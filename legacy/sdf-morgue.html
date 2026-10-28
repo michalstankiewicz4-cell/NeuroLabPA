@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body style="margin:0">
+<title>SDF Morgue</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: pixel-art canvas on the left, specimen card and controls on the right; one column on phones */
+:root{
+  --bg:#15131f; --panel:#1e1b2b; --line:#2f2a40; --fg:#ddd6c4; --muted:#8f889e;
+  --rot:#9cac70; --blood:#a8383a;
+  --display:"Pixelify Sans","Courier New",monospace;
+  --body:"Atkinson Hyperlegible",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 40px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:24px}
+header h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,44px);line-height:1;margin:0;color:var(--rot);text-wrap:balance;letter-spacing:.02em}
+header p{margin:8px 0 0;color:var(--muted);max-width:62ch}
+.stage{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:760px){.stage{grid-template-columns:1fr}}
+.view{background:var(--panel);border:1px solid var(--line);padding:12px;display:grid;gap:10px}
+canvas{display:block;width:100%;max-width:100%;aspect-ratio:1;image-rendering:pixelated;background:var(--bg)}
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--display);font-size:13px;color:var(--muted);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+aside{display:grid;gap:18px}
+.card{border-top:2px solid var(--blood);padding-top:12px}
+.card h2{font-family:var(--display);font-size:16px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px;color:var(--fg)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0;font-variant-numeric:tabular-nums}
+dt{color:var(--muted)} dd{margin:0}
+.swatches{display:flex;gap:2px;margin-top:10px}
+.swatches span{width:18px;height:18px}
+.controls{display:grid;gap:14px}
+button{font-family:var(--display);font-size:18px;letter-spacing:.04em;padding:12px 16px;background:var(--rot);color:var(--bg);border:0;cursor:pointer;box-shadow:0 4px 0 #5d6a3f}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #5d6a3f}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+label{display:grid;gap:4px;color:var(--muted);font-size:14px}
+.row{display:flex;align-items:center;gap:10px;color:var(--fg)}
+input[type=range]{width:100%;accent-color:var(--rot)}
+select{font:inherit;background:var(--panel);color:var(--fg);border:1px solid var(--line);padding:6px 8px}
+input[type=checkbox]{accent-color:var(--rot);width:18px;height:18px}
+.note{color:var(--muted);font-size:13px;max-width:62ch}
+.err{color:var(--blood)}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>SDF Morgue</h1>
+    <p>A zombie head computed in a shader: distance functions, raymarching, lighting quantized to four tones and outlines derived from geometry. Every click rolls a new specimen.</p>
+  </header>
+
+  <div class="stage">
+    <div class="view">
+      <canvas id="cv" width="64" height="64" aria-label="Pixel-art zombie head"></canvas>
+      <div class="meta"><span id="seedLabel">SPECIMEN #0</span><span id="resLabel">64×64 PX</span></div>
+    </div>
+
+    <aside>
+      <div class="controls">
+        <button id="roll" type="button">Roll a zombie</button>
+        <label for="ang">Camera angle
+          <input id="ang" type="range" min="-180" max="180" step="1" value="14">
+        </label>
+        <div class="row"><input id="spin" type="checkbox" checked><label for="spin" style="color:var(--fg)">Head sway</label></div>
+        <div class="row"><input id="outline" type="checkbox" checked><label for="outline" style="color:var(--fg)">Outline</label></div>
+        <label for="res">Resolution
+          <select id="res">
+            <option value="32">32 × 32</option>
+            <option value="48">48 × 48</option>
+            <option value="64" selected>64 × 64</option>
+            <option value="96">96 × 96</option>
+            <option value="256">256 × 256 (no pixel art)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="card">
+        <h2>Specimen card</h2>
+        <dl id="sheet"></dl>
+        <div class="swatches" id="sw"></div>
+      </div>
+      <p class="note">The engine is about 120 lines of GLSL. The first pass computes each pixel's material, light tone and depth; the second maps them to palette colors and draws an outline wherever the material changes or the depth jumps.</p>
+      <p class="note err" id="err" hidden></p>
+    </aside>
+  </div>
+</div>
+
+<script>
+const VS=`#version 300 es
+in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
+
+const FS1=`#version 300 es
+precision highp float;
+uniform vec2 uRes;uniform float uAng,uTilt,uJaw,uEyeL,uEyeR,uBoneR,uBoneX,uMissing,uWound,uNeck;
+out vec4 o;
+float sph(vec3 p,vec3 c,float r){return length(p-c)-r;}
+float ell(vec3 p,vec3 c,vec3 r){vec3 q=(p-c)/r;float k0=length(q),k1=length(q/r);return k0*(k0-1.)/max(k1,1e-6);}
+float box(vec3 p,vec3 c,vec3 b,float r){vec3 q=abs(p-c)-b+r;return length(max(q,0.))+min(max(q.x,max(q.y,q.z)),0.)-r;}
+float cap(vec3 p,vec3 a,vec3 b,float r){vec3 pa=p-a,ba=b-a;float h=clamp(dot(pa,ba)/dot(ba,ba),0.,1.);return length(pa-ba*h)-r;}
+float smin(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}
+float smax(float a,float b,float k){return -smin(-a,-b,k);}
+vec2 map(vec3 p){
+  float c=cos(uTilt),s=sin(uTilt);
+  p.xy=vec2(c*p.x-s*p.y,s*p.x+c*p.y);
+  vec3 q=vec3(abs(p.x),p.yz);
+  float d=ell(p,vec3(0,.2,-.05),vec3(.7,.75,.75));
+  d=smin(d,ell(p,vec3(0,-.35,.12),vec3(.5,.45,.55)),.25);
+  d=smin(d,ell(q,vec3(.38,-.05,.45),vec3(.2,.15,.2)),.12);
+  d=smin(d,cap(q,vec3(.08,.38,.62),vec3(.45,.42,.5),.09),.08);
+  d=smax(d,-sph(q,vec3(.5,-.3,.5),.17),.1);
+  d=smin(d,cap(p,vec3(0,.25,.75),vec3(0,-.02,.86),.07),.06);
+  d=smax(d,-sph(q,vec3(.05,-.04,.88),.035),.01);
+  d=smin(d,ell(p,vec3(.7,.05,-.05),vec3(.1,.2,.1)),.05);
+  d=smin(d,ell(p,vec3(-.7,-.02,-.05),vec3(.1,.12,.1)),.05);
+  d=smin(d,cap(p,vec3(0,-.6,-.1),vec3(0,-1.3,-.15),uNeck),.15);
+  float sock=smin(sph(p,vec3(-.27,.2,.62),.16),ell(p,vec3(.27,.15,.62),vec3(.17,.12,.16)),.01);
+  d=smax(d,-sock,.04);
+  float eyes=1e9;
+  if(uEyeL>0.)eyes=min(eyes,sph(p,vec3(-.27,.19,.55),uEyeL));
+  if(uEyeR>0.)eyes=min(eyes,sph(p,vec3(.29,.13,.55),uEyeR));
+  d=smax(d,-ell(p,vec3(.04,-.42,.62),vec3(.28,uJaw,.25)),.04);
+  float mouth=ell(p,vec3(.04,-.42,.45),vec3(.27,uJaw-.01,.1));
+  float top=-.42+uJaw,bot=-.42-uJaw,teeth=1e9;
+  for(int i=0;i<5;i++){
+    if(float(i)==uMissing)continue;
+    float x=-.18+.095*float(i),h=.05+.02*float((i*7)%3);
+    teeth=min(teeth,box(p,vec3(x,top-.04-h*.5,.7),vec3(.035,h*.5,.04),.01));
+  }
+  for(int i=0;i<3;i++){
+    float x=-.1+.13*float(i);
+    teeth=min(teeth,box(p,vec3(x,bot+.03,.68),vec3(.035,.035,.04),.01));
+  }
+  float br=uBoneR>.01?sph(p,vec3(uBoneX,.62,.4),uBoneR)+.06*sin(14.*p.x)*sin(11.*p.z+1.3):1e9;
+  float skin=uBoneR>.01?smax(d,-br,.02):d;
+  float bone=uBoneR>.01?smax(d+.04,br,.02)+.012*sin(40.*p.x+30.*p.y):1e9;
+  float crack=cap(p,vec3(uBoneX-.1,.85,.45),vec3(uBoneX+.1,.55,.62),.025);
+  float wound=cap(p,vec3(.62*uWound,.2,.3),vec3(.45*uWound,-.3,.55),.07);
+  float shirt=smin(cap(p,vec3(-.75,-1.35,-.2),vec3(.75,-1.35,-.2),.28),ell(p,vec3(0,-1.8,-.15),vec3(.9,.6,.45)),.2);
+  shirt=smax(shirt,-cap(p,vec3(0,-1.05,.05),vec3(0,-1.4,.15),.18),.05);
+  vec2 r=vec2(skin,0.);
+  if(eyes<r.x)r=vec2(eyes,1.);
+  if(mouth<r.x)r=vec2(mouth,2.);
+  if(teeth<r.x)r=vec2(teeth,3.);
+  if(bone<r.x)r=vec2(bone,4.);
+  if(shirt<r.x)r=vec2(shirt,6.);
+  if(r.y==0.&&wound<.02)r.y=5.;
+  if(r.y==4.&&crack<0.)r.y=2.;
+  return r;
+}
+void main(){
+  vec2 uv=gl_FragCoord.xy/uRes*2.-1.;
+  vec3 ta=vec3(0,-.15,0),ro=vec3(3.19*sin(uAng),.25,3.19*cos(uAng));
+  vec3 fw=normalize(ta-ro),rt=normalize(cross(fw,vec3(0,1,0))),up=cross(rt,fw);
+  vec3 rd=normalize(fw+(uv.x*rt+uv.y*up)*.51);
+  float t=0.;bool hit=false;
+  for(int i=0;i<110;i++){float d=map(ro+rd*t).x;if(d<1e-3){hit=true;break;}t+=d*.9;if(t>8.)break;}
+  if(!hit){o=vec4(0);return;}
+  vec3 p=ro+rd*t;vec2 e=vec2(1e-3,0);
+  vec3 n=normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));
+  vec3 L=normalize(vec3(.7,.6,.6));
+  float dif=clamp(dot(n,L),0.,1.),sh=1.,ts=.02;
+  for(int i=0;i<32;i++){float h=map(p+n*2e-3+L*ts).x;sh=min(sh,clamp(8.*h/ts,0.,1.));ts+=clamp(h,.01,.2);}
+  float ao=1.;
+  for(int i=1;i<6;i++){float h=.04*float(i);ao-=(h-map(p+n*h).x)*pow(.5,float(i))*4.;}
+  ao=clamp(ao,0.,1.);
+  float rim=pow(clamp(1.+dot(n,rd),0.,1.),3.);
+  float l=.15+.85*dif*sh*(.5+.5*ao)+.25*rim;
+  float band=l<.18?0.:l<.45?1.:l<.75?2.:3.;
+  o=vec4(band/3.,map(p).y/8.,t/8.,1.);
+}`;
+
+const FS2=`#version 300 es
+precision highp float;
+uniform sampler2D uTex;uniform vec2 uRes;uniform vec3 uPal[28];uniform vec3 uBg,uOut;uniform int uOutline;
+out vec4 o;
+vec4 T(ivec2 c){return texelFetch(uTex,clamp(c,ivec2(0),ivec2(uRes)-1),0);}
+void main(){
+  ivec2 c=ivec2(gl_FragCoord.xy);vec4 s=T(c);
+  if(s.a<.5){o=vec4(uBg,1);return;}
+  int m=int(round(s.g*8.)),b=int(round(s.r*3.));
+  if(m==1)b=3;
+  vec3 col=uPal[m*4+b];
+  if(uOutline==1){
+    bool edge=false;
+    ivec2 N[4]=ivec2[4](ivec2(1,0),ivec2(-1,0),ivec2(0,1),ivec2(0,-1));
+    for(int i=0;i<4;i++){
+      vec4 n=T(c+N[i]);
+      if(n.a<.5||n.b-s.b>.25/8.)edge=true;
+      if(i%2==0&&n.a>.5&&int(round(n.g*8.))!=m&&m!=1)edge=true;
+    }
+    if(edge)col=uOut;
+  }
+  o=vec4(col,1);
+}`;
+
+const cv=document.getElementById('cv');
+const gl=cv.getContext('webgl2',{antialias:false});
+const errEl=document.getElementById('err');
+function fail(msg){errEl.textContent=msg;errEl.hidden=false;}
+
+function sh(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
+  if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
+function prog(fs){const p=gl.createProgram();gl.attachShader(p,sh(gl.VERTEX_SHADER,VS));gl.attachShader(p,sh(gl.FRAGMENT_SHADER,fs));
+  gl.bindAttribLocation(p,0,'a');gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));return p;}
+
+// --- palettes ---
+const rgb=(r,g,b)=>[r/255,g/255,b/255];
+const SKINS=[
+  {name:'rotten green',c:[[38,34,56],[64,82,70],[104,128,86],[156,172,112]]},
+  {name:'ash',c:[[36,32,52],[78,80,92],[120,124,128],[170,172,164]]},
+  {name:'drowned',c:[[34,28,54],[70,74,104],[110,124,140],[160,178,172]]},
+  {name:'ochre',c:[[40,30,44],[92,78,60],[140,124,80],[188,176,116]]},
+];
+const EYES=[{name:'yellow',c:[250,238,150]},{name:'red',c:[240,96,72]},{name:'milky',c:[205,228,236]}];
+function hsl(h,s,l){h=((h%360)+360)%360/360;const f=n=>{const k=(n+h*12)%12,a=s*Math.min(l,1-l);return l-a*Math.max(-1,Math.min(k-3,9-k,1));};return [f(0)*255,f(8)*255,f(4)*255].map(Math.round);}
+function shirtRamp(h){return [hsl(h+40,.25,.12),hsl(h+20,.25,.24),hsl(h,.22,.36),hsl(h-12,.2,.48)];}
+const SHIRTS=[{name:'dirty violet',h:265},{name:'faded blue',h:215},{name:'hospital green',h:160},{name:'rust',h:15},{name:'mustard',h:45}];
+const FIXED={2:[[30,10,22],[30,10,22],[52,16,30],[52,16,30]],
+  3:[[120,104,80],[170,155,110],[214,200,150],[230,220,175]],
+  4:[[80,70,78],[130,120,112],[176,164,140],[214,204,176]],
+  5:[[50,12,24],[96,24,36],[140,40,44],[170,60,56]]};
+
+// --- seeded randomness, so a specimen can be reproduced ---
+function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+let Z,seed=1;
+function makeZombie(sd){
+  const r=mulberry(sd),pick=a=>a[Math.floor(r()*a.length)];
+  const z={seed:sd,skin:pick(SKINS),eye:pick(EYES),shirt:pick(SHIRTS),
+    tilt:(r()-.5)*.45,jaw:.07+r()*.11,
+    eyeL:r()<.15?0:.04+r()*.04,eyeR:r()<.15?0:.035+r()*.035,
+    boneR:r()<.25?0:.18+r()*.17,boneX:(r()-.5)*.7,
+    missing:r()<.7?Math.floor(r()*5):-1,wound:r()<.5?1:-1,neck:.2+r()*.08};
+  if(z.eyeL===0&&z.eyeR===0)z.eyeR=.05;
+  return z;
+}
+function paletteArray(z){
+  const pal=[];
+  for(let m=0;m<7;m++){
+    let set=m===0?z.skin.c:m===1?[z.eye.c,z.eye.c,z.eye.c,z.eye.c]:m===6?shirtRamp(z.shirt.h):FIXED[m];
+    set.forEach(c=>pal.push(...rgb(...c)));
+  }
+  return new Float32Array(pal);
+}
+function describe(z){
+  const eyes=z.eyeL===0?'left missing':z.eyeR===0?'right missing':'both, '+z.eye.name;
+  const rows=[['Skin',z.skin.name],['Eyes',eyes],['Jaw',z.jaw>.14?'gaping':z.jaw>.1?'ajar':'clenched'],
+    ['Skull',z.boneR?'exposed, cracked':'intact'],['Teeth',z.missing>=0?'one upper missing':'full set'],
+    ['Wound',z.wound>0?'left cheek':'right cheek'],['Clothing',z.shirt.name],['Tilt',Math.round(z.tilt*57.3)+'°']];
+  document.getElementById('sheet').innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
+  document.getElementById('sw').innerHTML=[...z.skin.c,...shirtRamp(z.shirt.h),z.eye.c].map(c=>`<span style="background:rgb(${c})"></span>`).join('');
+  document.getElementById('seedLabel').textContent='SPECIMEN #'+z.seed;
+}
+
+let P1,P2,fb,tex,res=64,U1={},U2={};
+function setup(){
+  P1=prog(FS1);P2=prog(FS2);
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+  for(const n of ['uRes','uAng','uTilt','uJaw','uEyeL','uEyeR','uBoneR','uBoneX','uMissing','uWound','uNeck'])U1[n]=gl.getUniformLocation(P1,n);
+  for(const n of ['uTex','uRes','uPal','uBg','uOut','uOutline'])U2[n]=gl.getUniformLocation(P2,n);
+  fb=gl.createFramebuffer();tex=gl.createTexture();resize(64);
+}
+function resize(n){
+  res=n;cv.width=cv.height=n;
+  gl.bindTexture(gl.TEXTURE_2D,tex);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,n,n,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+  for(const k of [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER])gl.texParameteri(gl.TEXTURE_2D,k,gl.NEAREST);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,fb);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,tex,0);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+  document.getElementById('resLabel').textContent=n+'×'+n+' PX';
+}
+
+const angEl=document.getElementById('ang'),spinEl=document.getElementById('spin'),outEl=document.getElementById('outline');
+let pal;
+function draw(time){
+  let ang=angEl.value*Math.PI/180;
+  if(spinEl.checked){ang=.24+.8*Math.sin(time*.0006);angEl.value=Math.round(ang*57.3);}
+  gl.viewport(0,0,res,res);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,fb);gl.useProgram(P1);
+  gl.uniform2f(U1.uRes,res,res);gl.uniform1f(U1.uAng,ang);
+  gl.uniform1f(U1.uTilt,Z.tilt);gl.uniform1f(U1.uJaw,Z.jaw);gl.uniform1f(U1.uEyeL,Z.eyeL);gl.uniform1f(U1.uEyeR,Z.eyeR);
+  gl.uniform1f(U1.uBoneR,Z.boneR);gl.uniform1f(U1.uBoneX,Z.boneX);gl.uniform1f(U1.uMissing,Z.missing);
+  gl.uniform1f(U1.uWound,Z.wound);gl.uniform1f(U1.uNeck,Z.neck);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.useProgram(P2);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);gl.uniform1i(U2.uTex,0);
+  gl.uniform2f(U2.uRes,res,res);gl.uniform3fv(U2.uPal,pal);
+  gl.uniform3f(U2.uBg,21/255,19/255,31/255);gl.uniform3f(U2.uOut,14/255,10/255,20/255);
+  gl.uniform1i(U2.uOutline,outEl.checked&&res<=96?1:0);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+}
+function loop(t){draw(t);requestAnimationFrame(loop);}
+function roll(){seed=1+Math.floor(Math.random()*99999);Z=makeZombie(seed);pal=paletteArray(Z);describe(Z);}
+
+if(!gl){fail('This browser does not support WebGL2, so the shader cannot start.');}
+else{
+  try{
+    setup();
+    Z=makeZombie(4417);pal=paletteArray(Z);describe(Z);
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches)spinEl.checked=false;
+    document.getElementById('roll').addEventListener('click',roll);
+    angEl.addEventListener('input',()=>{spinEl.checked=false;});
+    document.getElementById('res').addEventListener('change',e=>resize(+e.target.value));
+    requestAnimationFrame(loop);
+  }catch(e){fail('Shader error: '+e.message);}
+}
+</script>
+
+</body>
+</html>

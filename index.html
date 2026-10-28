@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SDF Walkers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>SDF Walkers</h1>
+    <p>A full zombie built from distance functions, with five animations in four directions. Roll a specimen, set every trait by hand, or rate batches so a small neural network learns which zombies you like and steers the rolls.</p>
+  </header>
+
+  <div class="stage">
+    <div class="view">
+      <div class="tabs" id="tabs" role="group" aria-label="Animation"></div>
+      <canvas id="preview" class="pix" width="256" height="80" aria-label="Zombie animation in four directions"></canvas>
+      <div class="dirs"><span>Down</span><span>Left</span><span>Right</span><span>Up</span></div>
+      <div class="meta"><span id="seedLabel">SPECIMEN #0</span><span id="sizeLabel">64×80 PX / FRAME</span></div>
+    </div>
+
+    <aside>
+      <div class="controls">
+        <button id="roll" type="button">Roll a zombie</button>
+        <div class="pair">
+          <label for="elev">Camera
+            <select id="elev">
+              <option value="0">Side</option>
+              <option value="30" selected>3/4 top-down</option>
+              <option value="55">Near top-down</option>
+            </select>
+          </label>
+          <label for="size">Frame size
+            <select id="size">
+              <option value="32x40">32 × 40</option>
+              <option value="48x64">48 × 64</option>
+              <option value="64x80" selected>64 × 80</option>
+            </select>
+          </label>
+        </div>
+        <div class="checks">
+          <div class="row"><input id="polish" type="checkbox" checked><label for="polish">Pixel-art polish</label></div>
+          <div class="row"><input id="rules" type="checkbox" checked><label for="rules">Palette rules</label></div>
+          <div class="row"><input id="outline" type="checkbox" checked><label for="outline">Outline</label></div>
+          <div class="row"><input id="anim" type="checkbox" checked><label for="anim">Play</label></div>
+          <div class="row"><input id="hudOn" type="checkbox"><label for="hudOn">Network view</label></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="head"><h2>Specimen</h2><span class="edited" id="editedTag" hidden>EDITED</span></div>
+        <div class="editor" id="editor"></div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="rate" aria-labelledby="rateTitle">
+    <div class="rate-head">
+      <div>
+        <h2 id="rateTitle">Rate specimens</h2>
+        <p class="note" id="rateStatus">Good means every part is fine. If something is wrong, mark Bad and the parts that are wrong.</p>
+      </div>
+      <div class="rate-actions">
+        <button id="hudBtn" class="ghost" type="button">Network view</button>
+        <div class="row"><input id="smart" type="checkbox" disabled><label for="smart">Smart roll</label></div>
+        <button id="batch" type="button">New batch</button>
+      </div>
+    </div>
+    <div class="modelbox" id="modelbox"></div>
+    <div class="io">
+      <button id="expRatings" class="ghost" type="button">Export ratings</button>
+      <button id="expModel" class="ghost" type="button">Export model</button>
+      <label class="ghost filebtn" for="impModel">Import model<input id="impModel" type="file" accept=".json,application/json"></label>
+      <p class="note" id="ioNote" role="status"></p>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="out">
+    <div>
+      <h2>Sprite sheet</h2>
+      <div class="sheetbox"><img id="sheetImg" class="pix" alt="Sprite sheet: 5 animations, 8 frames each, in 4 directions"></div>
+    </div>
+    <div class="json">
+      <h2>Sheet JSON</h2>
+      <pre id="json"></pre>
+      <button id="copy" type="button">Copy JSON</button>
+      <p class="note" id="sheetNote"></p>
+      <p class="note">Pixel-art polish exaggerates the walk in front and back views, thickens the legs, removes stray single pixels, dithers band edges on clothes, and colors the lit side of the outline with the material's own dark shade. Palette rules keep shirt and trousers apart, keep the shirt away from the skin hue, and keep the eye glow readable against the skin.</p>
+      <p class="note err" id="err" hidden></p>
+    </div>
+  </section>
+  <footer class="note">SDF Walkers v<span id="appVer"></span></footer>
+</div>
+
+<div class="hud" id="hud" hidden role="region" aria-label="Network view">
+  <div class="hud-head" id="hudHead" tabindex="0" title="Drag to move. Arrow keys move it, + and − resize it. Double-click to reset."><span>Network</span><span class="hud-state" id="hudState"></span><button id="hudClose" type="button" aria-label="Close network view">Close</button></div>
+  <canvas id="hudCv" aria-label="Diagram of the rating network"></canvas>
+  <p class="hud-foot" id="hudFoot"></p>
+  <div class="hud-grip" id="hudGrip" title="Drag to resize"></div>
+</div>
+<script src="js/version.js"></script>
+<script src="js/shaders.js"></script>
+<script src="js/traits.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/render.js"></script>
+<script src="js/preview.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/network.js"></script>
+<script src="js/io.js"></script>
+<script src="js/grid.js"></script>
+<script src="js/roll.js"></script>
+<script src="js/hud.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

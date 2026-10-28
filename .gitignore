@@ -1,0 +1,10 @@
+# exports made while testing
+sdf-walkers-ratings-*.json
+sdf-walkers-model-*.json
+# prototype renders
+tools/prototype/*.png
+# editors and OS
+.vscode/
+.DS_Store
+Thumbs.db
+__pycache__/
