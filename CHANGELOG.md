@@ -3,6 +3,12 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.17.0
+- Folder `data/` w repo: `claude-ratings.json` (160 ocen Claude'a, w tym 11 oznaczonych jako nieaktualne) i `model.json` (sieć wytrenowana na 149 aktualnych ocenach Claude'a).
+- Kopia strony poza claude.ai (GitHub Pages, serwer lokalny) sama dołącza oceny Claude'a z `data/` do nauki. Nie są zapisywane w przeglądarce, więc eksport i pamięć lokalna zawierają tylko Twoje oceny.
+- Przycisk **Load repo model** wczytuje `data/model.json` jednym kliknięciem. (Przeglądarka nie pozwala stronie ustawić domyślnego folderu w oknie wyboru pliku, stąd osobny przycisk.)
+- Eksportowany model zapisuje, czyje oceny go wytrenowały (`rater`).
+
 ## 0.16.2
 - Loader nad podglądem: „Compiling shader” (z czasem i wyjaśnieniem, gdy trwa dłużej niż 3 s), potem „Rendering sprite sheet” z paskiem i liczbą klatek. Przy szybkich przeliczeniach po edycji się nie pojawia.
 - Postęp jest prawdziwy: renderer czeka na faktyczne zakończenie pracy karty graficznej po każdej animacji (fence), zamiast tylko kolejkować rysowanie. Wcześniej cała praca wykonywała się na końcu, w jednym blokującym kroku.

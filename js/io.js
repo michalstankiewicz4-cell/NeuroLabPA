@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.2 · Export and import of ratings and trained models.
+// SDF Walkers v0.17.0 · Export and import of ratings and trained models.
 // ---------- export / import ----------
 // A model file carries its input list, so a file made for another version of the generator is refused, not misread.
 function featureNames(){
@@ -34,30 +34,37 @@ document.getElementById('expRatings').addEventListener('click',()=>{
 document.getElementById('expModel').addEventListener('click',()=>{
   if(!net){ioNote.textContent='The network has not been trained yet, so there is no model to export.';return;}
   const data={format:'sdf-walkers-model',version:1,created:new Date().toISOString(),
-    trainedOn:netStats?netStats.n:0,inputs:featureNames(),outputs:['good',...TAGS],hidden:net.h,activation:'tanh',outputActivation:'sigmoid',
+    trainedOn:netStats?netStats.n:0,rater:document.getElementById('trainOn').value==='both'?'both':document.getElementById('trainOn').value,inputs:featureNames(),outputs:['good',...TAGS],hidden:net.h,activation:'tanh',outputActivation:'sigmoid',
     W1:r5(net.W1),b1:r5(net.b1),W2:r5(net.W2),b2:r5(net.b2)};
   offerFile(`sdf-walkers-model-${data.trainedOn}.json`,JSON.stringify(data));
 });
+// One path for every model source: a file the viewer picks, or the model that ships in the repo.
+function loadModelData(d,from){
+  if(!d||d.format!=='sdf-walkers-model'){ioNote.textContent='That file is not an SDF Walkers model.';return;}
+  const want=featureNames(),outs=['good',...TAGS];
+  if(!Array.isArray(d.inputs)||d.inputs.length!==want.length||d.inputs.some((n,i)=>n!==want[i])||JSON.stringify(d.outputs)!==JSON.stringify(outs)){
+    ioNote.textContent=`This model was made for a different version of the generator (${(d.inputs||[]).length} inputs, this page uses ${want.length}). Train it again from ratings instead.`;return;
+  }
+  const m=createNet(want.length,d.hidden,1);
+  Object.assign(m,{W1:d.W1,b1:d.b1,W2:d.W2,b2:d.b2,epoch:EPOCHS,loss:[]});
+  trainToken++;training=null;net=m;
+  netStats={...(netStats||{}),imported:true,importedFrom:d.trainedOn,cv:null};
+  netStats.insights=insights(ratings.filter(r=>typeof r.good==='boolean'));
+  renderModel();refreshScores();drawHud();
+  ioNote.textContent=`Loaded ${from}: a model trained on ${d.trainedOn} ratings${d.rater?' by '+(d.rater==='claude'?'Claude':d.rater):''}. Your next rating retrains the network from this page's ratings and replaces it.`;
+}
 document.getElementById('impModel').addEventListener('change',e=>{
   const file=e.target.files&&e.target.files[0];e.target.value='';
   if(!file)return;
   const fr=new FileReader();
-  fr.onload=()=>{
-    let d;
-    try{d=JSON.parse(fr.result);}catch(err){ioNote.textContent='That file is not valid JSON.';return;}
-    if(d.format!=='sdf-walkers-model'){ioNote.textContent='That file is not an SDF Walkers model.';return;}
-    const want=featureNames(),outs=['good',...TAGS];
-    if(!Array.isArray(d.inputs)||d.inputs.length!==want.length||d.inputs.some((n,i)=>n!==want[i])||JSON.stringify(d.outputs)!==JSON.stringify(outs)){
-      ioNote.textContent=`This model was made for a different version of the generator (${(d.inputs||[]).length} inputs, this page uses ${want.length}). Train it again from ratings instead.`;return;
-    }
-    const m=createNet(want.length,d.hidden,1);
-    Object.assign(m,{W1:d.W1,b1:d.b1,W2:d.W2,b2:d.b2,epoch:EPOCHS,loss:[]});
-    trainToken++;training=null;net=m;
-    netStats={...(netStats||{}),imported:true,importedFrom:d.trainedOn,cv:null};
-    netStats.insights=insights(ratings.filter(r=>typeof r.good==='boolean'));
-    renderModel();refreshScores();drawHud();
-    ioNote.textContent=`Loaded a model trained on ${d.trainedOn} ratings. Your next rating retrains the network from this page's ratings and replaces it.`;
-  };
+  fr.onload=()=>{let d;try{d=JSON.parse(fr.result);}catch(err){ioNote.textContent='That file is not valid JSON.';return;}loadModelData(d,file.name);};
   fr.readAsText(file);
+});
+document.getElementById('repoModel').addEventListener('click',async()=>{
+  try{
+    const res=await fetch('data/model.json',{cache:'no-cache'});
+    if(!res.ok)throw new Error(res.status);
+    loadModelData(await res.json(),'the repo model');
+  }catch(e){ioNote.textContent='The repo model is only available on the GitHub Pages copy of this page (or a local copy of the repo).';}
 });
 

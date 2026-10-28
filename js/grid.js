@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.2 · The rating grid.
+// SDF Walkers v0.17.0 · The rating grid.
 // ---------- ratings: the grid ----------
 const grid=document.getElementById('grid');
 let cards=[];

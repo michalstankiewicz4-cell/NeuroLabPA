@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.2 · The rating network: features, multi-output MLP, training, cross-validation, insights, model panel.
+// SDF Walkers v0.17.0 · The rating network: features, multi-output MLP, training, cross-validation, insights, model panel.
 // ---------- ratings: the network ----------
 // Input: the specimen's own traits plus two colour relations. Output: chance you rate it Good.
 const FEAT_N=56;

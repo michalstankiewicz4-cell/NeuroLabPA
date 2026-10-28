@@ -57,13 +57,15 @@ tools/build_artifact.py  składa projekt w jeden plik HTML dla claude.ai (dist/)
 legacy/sdf-morgue.html  pierwsza wersja: sama głowa zombie
 tools/prototype/      prototyp w Pythonie (numpy), od którego wszystko się zaczęło
 docs/img/             zrzuty z kolejnych etapów
+data/claude-ratings.json  oceny Claude'a (dołączane automatycznie poza claude.ai)
+data/model.json       sieć wytrenowana na ocenach Claude'a (przycisk Load repo model)
 ```
 
 Skrypty są zwykłymi `<script>` (bez modułów ES) i dzielą zmienne globalne, dlatego **kolejność wczytywania w `index.html` ma znaczenie**.
 
 ## Sieć w skrócie
 
-- Wejście: 55 liczb opisujących zombie (one-hot dla wyborów, liczby dla suwaków, 2 relacje kolorów).
+- Wejście: 56 liczb opisujących zombie (one-hot dla wyborów, liczby dla suwaków, 3 kontrasty kolorów w Oklab).
 - Jedna warstwa ukryta (12 neuronów, tanh) i 7 wyjść (sigmoid): `good` oraz po jednym na część ciała (`Head`, `Torso`, `Arms`, `Legs`, `Skin colour`, `Clothes colour`).
 - Ocena Good uczy wszystkie części „OK”. Bad z tagami uczy wskazane części. Bad bez tagów uczy tylko `good`; wyjścia części są wtedy maskowane.
 - Jakość mierzy 5-krotna walidacja krzyżowa: jak często sieć zgadza się z ocenami, których nie widziała.

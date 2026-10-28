@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.2 · The movable see-through network view.
+// SDF Walkers v0.17.0 · The movable see-through network view.
 // ---------- network HUD ----------
 const hud=document.getElementById('hud'),hudCv=document.getElementById('hudCv'),hctx=hudCv.getContext('2d'),hudOnEl=document.getElementById('hudOn');
 const HW=520,HH=745;

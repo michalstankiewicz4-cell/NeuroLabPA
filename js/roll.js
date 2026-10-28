@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.2 · Rolling a new zombie, optionally steered by the network.
+// SDF Walkers v0.17.0 · Rolling a new zombie, optionally steered by the network.
 // ---------- rolling ----------
 function roll(){
   const smart=document.getElementById('smart');

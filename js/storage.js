@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.2 · Where ratings live: the page database for the owner on claude.ai, browser storage elsewhere.
+// SDF Walkers v0.17.0 · Where ratings live: the page database for the owner on claude.ai, browser storage elsewhere.
 // ---------- ratings: storage ----------
 // The owner's ratings live with the page (db); anyone else keeps them in this browser only.
 // Tags only go with Bad: they say which part is wrong. Good means every part is fine.
@@ -27,10 +27,18 @@ const initStore=async()=>{
   if(!store){
     store={kind:'local'};
     try{localStorage.removeItem('sdf-walkers-ratings');ratings=JSON.parse(localStorage.getItem(LS)||'[]');}catch(e){ratings=[];}
+    // A copy of the site (GitHub Pages, local server) ships Claude's ratings in data/; they join training read-only.
+    try{
+      const res=await fetch('data/claude-ratings.json',{cache:'no-cache'});
+      if(res.ok){
+        const d=await res.json(),have=new Set(ratings.map(r=>r.id));
+        (d.ratings||[]).filter(r=>r.v===2&&!have.has(r.id)).forEach(r=>ratings.push({...r,bundled:true}));
+      }
+    }catch(e){}
   }
   retrain();
 };
-function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(ratings));}catch(e){}}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(ratings.filter(r=>!r.bundled)));}catch(e){}}   // bundled ratings come from the repo, not this browser
 async function persist(rec){
   await storeReady;
   const i=ratings.findIndex(r=>r.id===rec.id);
