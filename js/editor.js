@@ -1,4 +1,4 @@
-// SDF Walkers v0.15.0 · The specimen editor: one control per trait.
+// SDF Walkers v0.16.0 · The specimen editor: one control per trait.
 // ---------- specimen editor ----------
 // Sides are the zombie's own: its right eye and right arm sit on your left in the Down view.
 const names=a=>a.map(x=>x.name);

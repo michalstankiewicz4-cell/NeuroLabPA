@@ -1,4 +1,4 @@
-// SDF Walkers v0.15.0 · GLSL sources: pass 1 raymarches the SDF zombie, pass 2 turns light/material/depth into palette pixels and outlines.
+// SDF Walkers v0.16.0 · GLSL sources: pass 1 raymarches the SDF zombie, pass 2 turns light/material/depth into palette pixels and outlines.
 const VS=`#version 300 es
 in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
 
@@ -7,11 +7,12 @@ precision highp float;
 uniform vec2 uOff,uFrame;
 uniform float uPhase,uYaw,uElev,uScale,uAnim,uPolish,uHead;
 uniform float uTilt,uJaw,uEyeL,uEyeR,uBoneR,uBoneX,uMissing,uWound;
-uniform float uHunch,uArmGone,uLimp,uHS,uBuild,uShoulder,uHair,uCloth,uSex,uShoe;
+uniform float uHunch,uArmGone,uLimp,uHS,uBuild,uShoulder,uHair,uCloth,uSex,uShoe,uArmShadow;
 out vec4 o;
 // pose, computed once per pixel in main()
 float gSw[2],gBend[2],gArmA[2],gArmB[2];
 float gHipY,gBob,gHunch,gReach,gJaw,gHeadPitch,gSwayZ,gEyeOff;
+bool gNoArms=false;   // set while tracing shadows: arms held forward would stripe the chest
 
 float sph(vec3 p,vec3 c,float r){return length(p-c)-r;}
 float ell(vec3 p,vec3 c,vec3 r){vec3 q=(p-c)/r;float k0=length(q),k1=length(q/r);return k0*(k0-1.)/max(k1,1e-6);}
@@ -176,7 +177,14 @@ vec2 map(vec3 p){
   float tm=6.;
   if(overalls&&(q.y<.52||(abs(abs(q.x)-.12)<.045&&q.z>0.)))tm=7.;
   if(bare)tm=fem&&chest?6.:0.;
-  if(rags&&!(fem&&chest)&&sin(q.x*31.+1.)*sin(q.y*27.)+.3*sin(q.z*23.)>.38)tm=0.;
+  if(rags){
+    float hx=fract(uBoneX*7.31+.5)*2.-1.;     // per-zombie placement of the tears
+    bool tear=q.y<.07+.06*sin(q.x*21.+hx*4.)             // ragged hem
+      ||length(q-vec3(.13*hx,.24,.15))<.075
+      ||length(q-vec3(-.12*hx,.45,.14))<.06
+      ||length(q-vec3(.06*hx,.33,-.15))<.085;           // one on the back
+    if(tear&&!(fem&&chest))tm=0.;
+  }
   U(r,tor,tm);
   if(gown)U(r,ell(q,vec3(0,-.13,0),vec3(.25*bw,.37,.18*bw)),6.);
   if(dress)U(r,smin(ell(q,vec3(0,-.04,0),vec3(.25*bw,.26,.18*bw)),ell(q,vec3(0,-.3,0),vec3(.33*bw,.1,.25*bw)),.12),6.);
@@ -189,6 +197,7 @@ vec2 map(vec3 p){
   float sx=(.25+.06*uShoulder+.02*uBuild)*(fem?.85:1.),ar=lb*(.9+.25*uShoulder)*(fem?.9:1.);
   for(int i=0;i<2;i++){
     float s=i==0?-1.:1.;
+    if(gNoArms)break;
     vec3 sh=rotX(vec3(sx*s,.66,0),gHunch)+base+vec3(0,0,gReach);
     if(uArmGone==s){
       U(r,cap(p,sh,sh+vec3(.03*s,-.13,.05),.09*ar),bareArms?0.:6.);
@@ -231,7 +240,9 @@ void main(){
   vec3 n=normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));
   vec3 L=normalize(vec3(.6,.8,.6));
   float dif=clamp(dot(n,L),0.,1.),sh=1.,ts=.02;
+  gNoArms=uArmShadow<.5;
   for(int i=0;i<24;i++){float h=map(p+n*2e-3+L*ts).x;sh=min(sh,clamp(8.*h/ts,0.,1.));ts+=clamp(h,.01,.2);}
+  gNoArms=false;
   float ao=1.;
   for(int i=1;i<5;i++){float h=.04*float(i);ao-=(h-map(p+n*h).x)*pow(.5,float(i))*4.;}
   ao=clamp(ao,0.,1.);

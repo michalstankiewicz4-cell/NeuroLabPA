@@ -3,6 +3,14 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.16.0 ⚠
+Poprawki po pierwszej partii 96 ocen Claude'a, w której połowa ocen Bad wskazywała błędy wspólne dla wszystkich zombie, a nie cechy okazów:
+- Ręce nie rzucają już cienia na klatkę piersiową. Kwantyzacja zamieniała ten cień w ukośny pas wyglądający jak szarfa.
+- Łachmany: postrzępiony dół i kilka dużych dziur w innym miejscu u każdego zombie, zamiast gęstego, regularnego wzoru, który wyglądał jak kamuflaż.
+- Reguła palety porównuje kolory w przestrzeni Oklab (tak jak widzi oko), więc odrzuca też szare na szarym i ciemne na ciemnym, a nie tylko podobne odcienie. Ubrania mają różne jasności.
+- Wejścia sieci: zamiast 2 odległości odcieni są 3 kontrasty Oklab (koszula↔spodnie, koszula↔skóra, spodnie↔skóra). Razem 56 wejść.
+- Oceny oznaczone `stale` (opisujące naprawiony błąd renderowania) są pomijane przy nauce. Tak oznaczono 11 ocen Claude'a.
+
 ## 0.15.0
 - Oceny odbierane na żywo: strona subskrybuje bazę, więc oceny zapisane gdzie indziej (np. partia od Claude'a) od razu trenują sieć.
 - Każda ocena wie, kto ją wystawił (`rater: you | claude`). Przełącznik „Learn from: both / my ratings / Claude's”. Oceny Claude'a mają przy „both” wagę 0,6.

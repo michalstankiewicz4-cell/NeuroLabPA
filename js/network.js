@@ -1,13 +1,14 @@
-// SDF Walkers v0.15.0 · The rating network: features, multi-output MLP, training, cross-validation, insights, model panel.
+// SDF Walkers v0.16.0 · The rating network: features, multi-output MLP, training, cross-validation, insights, model panel.
 // ---------- ratings: the network ----------
 // Input: the specimen's own traits plus two colour relations. Output: chance you rate it Good.
-const FEAT_N=55;
+const FEAT_N=56;
 function feats(t){
   const v=[];const oh=(i,n)=>{for(let k=0;k<n;k++)v.push(k===i?1:0);};
   oh(t.skin,4);oh(t.eye,3);oh(t.shirt,6);oh(t.pants,6);oh(t.hair??0,4);oh(t.hairC??0,4);oh(t.cloth??0,9);oh(t.shoe??3,5);
   v.push(((t.height??1)-.88)/.24,t.build??.5,t.shoulder??.5,t.sex??0,(t.head-.16)/.14,(t.jaw-.06)/.14,Math.abs(t.tilt)/.3,(t.hunch-.08)/.42,t.limp/.85,
     t.boneR?1:0,t.armGone?1:0,(t.eyeL&&t.eyeR)?0:1);
-  v.push(hueDist(CLOTH[t.shirt].h,CLOTH[t.pants].h)/180,hueDist(CLOTH[t.shirt].h,SKINS[t.skin].h)/180);
+  const k=contrasts(SKINS[t.skin],CLOTH[t.shirt],CLOTH[t.pants]);
+  v.push(Math.min(1,k.sp/.3),Math.min(1,k.ss/.3),Math.min(1,k.ps/.3));
   return v;
 }
 const EPOCHS=400,HIDDEN=12,OUTS=1+TAGS.length;   // output 0: Good; outputs 1..6: "this part is wrong"
@@ -57,7 +58,8 @@ let net=null,netStats=null;
 const MIN_TOTAL=16,MIN_EACH=4;
 let trainToken=0,training=null,cvCache=null;
 function retrain(){
-  const rated=sourceFilter(ratings.filter(r=>typeof r.good==='boolean'));
+  // ratings marked stale described a rendering bug that has since been fixed
+  const rated=sourceFilter(ratings.filter(r=>typeof r.good==='boolean'&&!r.stale));
   const src=document.getElementById('trainOn').value;
   const Wt=rated.map(r=>src==='both'&&isClaude(r)?CLAUDE_WEIGHT:1);
   const pos=rated.filter(r=>r.good).length,neg=rated.length-pos;

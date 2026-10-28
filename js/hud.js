@@ -1,9 +1,9 @@
-// SDF Walkers v0.15.0 · The movable see-through network view.
+// SDF Walkers v0.16.0 · The movable see-through network view.
 // ---------- network HUD ----------
 const hud=document.getElementById('hud'),hudCv=document.getElementById('hudCv'),hctx=hudCv.getContext('2d'),hudOnEl=document.getElementById('hudOn');
-const HW=520,HH=735;
+const HW=520,HH=745;
 let hudFocus=null,think=null;
-const GROUPS=[['Skin',4],['Eye glow',3],['Shirt',6],['Trousers',6],['Hair',4],['Hair colour',4],['Clothing',9],['Shoes',5],['Body',12],['Colour gaps',2]];
+const GROUPS=[['Skin',4],['Eye glow',3],['Shirt',6],['Trousers',6],['Hair',4],['Hair colour',4],['Clothing',9],['Shoes',5],['Body',12],['Colour gaps',3]];
 function hudOpen(){return !hud.hidden;}
 function setHud(on){
   hud.hidden=!on;hudOnEl.checked=on;
@@ -61,7 +61,7 @@ function drawHud(){
   c.textBaseline='middle';
   // each group gets a bracket; one-hot groups name the active option, number groups label every input
   const ACTIVE=[SKINS[t.skin].name,EYES[t.eye].name,CLOTH[t.shirt].name,CLOTH[t.pants].name,HAIR_STYLES[t.hair??0].name,HAIRS[t.hairC??0].name,GARMENTS[t.cloth??0].name,SHOES[t.shoe??3].name];
-  const NUM={8:['height','build','shoulders','female','head size','jaw open','head tilt','hunch','limp','bare skull','arm gone','eye gone'],9:['shirt↔trousers','shirt↔skin']};
+  const NUM={8:['height','build','shoulders','female','head size','jaw open','head tilt','hunch','limp','bare skull','arm gone','eye gone'],9:['shirt↔trousers','shirt↔skin','trousers↔skin']};
   GROUPS.forEach(([name,n],g)=>{
     if(NUM[g])yy+=11;   // room for the group heading above the labelled inputs
     const y0=yy;for(let k=0;k<n;k++){inY.push(yy);yy+=gap;}

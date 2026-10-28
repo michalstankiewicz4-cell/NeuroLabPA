@@ -1,4 +1,4 @@
-// SDF Walkers v0.15.0 · Wiring and start-up.
+// SDF Walkers v0.16.0 · Wiring and start-up.
 document.getElementById('copy').addEventListener('click',e=>{
   const btn=e.currentTarget,txt=document.getElementById('json').textContent;
   navigator.clipboard.writeText(txt).then(()=>{btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy JSON',1500);})

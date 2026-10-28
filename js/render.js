@@ -1,4 +1,4 @@
-// SDF Walkers v0.15.0 · WebGL setup, frame rendering, sprite sheet and its JSON.
+// SDF Walkers v0.16.0 · WebGL setup, frame rendering, sprite sheet and its JSON.
 // ---------- WebGL ----------
 const glc=document.createElement('canvas');
 const gl=glc.getContext('webgl2',{antialias:false,premultipliedAlpha:false,preserveDrawingBuffer:true});
@@ -6,7 +6,7 @@ const errEl=document.getElementById('err');
 function fail(m){errEl.textContent=m;errEl.hidden=false;}
 function shd(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
 function prog(fs){const p=gl.createProgram();gl.attachShader(p,shd(gl.VERTEX_SHADER,VS));gl.attachShader(p,shd(gl.FRAGMENT_SHADER,fs));gl.bindAttribLocation(p,0,'a');gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));return p;}
-const N1=['uOff','uFrame','uPhase','uYaw','uElev','uScale','uAnim','uPolish','uHead','uTilt','uJaw','uEyeL','uEyeR','uBoneR','uBoneX','uMissing','uWound','uHunch','uArmGone','uLimp','uHS','uBuild','uShoulder','uHair','uCloth','uSex','uShoe'];
+const N1=['uOff','uFrame','uPhase','uYaw','uElev','uScale','uAnim','uPolish','uHead','uTilt','uJaw','uEyeL','uEyeR','uBoneR','uBoneX','uMissing','uWound','uHunch','uArmGone','uLimp','uHS','uBuild','uShoulder','uHair','uCloth','uSex','uShoe','uArmShadow'];
 const N2=['uTex','uCell','uPal','uOut','uShadow','uOutline','uPolish'];
 let P1,P2,U1={},U2={},fb,tex;
 let FW=64,FH=80,Z;
@@ -37,7 +37,7 @@ function drawFrames(z,list,cols){
   f('uPolish',pol);f('uHead',z.head);
   f('uTilt',z.tilt);f('uJaw',z.jaw);f('uEyeL',z.eyeL);f('uEyeR',z.eyeR);f('uBoneR',z.boneR);f('uBoneX',z.boneX);
   f('uMissing',z.missing);f('uWound',z.wound);f('uHunch',z.hunch);f('uArmGone',z.armGone);f('uLimp',z.limp);
-  f('uHS',z.height);f('uBuild',z.build);f('uShoulder',z.shoulder);f('uHair',z.hair);f('uCloth',z.cloth);f('uSex',z.sex);f('uShoe',z.shoe);
+  f('uHS',z.height);f('uBuild',z.build);f('uShoulder',z.shoulder);f('uHair',z.hair);f('uCloth',z.cloth);f('uSex',z.sex);f('uShoe',z.shoe);f('uArmShadow',window.ARM_SHADOW?1:0);
   list.forEach(([ai,di,ph],i)=>{
     const x=(i%cols)*FW,y=(rows-1-Math.floor(i/cols))*FH;
     gl.viewport(x,y,FW,FH);gl.uniform2f(U1.uOff,x,y);

@@ -1,4 +1,4 @@
-// SDF Walkers v0.15.0 · Export and import of ratings and trained models.
+// SDF Walkers v0.16.0 · Export and import of ratings and trained models.
 // ---------- export / import ----------
 // A model file carries its input list, so a file made for another version of the generator is refused, not misread.
 function featureNames(){
@@ -6,7 +6,7 @@ function featureNames(){
   const pre=['skin','eye glow','shirt','trousers','hair','hair colour','clothing','shoes'];
   const out=[];
   one.forEach((list,i)=>list.forEach(o=>out.push(pre[i]+': '+o.name)));
-  ['height','build','shoulders','female','head size','jaw open','head tilt','hunch','limp','bare skull','arm gone','eye gone','shirt↔trousers hue gap','shirt↔skin hue gap'].forEach(n=>out.push(n));
+  ['height','build','shoulders','female','head size','jaw open','head tilt','hunch','limp','bare skull','arm gone','eye gone','shirt↔trousers contrast','shirt↔skin contrast','trousers↔skin contrast'].forEach(n=>out.push(n));
   return out;
 }
 const ioNote=document.getElementById('ioNote');
