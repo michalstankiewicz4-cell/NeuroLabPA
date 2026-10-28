@@ -5,6 +5,12 @@ Plany z rozmów projektowych, w kolejności, w jakiej najpewniej je zrobimy.
 ## W toku
 - **Partia ocen od Claude'a.** Claude ocenia zombie (te same miniatury co Ty: przód i bok, pierwsza klatka chodu) i zapisuje oceny jako `rater: "claude"`. Strona odbiera je na żywo i uczy się z nich z mniejszą wagą niż z Twoich (`CLAUDE_WEIGHT`).
 
+## Laboratorium języka
+- **Krok 3: sieć rekurencyjna (GRU).** Pamięć niesiona przez cały tekst zamiast stałego okna; widać, jak długo „pamięta”.
+- **Krok 4: transformer.** Uwaga (attention): każda litera sama wybiera, na które wcześniejsze patrzeć. Mapa uwagi na żywo.
+- Zapis i wczytywanie wytrenowanych modeli, zatrzymanie nauki w najlepszym momencie (gdy błąd sprawdzający zaczyna rosnąć).
+- Tokeny większe niż litera (BPE), potem rozmowa: dostrajanie na dialogach.
+
 ## Następne
 - **Różnorodność kolorów ubrań.** Reguła kontrastu (0.16.0) usunęła zlewające się zestawy, ale przy okazji zawęziła paletę: koszule rdzawe i fioletowe to razem 52% (zamiast 33%), a zielone i musztardowe spadły do 8–9%. Pomysł: każdy kolor w wariancie jasnym i ciemnym, wtedy reguła ma z czego wybierać, zamiast odrzucać całe kolory.
 - **Zakładka Review.** Przeglądasz oceny Claude'a: „Agree” albo poprawka werdyktu i części. Wagi: niesprawdzona ocena Claude'a < potwierdzona < Twoja poprawka. Statystyka zgodności między Wami, ogólna i dla każdej części ciała.

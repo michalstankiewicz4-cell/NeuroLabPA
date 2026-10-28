@@ -35,6 +35,21 @@ W VS Code działa też rozszerzenie *Live Server*.
 
 Sieć neuronowa nie jest nigdzie zapisywana: przy każdym otwarciu uczy się od nowa z ocen (trwa to ułamek sekundy). Wytrenowany model można wyeksportować (**Export model**) i wczytać (**Import model**). Plik modelu zawiera listę wejść, więc model z innej wersji generatora zostanie odrzucony, a nie błędnie wczytany.
 
+## Laboratorium języka
+
+Osobna strona `lang/` (link w nagłówku): sieć uczy się polskiego od zera, na Twoich plikach .txt, na własnym silniku napisanym w JS (bez bibliotek). Konstrukcje idą w kolejności historycznej, każda naprawia słabość poprzedniej: bigram → sieć z oknem i embeddingami → sieć rekurencyjna → transformer (dwie ostatnie w przygotowaniu). Wszystkie mierzone tą samą miarą (błąd na tekście sprawdzającym, bity na znak), więc różnice widać w tabeli porównania.
+
+```
+lang/index.html       strona laboratorium
+lang/lang.css         układ (kolory i czcionki z css/style.css)
+lang/js/engine.js     silnik: tensory, autograd, Adam, PCA
+lang/js/data.js       przykładowy tekst, słownik liter
+lang/js/worker.js     trening w tle (Web Worker): bigram, sieć z oknem, próbkowanie
+lang/js/lang.js       strona: dane, wykres, wizualizacje, porównanie
+```
+
+Uwaga: Web Worker nie działa z pliku otwartego bezpośrednio (`file://`), laboratorium trzeba uruchomić przez serwer lub GitHub Pages.
+
 ## Struktura
 
 ```

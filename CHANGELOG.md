@@ -3,6 +3,16 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.18.0
+- Nowa strona **Laboratorium języka** (`lang/`): własna sieć uczy się polskiego od zera, litera po literze. Link w nagłówku strony głównej.
+- Własny silnik uczenia w czystym JS (`lang/js/engine.js`): tensory, automatyczne liczenie gradientów (autograd), Adam, PCA. Sprawdzony testem gradientów numerycznych.
+- Trening w osobnym wątku (Web Worker), więc strona nie zawiesza się w trakcie nauki.
+- Krok 1: **bigram** (liczenie par liter) z tabelą „po jakiej literze jaka”.
+- Krok 2: **sieć z oknem** (Bengio 2003): embeddingi liter, warstwa tanh, wybór okna, rozmiaru embeddingu i liczby neuronów. Mapa liter (PCA embeddingów), na której widać, jak sieć sama grupuje litery.
+- Wczytywanie własnych plików .txt (kilka naraz), krótki przykładowy tekst na start, podział 90/10 na tekst do nauki i do sprawdzania.
+- Na żywo: wykres błędu (treningowy i sprawdzający, poziom „bez wiedzy”), bity na znak, „waha się między N literami”, próbki tekstu z temperaturą, ostrzeżenie, gdy sieć uczy się na pamięć.
+- Tabela porównania wszystkich nauk na tym samym tekście.
+
 ## 0.17.0
 - Folder `data/` w repo: `claude-ratings.json` (160 ocen Claude'a, w tym 11 oznaczonych jako nieaktualne) i `model.json` (sieć wytrenowana na 149 aktualnych ocenach Claude'a).
 - Kopia strony poza claude.ai (GitHub Pages, serwer lokalny) sama dołącza oceny Claude'a z `data/` do nauki. Nie są zapisywane w przeglądarce, więc eksport i pamięć lokalna zawierają tylko Twoje oceny.

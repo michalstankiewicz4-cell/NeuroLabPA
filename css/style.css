@@ -127,3 +127,6 @@ h2{font-family:var(--display);font-size:16px;letter-spacing:.08em;text-transform
 .hud-head:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 .hud-grip{position:absolute;right:0;bottom:0;width:22px;height:22px;pointer-events:auto;cursor:nwse-resize;touch-action:none;
   background:linear-gradient(135deg,transparent 50%,rgba(156,172,112,.55) 50%,rgba(156,172,112,.55) 58%,transparent 58%,transparent 70%,rgba(156,172,112,.55) 70%,rgba(156,172,112,.55) 78%,transparent 78%)}
+
+header .xlink{font-size:14px}
+header .xlink a{color:var(--rot);font-family:var(--display);letter-spacing:.04em}

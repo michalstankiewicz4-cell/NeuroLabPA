@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Laboratorium języka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="lang.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="crumb"><a href="../">← SDF Walkers</a></p>
+    <h1>Laboratorium języka</h1>
+    <p>Własna sieć uczy się polskiego od zera, litera po literze. Cztery konstrukcje w kolejności, w jakiej powstawały: każda kolejna naprawia to, czego nie umiała poprzednia. Ten sam tekst, ta sama miara, więc różnice widać czarno na białym.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="h-data">
+    <h2 id="h-data"><span class="num">1</span> Tekst do nauki</h2>
+    <div class="datarow">
+      <div class="dataactions">
+        <label class="btn filebtn" for="files">Wgraj pliki .txt<input id="files" type="file" accept=".txt,text/plain" multiple></label>
+        <button id="useSample" class="ghost" type="button">Użyj przykładu</button>
+      </div>
+      <dl class="stats" id="dataStats"></dl>
+    </div>
+    <p class="note" id="dataNote"></p>
+    <details class="hint">
+      <summary>Skąd wziąć więcej polskiego tekstu?</summary>
+      <p>Z <a href="https://wolnelektury.pl" target="_blank" rel="noopener">wolnelektury.pl</a>: przy każdej lekturze jest przycisk pobrania w formacie TXT. To utwory z domeny publicznej, np. baśnie, nowele czy „Pan Tadeusz”. Możesz wgrać kilka plików naraz, a także własne teksty. Mała sieć zaczyna sensownie pisać od ok. 300–500 tys. znaków; jedna powieść to zwykle ok. 500 tys.–1 mln.</p>
+    </details>
+  </section>
+
+  <section class="panel" aria-labelledby="h-model">
+    <h2 id="h-model"><span class="num">2</span> Konstrukcja</h2>
+    <div class="steps" role="tablist" aria-label="Konstrukcja sieci" id="steps"></div>
+    <div class="explain" id="explain"></div>
+    <div class="hp" id="hp"></div>
+    <div class="actions">
+      <button id="train" type="button">Ucz</button>
+      <button id="stop" class="ghost" type="button" disabled>Stop</button>
+      <span class="note" id="paramNote"></span>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-learn">
+    <h2 id="h-learn"><span class="num">3</span> Nauka</h2>
+    <div class="learn">
+      <div class="chartbox">
+        <canvas id="chart" width="640" height="260" aria-label="Wykres błędu w trakcie nauki"></canvas>
+        <div class="legend"><span class="lt">błąd na tekście treningowym</span><span class="lv">błąd na tekście sprawdzającym</span></div>
+      </div>
+      <dl class="metrics" id="metrics"></dl>
+    </div>
+    <h3>Co pisze sieć</h3>
+    <pre class="sample" id="sample">Wybierz konstrukcję i kliknij „Ucz”.</pre>
+    <div class="gen">
+      <label for="prompt">Początek tekstu<input id="prompt" type="text" value="Na końcu " maxlength="80"></label>
+      <label for="temp">Temperatura <output id="tempOut">0,8</output><input id="temp" type="range" min="0.2" max="1.5" step="0.1" value="0.8"></label>
+      <button id="gen" class="ghost" type="button" disabled>Generuj</button>
+    </div>
+    <p class="note">Temperatura: niska = sieć wybiera najpewniejsze litery (bezpiecznie, ale powtarzalnie), wysoka = odważniej (ciekawiej, ale więcej błędów).</p>
+    <h3 id="vizTitle">Co sieć wie o literach</h3>
+    <div class="vizbox"><canvas id="viz" width="640" height="420" aria-label="Wizualizacja wiedzy sieci"></canvas></div>
+    <p class="note" id="vizNote"></p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-cmp">
+    <h2 id="h-cmp"><span class="num">4</span> Porównanie</h2>
+    <div class="tablebox"><table id="cmp"><thead><tr><th>Konstrukcja</th><th>Parametry</th><th>Błąd (sprawdzający)</th><th>Bity na znak</th><th>Waha się między</th><th>Próbka</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">Bity na znak: ile informacji sieć „traci” na każdą literę; mniej znaczy lepiej. „Waha się między N literami”: tyle równie prawdopodobnych liter musiałaby losować sieć bez żadnej wiedzy, żeby być tak samo niepewna. Bez nauki to cały słownik.</p>
+    <p class="err" id="err" hidden></p>
+  </section>
+  <footer class="note">Laboratorium języka · część NeuroLabPA</footer>
+</div>
+<script src="js/data.js"></script>
+<script src="js/lang.js"></script>
+</body>
+</html>
