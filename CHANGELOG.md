@@ -3,6 +3,11 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.16.2
+- Loader nad podglądem: „Compiling shader” (z czasem i wyjaśnieniem, gdy trwa dłużej niż 3 s), potem „Rendering sprite sheet” z paskiem i liczbą klatek. Przy szybkich przeliczeniach po edycji się nie pojawia.
+- Postęp jest prawdziwy: renderer czeka na faktyczne zakończenie pracy karty graficznej po każdej animacji (fence), zamiast tylko kolejkować rysowanie. Wcześniej cała praca wykonywała się na końcu, w jednym blokującym kroku.
+- Miniatury w siatce ocen pulsują, dopóki się nie wyrenderują.
+
 ## 0.16.1
 - Naprawa: strona zawieszała się przy otwieraniu (bez komunikatu w konsoli). Na Windowsie przeglądarki tłumaczą WebGL na DirectX, którego kompilator rozwija pętle i wkleja funkcję kształtu w każde miejsce wywołania. Shader urósł na tyle, że kompilacja blokowała kartę. Pętle mają teraz granicę nieznaną kompilatorowi, a normalne są liczone w jednej pętli zamiast 6 wywołań.
 - Shadery kompilują się w tle (`KHR_parallel_shader_compile`), a w podglądzie widać „COMPILING SHADER…”. Arkusz renderuje się po jednej animacji na klatkę obrazu, więc strona odpowiada w trakcie.

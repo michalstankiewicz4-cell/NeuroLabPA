@@ -20,7 +20,14 @@
   <div class="stage">
     <div class="view">
       <div class="tabs" id="tabs" role="group" aria-label="Animation"></div>
-      <canvas id="preview" class="pix" width="256" height="80" aria-label="Zombie animation in four directions"></canvas>
+      <div class="pv">
+        <canvas id="preview" class="pix" width="256" height="80" aria-label="Zombie animation in four directions"></canvas>
+        <div class="loader" id="loader" role="status" aria-live="polite" hidden>
+          <p class="ltitle" id="loaderTitle">Loading</p>
+          <div class="lbar" id="loaderBar"><i></i></div>
+          <p class="lnote" id="loaderNote"></p>
+        </div>
+      </div>
       <div class="dirs"><span>Down</span><span>Left</span><span>Right</span><span>Up</span></div>
       <div class="meta"><span id="seedLabel">SPECIMEN #0</span><span id="sizeLabel">64×80 PX / FRAME</span></div>
     </div>

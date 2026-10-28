@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.1 · Where ratings live: the page database for the owner on claude.ai, browser storage elsewhere.
+// SDF Walkers v0.16.2 · Where ratings live: the page database for the owner on claude.ai, browser storage elsewhere.
 // ---------- ratings: storage ----------
 // The owner's ratings live with the page (db); anyone else keeps them in this browser only.
 // Tags only go with Bad: they say which part is wrong. Good means every part is fine.

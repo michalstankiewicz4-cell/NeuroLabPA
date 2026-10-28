@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.1 · WebGL setup, frame rendering, sprite sheet and its JSON.
+// SDF Walkers v0.16.2 · WebGL setup, frame rendering, sprite sheet and its JSON.
 // ---------- WebGL ----------
 const glc=document.createElement('canvas');
 const gl=glc.getContext('webgl2',{antialias:false,premultipliedAlpha:false,preserveDrawingBuffer:true});
@@ -22,6 +22,30 @@ const N2=['uTex','uCell','uPal','uOut','uShadow','uOutline','uPolish'];
 let P1,P2,U1={},U2={},fb,tex;
 let FW=64,FH=80,Z;
 const nextFrame=()=>new Promise(r=>requestAnimationFrame(()=>r()));
+// Draw calls only queue work; a fence tells us when the GPU has actually finished it.
+// Polling it once per frame keeps the page responsive and makes the progress bar honest.
+async function gpuDone(){
+  const sync=gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE,0);
+  gl.flush();
+  if(!sync)return nextFrame();
+  for(;;){
+    const r=gl.clientWaitSync(sync,0,0);
+    if(r===gl.ALREADY_SIGNALED||r===gl.CONDITION_SATISFIED||r===gl.WAIT_FAILED)break;
+    await nextFrame();
+  }
+  gl.deleteSync(sync);
+}
+// Loader over the preview. Short jobs (an edit re-rendering the sheet) finish before the delay and never show it.
+const loaderEl=document.getElementById('loader'),loaderBar=document.getElementById('loaderBar');
+let loaderTimer=0;
+function showLoader(title,frac,note,delay=0){
+  document.getElementById('loaderTitle').textContent=title;
+  document.getElementById('loaderNote').textContent=note||'';
+  loaderBar.classList.toggle('busy',frac==null);
+  loaderBar.firstElementChild.style.width=frac==null?'':Math.round(frac*100)+'%';
+  if(loaderEl.hidden&&!loaderTimer)loaderTimer=setTimeout(()=>{loaderTimer=0;loaderEl.hidden=false;},delay);
+}
+function hideLoader(){clearTimeout(loaderTimer);loaderTimer=0;loaderEl.hidden=true;}
 
 async function setup(onStatus){
   const ext=gl.getExtension('KHR_parallel_shader_compile');
@@ -29,10 +53,11 @@ async function setup(onStatus){
   const p1=startProgram(FS1),p2=startProgram(FS2);
   if(ext){
     while(!gl.getProgramParameter(p1,ext.COMPLETION_STATUS_KHR)||!gl.getProgramParameter(p2,ext.COMPLETION_STATUS_KHR)){
-      onStatus(`COMPILING SHADER… ${Math.round((performance.now()-t0)/1000)} S`);
+      const s=Math.round((performance.now()-t0)/1000);
+      onStatus('Compiling shader',null,s>=3?`${s} s. The first start on Windows can take a while; later starts reuse the compiled shader.`:'');
       await new Promise(r=>setTimeout(r,100));
     }
-  }else{onStatus('COMPILING SHADER…');await nextFrame();}
+  }else{onStatus('Compiling shader',null,'The page may pause for a moment.');await nextFrame();await nextFrame();}
   P1=checkProgram(p1);P2=checkProgram(p2);
   const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);
   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
@@ -103,13 +128,14 @@ async function renderSheet(tok){
     // looping clips wrap around; one-shot clips run from first pose to last
     for(let k=0;k<FRAMES;k++)list.push([ai,di,an.loop?k/FRAMES:k/(FRAMES-1)]);
   }));
-  const z=Z,rows=Math.ceil(list.length/FRAMES),{W,H}=prepFrames(z,FRAMES,rows);
+  const z=Z,rows=Math.ceil(list.length/FRAMES),{W,H}=prepFrames(z,FRAMES,rows),first=!sheetBitmap;
   // one animation (4 rows) per browser frame, so the page stays responsive while the sheet renders
   const step=FRAMES*DIRS.length;
   for(let i=0;i<list.length;i+=step){
     pass1(list,FRAMES,rows,i,Math.min(list.length,i+step));
-    gl.flush();
-    document.getElementById('sizeLabel').textContent=`RENDERING ${Math.min(100,Math.round((i+step)/list.length*100))}%`;
+    await gpuDone();                        // wait for the GPU to really finish this chunk, without blocking the page
+    const done=Math.min(list.length,i+step);
+    showLoader('Rendering sprite sheet',done/list.length,`${done} of ${list.length} frames`,first?0:400);
     await nextFrame();
     if(tok!==sheetToken)return;
   }
@@ -118,6 +144,7 @@ async function renderSheet(tok){
   const img=document.getElementById('sheetImg');
   img.src=url;img.style.width=(W*2)+'px';
   const bm=new Image();bm.onload=()=>{sheetBitmap=bm;};bm.src=url;
+  hideLoader();
   document.getElementById('sizeLabel').textContent=FW+'×'+FH+' PX / FRAME';
   document.getElementById('sheetNote').textContent=`Sheet ${W}×${H} px with a transparent background: ${ANIMS.length} animations × ${DIRS.length} directions = ${ROWS} rows of ${FRAMES} frames. Right-click or long-press the sheet, then choose “Save image”.`;
   writeJson(W,H);

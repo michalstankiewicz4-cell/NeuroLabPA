@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.1 · Export and import of ratings and trained models.
+// SDF Walkers v0.16.2 · Export and import of ratings and trained models.
 // ---------- export / import ----------
 // A model file carries its input list, so a file made for another version of the generator is refused, not misread.
 function featureNames(){

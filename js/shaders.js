@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.1 · GLSL sources: pass 1 raymarches the SDF zombie, pass 2 turns light/material/depth into palette pixels and outlines.
+// SDF Walkers v0.16.2 · GLSL sources: pass 1 raymarches the SDF zombie, pass 2 turns light/material/depth into palette pixels and outlines.
 const VS=`#version 300 es
 in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
 
