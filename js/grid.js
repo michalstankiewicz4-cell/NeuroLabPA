@@ -1,4 +1,4 @@
-// SDF Walkers v0.14.0 · The rating grid.
+// SDF Walkers v0.15.0 · The rating grid.
 // ---------- ratings: the grid ----------
 const grid=document.getElementById('grid');
 let cards=[];
@@ -31,7 +31,7 @@ function newBatch(){
     });
     const setVote=v=>{
       if(v){card.tags.clear();tr.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));}   // Good means every part is fine
-      card.rec={v:2,id:card.id,seed:sd,traits:ser(z),good:v,t:Date.now()};
+      card.rec={v:2,rater:'you',id:card.id,seed:sd,traits:ser(z),good:v,t:Date.now()};
       g.setAttribute('aria-pressed',v?'true':'false');b.setAttribute('aria-pressed',v?'false':'true');
       el.classList.toggle('good',v);el.classList.toggle('bad',!v);
       save(card);

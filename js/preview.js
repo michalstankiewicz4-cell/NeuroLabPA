@@ -1,4 +1,4 @@
-// SDF Walkers v0.14.0 · Animated four-direction preview.
+// SDF Walkers v0.15.0 · Animated four-direction preview.
 // ---------- preview ----------
 const pv=document.getElementById('preview'),ctx=pv.getContext('2d');
 let sheetBitmap=null,tick=0,last=0,cur=0;

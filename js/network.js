@@ -1,4 +1,4 @@
-// SDF Walkers v0.14.0 · The rating network: features, multi-output MLP, training, cross-validation, insights, model panel.
+// SDF Walkers v0.15.0 · The rating network: features, multi-output MLP, training, cross-validation, insights, model panel.
 // ---------- ratings: the network ----------
 // Input: the specimen's own traits plus two colour relations. Output: chance you rate it Good.
 const FEAT_N=55;
@@ -24,16 +24,16 @@ function createNet(n,h,seed){
   };
   m.predict=x=>m.act(x).p[0];
   // Y: targets per output, M: 1 where that target is known (a Bad with no tags says nothing about parts)
-  m.step=(X,Y,M,E)=>{
+  m.step=(X,Y,M,E,Wt)=>{
     const lr=.15,l2=.002,N=X.length;
     for(let e=0;e<E;e++){
       const gW1=m.W1.map(row=>row.map(()=>0)),gb1=new Array(h).fill(0),gW2=m.W2.map(row=>row.map(()=>0)),gb2=new Array(K).fill(0);let L=0;
       for(let s=0;s<N;s++){
-        const {a,p}=m.act(X[s]),x=X[s],da=new Array(h).fill(0);
+        const {a,p}=m.act(X[s]),x=X[s],da=new Array(h).fill(0),w=Wt?Wt[s]:1;
         for(let o=0;o<K;o++){
           if(!M[s][o])continue;
-          const d=p[o]-Y[s][o];
-          L-=Y[s][o]?Math.log(p[o]+1e-9):Math.log(1-p[o]+1e-9);
+          const d=(p[o]-Y[s][o])*w;
+          L-=w*(Y[s][o]?Math.log(p[o]+1e-9):Math.log(1-p[o]+1e-9));
           gb2[o]+=d;
           for(let j=0;j<h;j++){gW2[o][j]+=d*a[j];da[j]+=d*m.W2[o][j];}
         }
@@ -46,12 +46,20 @@ function createNet(n,h,seed){
   };
   return m;
 }
-function trainNet(X,Y,M,seed=1){const m=createNet(X[0].length,HIDDEN,seed);m.step(X,Y,M,EPOCHS);return m;}
+function trainNet(X,Y,M,seed=1,Wt){const m=createNet(X[0].length,HIDDEN,seed);m.step(X,Y,M,EPOCHS,Wt);return m;}
+// Ratings carry who made them. Claude's count less than yours when both are used.
+const CLAUDE_WEIGHT=.6;
+const isClaude=r=>r.rater==='claude';
+function sourceFilter(list){const src=document.getElementById('trainOn').value;return src==='both'?list:list.filter(r=>src==='claude'?isClaude(r):!isClaude(r));}
+let retrainTimer=0;
+function scheduleRetrain(){clearTimeout(retrainTimer);retrainTimer=setTimeout(()=>{cvCache=null;retrain();},400);}
 let net=null,netStats=null;
 const MIN_TOTAL=16,MIN_EACH=4;
 let trainToken=0,training=null,cvCache=null;
 function retrain(){
-  const rated=ratings.filter(r=>typeof r.good==='boolean');
+  const rated=sourceFilter(ratings.filter(r=>typeof r.good==='boolean'));
+  const src=document.getElementById('trainOn').value;
+  const Wt=rated.map(r=>src==='both'&&isClaude(r)?CLAUDE_WEIGHT:1);
   const pos=rated.filter(r=>r.good).length,neg=rated.length-pos;
   if(!(rated.length>=MIN_TOTAL&&pos>=MIN_EACH&&neg>=MIN_EACH)){
     net=null;netStats={n:rated.length,pos,neg};renderModel();refreshScores();drawHud();return;
@@ -67,7 +75,7 @@ function retrain(){
     let hit=0;
     for(let f=0;f<5;f++){
       const test=idx.filter((_,i)=>i%5===f),train=idx.filter((_,i)=>i%5!==f);
-      const m=trainNet(train.map(i=>X[i]),train.map(i=>Y[i]),train.map(i=>M[i]),f+2);
+      const m=trainNet(train.map(i=>X[i]),train.map(i=>Y[i]),train.map(i=>M[i]),f+2,train.map(i=>Wt[i]));
       test.forEach(i=>{if((m.predict(X[i])>.5)===(y[i]===1))hit++;});
     }
     cvCache={n:rated.length,cv:hit/X.length};
@@ -81,9 +89,9 @@ function retrain(){
   };
   if(hudOpen()&&!reduced){
     training=m;
-    const stepF=()=>{if(tok!==trainToken)return;m.step(X,Y,M,Math.min(6,EPOCHS-m.epoch));drawHud();if(m.epoch<EPOCHS)requestAnimationFrame(stepF);else finish();};
+    const stepF=()=>{if(tok!==trainToken)return;m.step(X,Y,M,Math.min(6,EPOCHS-m.epoch),Wt);drawHud();if(m.epoch<EPOCHS)requestAnimationFrame(stepF);else finish();};
     requestAnimationFrame(stepF);
-  }else{m.step(X,Y,M,EPOCHS);finish();}
+  }else{m.step(X,Y,M,EPOCHS,Wt);finish();}
 }
 function effects(rated,o){
   const T=rated.length>=10?rated.map(r=>r.traits):Array.from({length:150},(_,i)=>ser(makeZombie(900001+i)));
@@ -140,6 +148,7 @@ function renderModel(){
       <div><h3>Why parts get marked</h3>${partsHtml(ins.parts)}</div>`;
     smart.disabled=false;
   }
-  document.getElementById('rateStatus').textContent=`Good means every part is fine. If something is wrong, mark Bad and the parts that are wrong. ${s.n} rated so far.`;
+  const all=ratings.filter(r=>typeof r.good==='boolean'),cl=all.filter(isClaude).length;
+  document.getElementById('rateStatus').textContent=`Good means every part is fine. If something is wrong, mark Bad and the parts that are wrong. Rated so far: ${all.length-cl} by you, ${cl} by Claude.`;
 }
 

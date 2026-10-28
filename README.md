@@ -49,6 +49,7 @@ js/grid.js            siatka oceniania
 js/roll.js            losowanie (zwykłe i sterowane siecią)
 js/hud.js             panel Network view
 js/main.js            start i podpięcie zdarzeń
+tools/build_artifact.py  składa projekt w jeden plik HTML dla claude.ai (dist/)
 legacy/sdf-morgue.html  pierwsza wersja: sama głowa zombie
 tools/prototype/      prototyp w Pythonie (numpy), od którego wszystko się zaczęło
 docs/img/             zrzuty z kolejnych etapów
@@ -62,6 +63,10 @@ Skrypty są zwykłymi `<script>` (bez modułów ES) i dzielą zmienne globalne, 
 - Jedna warstwa ukryta (12 neuronów, tanh) i 7 wyjść (sigmoid): `good` oraz po jednym na część ciała (`Head`, `Torso`, `Arms`, `Legs`, `Skin colour`, `Clothes colour`).
 - Ocena Good uczy wszystkie części „OK”. Bad z tagami uczy wskazane części. Bad bez tagów uczy tylko `good`; wyjścia części są wtedy maskowane.
 - Jakość mierzy 5-krotna walidacja krzyżowa: jak często sieć zgadza się z ocenami, których nie widziała.
+
+## Plany
+
+Zobacz `ROADMAP.md`.
 
 ## Wersjonowanie
 

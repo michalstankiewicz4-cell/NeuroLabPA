@@ -1,4 +1,4 @@
-// SDF Walkers v0.14.0 · Palettes, trait vocabularies, animation list and the seeded specimen generator.
+// SDF Walkers v0.15.0 · Palettes, trait vocabularies, animation list and the seeded specimen generator.
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ---------- palettes ----------
 const SKINS=[

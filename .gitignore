@@ -8,3 +8,4 @@ tools/prototype/*.png
 .DS_Store
 Thumbs.db
 __pycache__/
+dist/

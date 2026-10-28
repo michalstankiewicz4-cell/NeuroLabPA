@@ -1,4 +1,4 @@
-// SDF Walkers v0.14.0 · Wiring and start-up.
+// SDF Walkers v0.15.0 · Wiring and start-up.
 document.getElementById('copy').addEventListener('click',e=>{
   const btn=e.currentTarget,txt=document.getElementById('json').textContent;
   navigator.clipboard.writeText(txt).then(()=>{btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy JSON',1500);})
@@ -26,6 +26,7 @@ else{
     if(reduced)animEl.checked=false;
     document.getElementById('roll').addEventListener('click',roll);
     document.getElementById('batch').addEventListener('click',newBatch);
+    document.getElementById('trainOn').addEventListener('change',()=>{cvCache=null;retrain();});
     ['elev','outline','polish'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{rebuild();newBatch();}));
     document.getElementById('size').addEventListener('change',e=>{[FW,FH]=e.target.value.split('x').map(Number);rebuild();newBatch();});
     requestAnimationFrame(loop);

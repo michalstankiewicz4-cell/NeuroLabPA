@@ -1,4 +1,4 @@
-// SDF Walkers v0.14.0 · WebGL setup, frame rendering, sprite sheet and its JSON.
+// SDF Walkers v0.15.0 · WebGL setup, frame rendering, sprite sheet and its JSON.
 // ---------- WebGL ----------
 const glc=document.createElement('canvas');
 const gl=glc.getContext('webgl2',{antialias:false,premultipliedAlpha:false,preserveDrawingBuffer:true});

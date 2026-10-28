@@ -3,6 +3,11 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.15.0
+- Oceny odbierane na żywo: strona subskrybuje bazę, więc oceny zapisane gdzie indziej (np. partia od Claude'a) od razu trenują sieć.
+- Każda ocena wie, kto ją wystawił (`rater: you | claude`). Przełącznik „Learn from: both / my ratings / Claude's”. Oceny Claude'a mają przy „both” wagę 0,6.
+- `ROADMAP.md` z planami. `tools/build_artifact.py` składa projekt w jeden plik dla claude.ai.
+
 ## 0.14.0
 - Podział projektu na pliki i foldery (`index.html`, `css/`, `js/`), README, CHANGELOG, numer wersji w stopce.
 - Eksport poza claude.ai działa jako zwykłe pobieranie pliku.
