@@ -1,10 +1,11 @@
-// SDF Walkers v0.16.0 · GLSL sources: pass 1 raymarches the SDF zombie, pass 2 turns light/material/depth into palette pixels and outlines.
+// SDF Walkers v0.16.1 · GLSL sources: pass 1 raymarches the SDF zombie, pass 2 turns light/material/depth into palette pixels and outlines.
 const VS=`#version 300 es
 in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
 
 const FS1=`#version 300 es
 precision highp float;
 uniform vec2 uOff,uFrame;
+uniform int uZero;   // always 0; see the loop comment in main()
 uniform float uPhase,uYaw,uElev,uScale,uAnim,uPolish,uHead;
 uniform float uTilt,uJaw,uEyeL,uEyeR,uBoneR,uBoneX,uMissing,uWound;
 uniform float uHunch,uArmGone,uLimp,uHS,uBuild,uShoulder,uHair,uCloth,uSex,uShoe,uArmShadow;
@@ -28,11 +29,11 @@ void pose(){
   float ph=uPhase,t=ph*6.2831853;
   float fv=abs(cos(uYaw))*uPolish;   // 1 in front/back views when polish is on
   gHunch=uHunch;gJaw=uJaw;gHeadPitch=0.;gSwayZ=0.;gBob=0.;gReach=0.;gHipY=1.02;gEyeOff=0.;
-  for(int i=0;i<2;i++){gSw[i]=0.;gBend[i]=.05;gArmA[i]=1.45;gArmB[i]=-.25;}
+  for(int i=uZero;i<2;i++){gSw[i]=0.;gBend[i]=.05;gArmA[i]=1.45;gArmB[i]=-.25;}
   if(uAnim<.5){ // walk
     gBob=.035*cos(2.*t)*(1.+fv);
     gSwayZ=.08*fv*sin(t);
-    for(int i=0;i<2;i++){
+    for(int i=uZero;i<2;i++){
       float p2=t+(i==0?0.:3.14159);
       float lim=i==1?1.-uLimp:1.;
       gSw[i]=.42*lim*sin(p2);
@@ -47,7 +48,7 @@ void pose(){
     gHunch+=.04*sin(t);
     gHeadPitch=.06*sin(t+.8);
     gJaw+=.025*max(0.,sin(2.*t));
-    for(int i=0;i<2;i++){gArmA[i]=1.05+(i==0?-.08:.08)+.1*sin(t+float(i)*2.);gArmB[i]=.3;}
+    for(int i=uZero;i<2;i++){gArmA[i]=1.05+(i==0?-.08:.08)+.1*sin(t+float(i)*2.);gArmB[i]=.3;}
   }else if(uAnim<2.5){ // attack
     float w=smoothstep(0.,.35,ph)*(1.-smoothstep(.35,.5,ph));
     float l=smoothstep(.35,.5,ph)*(1.-smoothstep(.75,1.,ph));
@@ -56,7 +57,7 @@ void pose(){
     gHeadPitch=-.25*w+.25*l;
     gJaw+=.08*l;
     gReach=.1*l;
-    for(int i=0;i<2;i++){gArmA[i]=1.4+1.*w-.15*l+(i==0?-.06:.06);gArmB[i]=-.15+.85*w;}
+    for(int i=uZero;i<2;i++){gArmA[i]=1.4+1.*w-.15*l+(i==0?-.06:.06);gArmB[i]=-.15+.85*w;}
   }else if(uAnim<3.5){ // hit
     float k=ph<.2?ph/.2:1.-smoothstep(.2,1.,ph);
     gHunch-=.55*k;
@@ -64,10 +65,10 @@ void pose(){
     gJaw+=.05*k;
     gHipY=1.02-.03*k;
     gSw[0]=-.15*k;gSw[1]=.12*k;
-    for(int i=0;i<2;i++){gArmA[i]=1.45+(i==0?.9:.55)*k;gArmB[i]=-.25+.85*k;}
+    for(int i=uZero;i<2;i++){gArmA[i]=1.45+(i==0?.9:.55)*k;gArmB[i]=-.25+.85*k;}
   }else{ // death: knees buckle, then the body slumps forward
     float kn=smoothstep(0.,.45,ph),sl=smoothstep(.35,.9,ph);
-    for(int i=0;i<2;i++){
+    for(int i=uZero;i<2;i++){
       gSw[i]=.9*kn*(i==0?1.:.85);gBend[i]=2.2*kn;
       gArmA[i]=mix(1.45,.25,kn);gArmB[i]=.2;
     }
@@ -100,7 +101,7 @@ vec2 headMap(vec3 p){
   d=smax(d,-ell(p,vec3(.04,-.42,.62),vec3(.28,gJaw,.25)),.04);
   float mouth=ell(p,vec3(.04,-.42,.45),vec3(.27,gJaw-.01,.1));
   float top=-.42+gJaw,teeth=1e9;
-  for(int i=0;i<5;i++){
+  for(int i=uZero;i<5;i++){
     if(float(i)==uMissing)continue;
     float x=-.18+.095*float(i),h=.05+.02*float((i*7)%3);
     teeth=min(teeth,box(p,vec3(x,top-.04-h*.5,.7),vec3(.035,h*.5,.04),.01));
@@ -118,7 +119,7 @@ vec2 headMap(vec3 p){
     if(uHair>2.5)hc=smax(hc,-min(sph(p,vec3(.5,.6,.15),.42),min(sph(p,vec3(-.15,.85,-.25),.38),sph(p,vec3(-.6,.25,-.4),.36))),.03);
     hair=hc;
     if(uHair>1.5&&uHair<2.5){
-      for(int i=0;i<3;i++){
+      for(int i=uZero;i<3;i++){
         float a=-1.15+1.15*float(i);
         vec3 s0=vec3(.6*sin(a),.2,-.6*cos(a)-.05);
         hair=smin(hair,cap(p,s0,vec3(s0.x*1.15,-1.15+.15*float(i%2),s0.z*1.1-.1),.22),.12);
@@ -149,7 +150,7 @@ vec2 map(vec3 p){
   bool jacket=g==1,gown=g==2,overalls=g==4,rags=g==5,bare=g==6,dress=g==7,shorts=g==8;
   bool bareArms=gown||g==3||bare||dress,skirt=gown||dress;
   // legs
-  for(int i=0;i<2;i++){
+  for(int i=uZero;i<2;i++){
     float s=i==0?-1.:1.;
     vec3 hip=vec3(.135*(.92+.16*uBuild)*(fem?1.18:1.)*s,gHipY,0);
     vec3 knee=hip+vec3(0,-.48*cos(gSw[i]),.48*sin(gSw[i]));
@@ -195,7 +196,7 @@ vec2 map(vec3 p){
   if(jacket)U(r,cap(p,nb+vec3(-.09,-.03,-.02),nb+vec3(.09,-.03,-.02),.055),6.);
   // arms: angle 0 hangs down, about 1.5 points forward, above 2 is raised
   float sx=(.25+.06*uShoulder+.02*uBuild)*(fem?.85:1.),ar=lb*(.9+.25*uShoulder)*(fem?.9:1.);
-  for(int i=0;i<2;i++){
+  for(int i=uZero;i<2;i++){
     float s=i==0?-1.:1.;
     if(gNoArms)break;
     vec3 sh=rotX(vec3(sx*s,.66,0),gHunch)+base+vec3(0,0,gReach);
@@ -228,7 +229,7 @@ void main(){
   vec3 ta=vec3(0,1.2,0)+rotY(vec3(0,0,.22),uYaw);
   vec3 ro=ta+uv.x*rt+uv.y*up-fw*6.,rd=fw;
   float t=0.;bool hit=false;
-  for(int i=0;i<120;i++){float d=map(ro+rd*t).x;if(d<1e-3){hit=true;break;}t+=d*.9;if(t>12.)break;}
+  for(int i=uZero;i<120;i++){float d=map(ro+rd*t).x;if(d<1e-3){hit=true;break;}t+=d*.9;if(t>12.)break;}
   if(!hit){
     if(rd.y<-.05){
       vec3 g=ro+rd*(-ro.y/rd.y);
@@ -237,11 +238,16 @@ void main(){
     o=vec4(0);return;
   }
   vec3 p=ro+rd*t;vec2 e=vec2(1e-3,0);
-  vec3 n=normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));
+  // normal from 4 samples in one loop: one copy of map() in the compiled shader instead of six.
+  // Windows browsers translate WebGL to DirectX, whose compiler unrolls loops and inlines every
+  // map() call; with constant loop bounds this shader took long enough to compile to freeze the page.
+  vec3 n=vec3(0);
+  for(int i=uZero;i<4;i++){vec3 k=.5773*(2.*vec3(float(((i+3)>>1)&1),float((i>>1)&1),float(i&1))-1.);n+=k*map(p+.001*k).x;}
+  n=normalize(n);
   vec3 L=normalize(vec3(.6,.8,.6));
   float dif=clamp(dot(n,L),0.,1.),sh=1.,ts=.02;
   gNoArms=uArmShadow<.5;
-  for(int i=0;i<24;i++){float h=map(p+n*2e-3+L*ts).x;sh=min(sh,clamp(8.*h/ts,0.,1.));ts+=clamp(h,.01,.2);}
+  for(int i=uZero;i<24;i++){float h=map(p+n*2e-3+L*ts).x;sh=min(sh,clamp(8.*h/ts,0.,1.));ts+=clamp(h,.01,.2);}
   gNoArms=false;
   float ao=1.;
   for(int i=1;i<5;i++){float h=.04*float(i);ao-=(h-map(p+n*h).x)*pow(.5,float(i))*4.;}

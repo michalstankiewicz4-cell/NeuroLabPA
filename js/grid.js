@@ -1,4 +1,4 @@
-// SDF Walkers v0.16.0 · The rating grid.
+// SDF Walkers v0.16.1 · The rating grid.
 // ---------- ratings: the grid ----------
 const grid=document.getElementById('grid');
 let cards=[];
@@ -10,8 +10,7 @@ function newBatch(){
     const el=document.createElement('div');el.className='zc';
     const cv=document.createElement('canvas');cv.className='pix';cv.width=FW*2;cv.height=FH;
     cv.setAttribute('aria-label','Zombie '+sd+', front and side view');
-    drawFrames(z,[[0,0,0],[0,2,.25]],2);
-    cv.getContext('2d').drawImage(glc,0,0);
+    glJob(()=>{drawFrames(z,[[0,0,0],[0,2,.25]],2);cv.getContext('2d').drawImage(glc,0,0);});
     const cap=document.createElement('div');cap.className='cap';
     cap.innerHTML=`<span>#${sd}</span><span class="score"></span>`;
     const vote=document.createElement('div');vote.className='vote';
