@@ -1,5 +1,7 @@
 # SDF Walkers
 
+*Repozytorium NeuroLabPA*
+
 Generator pixel-artowych zombie do gier przeglądarkowych. Postać nie jest rysowana ani generowana przez model graficzny: powstaje z **funkcji odległości (SDF)** liczonych w shaderze WebGL2, a potem jest zamieniana na pixel art (paleta, kontur, dithering).
 
 Strona robi trzy rzeczy:
@@ -18,7 +20,9 @@ python -m http.server 8000
 # potem http://localhost:8000
 ```
 
-W VS Code działa też rozszerzenie *Live Server*. Na GitHub Pages wystarczy włączyć Pages dla gałęzi `main` (katalog główny).
+W VS Code działa też rozszerzenie *Live Server*.
+
+**Wersja online:** https://michalstankiewicz4-cell.github.io/NeuroLabPA/. Stronę publikuje workflow `.github/workflows/static.yml` przy każdym wypchnięciu do gałęzi `main`.
 
 > Otwieranie `index.html` bezpośrednio z dysku (`file://`) też powinno działać, ale serwer jest pewniejszy.
 
