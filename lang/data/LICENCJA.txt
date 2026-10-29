@@ -1,0 +1,83 @@
+TEKSTY PRZYKŁADOWE LABORATORIUM JĘZYKA: ŹRÓDŁO I LICENCJA
+===========================================================
+
+Utwory: Stefan Grabiński (1887–1936), 43 nowele i opowiadania.
+Źródło: Wolne Lektury (https://wolnelektury.pl), projekt Fundacji Wolne Lektury
+(wcześniej Fundacja Nowoczesna Polska).
+
+STATUS PRAWNY
+-------------
+Wszystkie utwory w tym folderze są w domenie publicznej (autor zmarł w 1936 r.),
+co potwierdza nota w każdym pliku: „Ten utwór jest w domenie publicznej”.
+
+Materiały dodatkowe Wolnych Lektur (przypisy, motywy literackie) są udostępnione
+na Licencji Wolnej Sztuki 1.3: https://artlibre.org/licence/lal/pl/
+Pliki TXT w tym folderze ich nie zawierają; pełne wydania z przypisami są na
+stronach utworów podanych niżej.
+
+Fundacja Wolne Lektury zastrzega sobie prawa do wydania krytycznego zgodnie
+z art. 99(2) ustawy o prawie autorskim i prawach pokrewnych.
+
+Zasady wykorzystania Wolnych Lektur: https://wolnelektury.pl/info/zasady-wykorzystania/
+
+ZACHOWANIE INFORMACJI
+---------------------
+Pliki są niezmienionymi kopiami plików TXT pobranych z wolnelektury.pl
+(29 października 2026). Każdy zawiera na końcu oryginalną notę Wolnych Lektur:
+informację o licencji, wydawcy, podstawie tekstu, osobach, które opracowały
+tekst, a w części plików także informację o „Planie współpracy z Polonią
+i Polakami za granicą w 2014 roku” realizowanym za pośrednictwem MSZ. Noty te
+muszą pozostać w plikach przy dalszym udostępnianiu.
+
+Strona laboratorium pomija notę (tekst po linii „-----”) i linię z numerem ISBN
+tylko w pamięci przeglądarki, przy wczytywaniu tekstu do nauki sieci, bo nie są
+częścią utworu. Same pliki pozostają bez zmian.
+
+Kod NeuroLabPA nie jest objęty tą informacją; dotyczy ona wyłącznie plików
+tekstowych w folderze lang/data/.
+
+LISTA UTWORÓW
+-------------
+- Biały wyrak — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-bialy-wyrak/  (plik: grabinski-ksiega-ognia-bialy-wyrak.txt)
+- Błędny pociąg — https://wolnelektury.pl/katalog/lektura/grabinski-bledny-pociag/  (plik: grabinski-bledny-pociag.txt)
+- Czad — https://wolnelektury.pl/katalog/lektura/grabinski-czad/  (plik: grabinski-czad.txt)
+- Czerwona Magda — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-czerwona-magda/  (plik: grabinski-ksiega-ognia-czerwona-magda.txt)
+- Demon ruchu — https://wolnelektury.pl/katalog/lektura/grabinski-demon-ruchu/  (plik: grabinski-demon-ruchu.txt)
+- Dziedzina — https://wolnelektury.pl/katalog/lektura/grabinski-dziedzina/  (plik: grabinski-dziedzina.txt)
+- Dziwna stacja — https://wolnelektury.pl/katalog/lektura/grabinski-dziwna-stacja/  (plik: grabinski-dziwna-stacja.txt)
+- Fałszywy alarm — https://wolnelektury.pl/katalog/lektura/grabinski-falszywy-alarm/  (plik: grabinski-falszywy-alarm.txt)
+- Gebrowie — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-gebrowie/  (plik: grabinski-ksiega-ognia-gebrowie.txt)
+- Głucha przestrzeń — https://wolnelektury.pl/katalog/lektura/grabinski-glucha-przestrzen/  (plik: grabinski-glucha-przestrzen.txt)
+- Klątwa — https://wolnelektury.pl/katalog/lektura/grabinski-z-wyjatkow-w-pomrokach-wiary-klatwa/  (plik: grabinski-z-wyjatkow-w-pomrokach-wiary-klatwa.txt)
+- Kochanka Szamoty — https://wolnelektury.pl/katalog/lektura/grabinski-niesamowita-opowiesc-kochanka-szamoty/  (plik: grabinski-niesamowita-opowiesc-kochanka-szamoty.txt)
+- Maszynista Grot — https://wolnelektury.pl/katalog/lektura/grabinski-maszynista-grot/  (plik: grabinski-maszynista-grot.txt)
+- Muzeum dusz czyśćcowych — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-muzeum-dusz-czysccowych/  (plik: grabinski-ksiega-ognia-muzeum-dusz-czysccowych.txt)
+- Na tropie — https://wolnelektury.pl/katalog/lektura/grabinski-niesamowita-opowiesc-na-tropie/  (plik: grabinski-niesamowita-opowiesc-na-tropie.txt)
+- Namiętność — https://wolnelektury.pl/katalog/lektura/grabinski-namietnosc/  (plik: grabinski-namietnosc.txt)
+- Nietykalny — https://wolnelektury.pl/katalog/lektura/grabinski-nietykalny/  (plik: grabinski-nietykalny.txt)
+- Pirotechnik — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-pirotechnik/  (plik: grabinski-ksiega-ognia-pirotechnik.txt)
+- Po stycznej — https://wolnelektury.pl/katalog/lektura/grabinski-na-wzgorzu-roz-po-stycznej/  (plik: grabinski-na-wzgorzu-roz-po-stycznej.txt)
+- Podzwonne — https://wolnelektury.pl/katalog/lektura/grabinski-z-wyjatkow-w-pomrokach-wiary-podzwonne/  (plik: grabinski-z-wyjatkow-w-pomrokach-wiary-podzwonne.txt)
+- Pomsta ziemi — https://wolnelektury.pl/katalog/lektura/grabinski-z-wyjatkow-w-pomrokach-wiary/  (plik: grabinski-z-wyjatkow-w-pomrokach-wiary.txt)
+- Pożarowisko — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-pozarowisko/  (plik: grabinski-ksiega-ognia-pozarowisko.txt)
+- Problemat Czelawy — https://wolnelektury.pl/katalog/lektura/grabinski-problemat-czelawy/  (plik: grabinski-problemat-czelawy.txt)
+- Projekcje — https://wolnelektury.pl/katalog/lektura/grabinski-namietnosc-projekcje/  (plik: grabinski-namietnosc-projekcje.txt)
+- Przed drogą daleką — https://wolnelektury.pl/katalog/lektura/grabinski-niesamowita-opowiesc-przed-droga-daleka/  (plik: grabinski-niesamowita-opowiesc-przed-droga-daleka.txt)
+- Przypadek — https://wolnelektury.pl/katalog/lektura/grabinski-przypadek/  (plik: grabinski-przypadek.txt)
+- Puszczyk — https://wolnelektury.pl/katalog/lektura/grabinski-z-wyjatkow-w-pomrokach-wiary-puszczyk/  (plik: grabinski-z-wyjatkow-w-pomrokach-wiary-puszczyk.txt)
+- Płomienne gody — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-plomienne-gody/  (plik: grabinski-ksiega-ognia-plomienne-gody.txt)
+- Saturnin Sektor — https://wolnelektury.pl/katalog/lektura/grabinski-saturnin-sektor/  (plik: grabinski-saturnin-sektor.txt)
+- Smoluch — https://wolnelektury.pl/katalog/lektura/grabinski-smoluch/  (plik: grabinski-smoluch.txt)
+- Spojrzenie — https://wolnelektury.pl/katalog/lektura/grabinski-niesamowita-opowiesc-spojrzenie/  (plik: grabinski-niesamowita-opowiesc-spojrzenie.txt)
+- Sygnały — https://wolnelektury.pl/katalog/lektura/grabinski-sygnaly/  (plik: grabinski-sygnaly.txt)
+- Szalona zagroda — https://wolnelektury.pl/katalog/lektura/grabinski-z-wyjatkow-w-pomrokach-wiary-szalona-zagroda/  (plik: grabinski-z-wyjatkow-w-pomrokach-wiary-szalona-zagroda.txt)
+- Szary pokój — https://wolnelektury.pl/katalog/lektura/grabinski-szary-pokoj/  (plik: grabinski-szary-pokoj.txt)
+- Ultima Thule — https://wolnelektury.pl/katalog/lektura/grabinski-ultima-thule/  (plik: grabinski-ultima-thule.txt)
+- W domu Sary — https://wolnelektury.pl/katalog/lektura/grabinski-niesamowita-opowiesc-w-domu-sary/  (plik: grabinski-niesamowita-opowiesc-w-domu-sary.txt)
+- W willi nad morzem — https://wolnelektury.pl/katalog/lektura/grabinski-na-wzgorzu-roz-w-willi-nad-morzem/  (plik: grabinski-na-wzgorzu-roz-w-willi-nad-morzem.txt)
+- Wampir — https://wolnelektury.pl/katalog/lektura/grabinski-z-wyjatkow-w-pomrokach-wiary-wampir/  (plik: grabinski-z-wyjatkow-w-pomrokach-wiary-wampir.txt)
+- Zemsta żywiołaków — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-zemsta-zywiolakow/  (plik: grabinski-ksiega-ognia-zemsta-zywiolakow.txt)
+- Zez — https://wolnelektury.pl/katalog/lektura/grabinski-na-wzgorzu-roz-zez/  (plik: grabinski-na-wzgorzu-roz-zez.txt)
+- Zielone Świątki — https://wolnelektury.pl/katalog/lektura/grabinski-ksiega-ognia-zielone-swiatki/  (plik: grabinski-ksiega-ognia-zielone-swiatki.txt)
+- Ślepy tor — https://wolnelektury.pl/katalog/lektura/grabinski-slepy-tor/  (plik: grabinski-slepy-tor.txt)
+- Świadek Materna — https://wolnelektury.pl/katalog/lektura/grabinski-swiadek-materna/  (plik: grabinski-swiadek-materna.txt)

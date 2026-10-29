@@ -3,6 +3,11 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.18.2
+- Laboratorium języka: przykład to teraz 43 nowele i opowiadania Stefana Grabińskiego z Wolnych Lektur (domena publiczna, ok. 1,1 mln znaków). Źródło, licencja i lista utworów: `lang/data/LICENCJA.txt`; oryginalne noty licencyjne zostają w plikach.
+- Na tym tekście sieć z oknem wyraźnie wygrywa z bigramem (błąd sprawdzający 2,12 wobec 2,52; waha się między 8 literami zamiast 12) i nie uczy się na pamięć.
+- Przy wczytywaniu do nauki pomijana jest też linia z numerem ISBN.
+
 ## 0.18.1
 - Laboratorium języka: **Użyj przykładu** wczytuje lektury z folderu `lang/data/` (lista w `manifest.json`), a nota licencyjna Wolnych Lektur na końcu pliku jest pomijana. Bez lektur, albo z pliku otwartego z dysku, zostaje krótki tekst wbudowany.
 

@@ -11,4 +11,4 @@ Dodanie lektury: plik TXT z wolnelektury.pl (domena publiczna) wrzuć do tego fo
 ] }
 ```
 
-Stopka licencyjna Wolnych Lektur (na końcu pliku, po linii z `-----`) jest wycinana przy wczytywaniu.
+Stopka licencyjna Wolnych Lektur (na końcu pliku, po linii z `-----`) jest pomijana przy wczytywaniu do nauki, ale w plikach zostaje. Źródło i licencja tekstów: `LICENCJA.txt`.

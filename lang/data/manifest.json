@@ -1,3 +1,220 @@
 {
-  "files": []
+ "source": "wolnelektury.pl (domena publiczna); każdy plik zawiera oryginalną notę licencyjną",
+ "files": [
+  {
+   "file": "grabinski-ksiega-ognia-bialy-wyrak.txt",
+   "title": "Biały wyrak",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-bledny-pociag.txt",
+   "title": "Błędny pociąg",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-czad.txt",
+   "title": "Czad",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-czerwona-magda.txt",
+   "title": "Czerwona Magda",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-demon-ruchu.txt",
+   "title": "Demon ruchu",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-dziedzina.txt",
+   "title": "Dziedzina",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-dziwna-stacja.txt",
+   "title": "Dziwna stacja",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-falszywy-alarm.txt",
+   "title": "Fałszywy alarm",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-gebrowie.txt",
+   "title": "Gebrowie",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-glucha-przestrzen.txt",
+   "title": "Głucha przestrzeń",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-klatwa.txt",
+   "title": "Klątwa",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-niesamowita-opowiesc-kochanka-szamoty.txt",
+   "title": "Kochanka Szamoty",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-maszynista-grot.txt",
+   "title": "Maszynista Grot",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-muzeum-dusz-czysccowych.txt",
+   "title": "Muzeum dusz czyśćcowych",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-niesamowita-opowiesc-na-tropie.txt",
+   "title": "Na tropie",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-namietnosc.txt",
+   "title": "Namiętność",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-nietykalny.txt",
+   "title": "Nietykalny",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-pirotechnik.txt",
+   "title": "Pirotechnik",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-na-wzgorzu-roz-po-stycznej.txt",
+   "title": "Po stycznej",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-podzwonne.txt",
+   "title": "Podzwonne",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary.txt",
+   "title": "Pomsta ziemi",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-pozarowisko.txt",
+   "title": "Pożarowisko",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-problemat-czelawy.txt",
+   "title": "Problemat Czelawy",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-namietnosc-projekcje.txt",
+   "title": "Projekcje",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-niesamowita-opowiesc-przed-droga-daleka.txt",
+   "title": "Przed drogą daleką",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-przypadek.txt",
+   "title": "Przypadek",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-puszczyk.txt",
+   "title": "Puszczyk",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-plomienne-gody.txt",
+   "title": "Płomienne gody",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-saturnin-sektor.txt",
+   "title": "Saturnin Sektor",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-smoluch.txt",
+   "title": "Smoluch",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-niesamowita-opowiesc-spojrzenie.txt",
+   "title": "Spojrzenie",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-sygnaly.txt",
+   "title": "Sygnały",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-szalona-zagroda.txt",
+   "title": "Szalona zagroda",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-szary-pokoj.txt",
+   "title": "Szary pokój",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ultima-thule.txt",
+   "title": "Ultima Thule",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-niesamowita-opowiesc-w-domu-sary.txt",
+   "title": "W domu Sary",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-na-wzgorzu-roz-w-willi-nad-morzem.txt",
+   "title": "W willi nad morzem",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-wampir.txt",
+   "title": "Wampir",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-zemsta-zywiolakow.txt",
+   "title": "Zemsta żywiołaków",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-na-wzgorzu-roz-zez.txt",
+   "title": "Zez",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-ksiega-ognia-zielone-swiatki.txt",
+   "title": "Zielone Świątki",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-slepy-tor.txt",
+   "title": "Ślepy tor",
+   "author": "Stefan Grabiński"
+  },
+  {
+   "file": "grabinski-swiadek-materna.txt",
+   "title": "Świadek Materna",
+   "author": "Stefan Grabiński"
+  }
+ ]
 }
