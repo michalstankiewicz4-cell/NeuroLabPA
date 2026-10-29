@@ -3,6 +3,9 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.18.1
+- Laboratorium języka: **Użyj przykładu** wczytuje lektury z folderu `lang/data/` (lista w `manifest.json`), a nota licencyjna Wolnych Lektur na końcu pliku jest pomijana. Bez lektur, albo z pliku otwartego z dysku, zostaje krótki tekst wbudowany.
+
 ## 0.18.0
 - Nowa strona **Laboratorium języka** (`lang/`): własna sieć uczy się polskiego od zera, litera po literze. Link w nagłówku strony głównej.
 - Własny silnik uczenia w czystym JS (`lang/js/engine.js`): tensory, automatyczne liczenie gradientów (autograd), Adam, PCA. Sprawdzony testem gradientów numerycznych.

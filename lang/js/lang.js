@@ -50,7 +50,25 @@ function loadText(text, label) {
   worker.postMessage({ cmd: 'data', text: corpus, chars: vocab.chars });
   updateParamNote();
 }
-$('useSample').addEventListener('click', () => loadText(SAMPLE_TEXT, 'przykład (Claude)'));
+// Przykład: lektury z lang/data/ (lista w manifest.json, bo serwer statyczny nie pokazuje zawartości folderu).
+// Gdy ich brak albo strona jest otwarta z dysku, zostaje krótki tekst wbudowany w data.js.
+// Pliki z Wolnych Lektur kończą się notą licencyjną po linii „-----”; to nie jest tekst utworu.
+function stripFooter(t) { const i = t.search(/\r?\n-----\r?\n[^]*$/); return i > 0 ? t.slice(0, i) : t; }
+async function loadExample() {
+  $('useSample').disabled = true;
+  try {
+    const man = await (await fetch('data/manifest.json', { cache: 'no-cache' })).json();
+    const list = (man.files || []).filter(f => f.file);
+    if (!list.length) throw 0;
+    $('dataNote').textContent = 'Wczytuję lektury…';
+    const texts = await Promise.all(list.map(async f => { const r = await fetch('data/' + f.file); if (!r.ok) throw 0; return stripFooter(await r.text()); }));
+    loadText(texts.join('\n\n'), list.length === 1 ? list[0].title : `${list.length} lektury`);
+    $('dataNote').textContent = 'Przykład: ' + list.map(f => f.title + (f.author ? ` (${f.author})` : '')).join(', ') + '. Domena publiczna, z wolnelektury.pl. ' + $('dataNote').textContent;
+  } catch (e) {
+    loadText(SAMPLE_TEXT, 'przykład (Claude)');
+  } finally { $('useSample').disabled = false; }
+}
+$('useSample').addEventListener('click', loadExample);
 $('files').addEventListener('change', async e => {
   const files = [...e.target.files]; e.target.value = '';
   if (!files.length) return;
@@ -234,4 +252,4 @@ function renderCmp() {
 
 // ---------- start ----------
 renderSteps(); renderExplain(); renderHP(); renderCmp();
-loadText(SAMPLE_TEXT, 'przykład (Claude)');
+loadExample();
