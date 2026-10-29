@@ -6,8 +6,8 @@ Plany z rozmów projektowych, w kolejności, w jakiej najpewniej je zrobimy.
 - **Partia ocen od Claude'a.** Claude ocenia zombie (te same miniatury co Ty: przód i bok, pierwsza klatka chodu) i zapisuje oceny jako `rater: "claude"`. Strona odbiera je na żywo i uczy się z nich z mniejszą wagą niż z Twoich (`CLAUDE_WEIGHT`).
 
 ## Laboratorium języka
-- **Krok 4: transformer.** Uwaga (attention): każda litera sama wybiera, na które wcześniejsze patrzeć. Mapa uwagi na żywo.
-- **Przełącznik CPU/GPU (WebGPU)**, razem z krokiem 4. Silnik w shaderach WGSL, w którym cały krok nauki zostaje na karcie graficznej. Porównanie szybkości CPU i GPU dla RNN (czyta po kolei, więc zyskuje mało) i dla transformera (wszystkie pozycje naraz, więc zyskuje dużo). To w praktyce pokazuje, dlaczego transformer wygrał.
+- **Szybszy procesor:** WebAssembly z SIMD (4 liczby naraz) i nauka na kilku wątkach jednocześnie, dla wszystkich kroków.
+- **GPU także dla RNN/GRU**, żeby pokazać na liczbach, że sieć czytająca po kolei zyskuje na karcie dużo mniej niż transformer.
 - Tokeny większe niż litera (BPE), potem rozmowa: dostrajanie na dialogach.
 
 ## Następne

@@ -14,6 +14,7 @@ class T {
   }
   get size() { return this.d.length; }
 }
+const T_ = T;   // inna nazwa tej samej klasy, gdy parametr funkcji nazywa się T (długość tekstu)
 
 // Parametr: liczby losowe z rozkładu normalnego, przeskalowane (inicjalizacja ma znaczenie, patrz opis kroku 2).
 function randn() { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
@@ -143,6 +144,91 @@ function crossEntropy(logits, targets) {
   return out;
 }
 
+// ---------- klocki transformera ----------
+// Dodaje wektor pozycji P[t] do wiersza b*T+t: sieć z uwagą sama nie wie, która litera jest która z kolei.
+function addPos(x, P, T) {
+  const [n, d] = x.s, O = new Float32Array(x.d);
+  for (let i = 0; i < n; i++) { const t = i % T; for (let j = 0; j < d; j++) O[i * d + j] += P.d[t * d + j]; }
+  const out = new T_(O, x.s, [x, P], () => {
+    for (let i = 0; i < n; i++) { const t = i % T; for (let j = 0; j < d; j++) { const g = out.g[i * d + j]; x.g[i * d + j] += g; P.g[t * d + j] += g; } }
+  });
+  return out;
+}
+// Normalizacja warstwy: każdy wiersz sprowadzony do średniej 0 i wariancji 1, potem skala g i przesunięcie b.
+// Trzyma liczby w rozsądnym zakresie przy wielu warstwach, więc nauka jest stabilna.
+function layerNorm(x, g, b) {
+  const [n, d] = x.s, O = new Float32Array(n * d), XH = new Float32Array(n * d), RS = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    let m = 0; for (let j = 0; j < d; j++) m += x.d[i * d + j]; m /= d;
+    let v = 0; for (let j = 0; j < d; j++) { const z = x.d[i * d + j] - m; v += z * z; } v /= d;
+    const rs = 1 / Math.sqrt(v + 1e-5); RS[i] = rs;
+    for (let j = 0; j < d; j++) { const xh = (x.d[i * d + j] - m) * rs; XH[i * d + j] = xh; O[i * d + j] = xh * g.d[j] + b.d[j]; }
+  }
+  const out = new T_(O, x.s, [x, g, b], () => {
+    for (let i = 0; i < n; i++) {
+      let s1 = 0, s2 = 0;
+      for (let j = 0; j < d; j++) { const go = out.g[i * d + j], dxh = go * g.d[j]; g.g[j] += go * XH[i * d + j]; b.g[j] += go; s1 += dxh; s2 += dxh * XH[i * d + j]; }
+      for (let j = 0; j < d; j++) { const dxh = out.g[i * d + j] * g.d[j]; x.g[i * d + j] += RS[i] * (dxh - s1 / d - XH[i * d + j] * s2 / d); }
+    }
+  });
+  return out;
+}
+// GELU: gładsza wersja „przepuść dodatnie, wytnij ujemne”; standard w transformerach.
+function gelu(a) {
+  const n = a.size, O = new Float32Array(n), D = new Float32Array(n), c = Math.sqrt(2 / Math.PI);
+  for (let i = 0; i < n; i++) {
+    const x = a.d[i], u = c * (x + .044715 * x * x * x), t = Math.tanh(u);
+    O[i] = .5 * x * (1 + t); D[i] = .5 * (1 + t) + .5 * x * (1 - t * t) * c * (1 + 3 * .044715 * x * x);
+  }
+  const out = new T_(O, a.s, [a], () => { for (let i = 0; i < n; i++) a.g[i] += D[i] * out.g[i]; });
+  return out;
+}
+// Uwaga przyczynowa (causal self-attention), wiele głów naraz.
+// qkv: [B*T, 3d] = zapytania Q, klucze K i wartości V dla każdej pozycji. Dla litery i każda głowa liczy,
+// jak bardzo jej zapytanie pasuje do kluczy liter 0..i (późniejszych nie widzi), zamienia to softmaxem
+// na wagi sumujące się do 1 i bierze ważoną sumę wartości. Wagi zostają w out.att do pokazania.
+function causalAttention(qkv, B, T, nh) {
+  const d = qkv.s[1] / 3, hd = d / nh, sc = 1 / Math.sqrt(hd), Qd = qkv.d;
+  const O = new Float32Array(B * T * d), A = new Float32Array(B * nh * T * T);
+  for (let b = 0; b < B; b++) for (let h = 0; h < nh; h++) {
+    const ab = (b * nh + h) * T * T;
+    for (let i = 0; i < T; i++) {
+      const qi = (b * T + i) * 3 * d + h * hd; let mx = -Infinity;
+      for (let j = 0; j <= i; j++) {
+        const kj = (b * T + j) * 3 * d + d + h * hd; let s = 0;
+        for (let k = 0; k < hd; k++) s += Qd[qi + k] * Qd[kj + k];
+        s *= sc; A[ab + i * T + j] = s; if (s > mx) mx = s;
+      }
+      let sum = 0; for (let j = 0; j <= i; j++) { const e = Math.exp(A[ab + i * T + j] - mx); A[ab + i * T + j] = e; sum += e; }
+      const oi = (b * T + i) * d + h * hd;
+      for (let j = 0; j <= i; j++) {
+        const p = A[ab + i * T + j] /= sum, vj = (b * T + j) * 3 * d + 2 * d + h * hd;
+        for (let k = 0; k < hd; k++) O[oi + k] += p * Qd[vj + k];
+      }
+    }
+  }
+  const out = new T_(O, [B * T, d], [qkv], () => {
+    const G = qkv.g, dP = new Float32Array(T);
+    for (let b = 0; b < B; b++) for (let h = 0; h < nh; h++) {
+      const ab = (b * nh + h) * T * T;
+      for (let i = 0; i < T; i++) {
+        const oi = (b * T + i) * d + h * hd, qi = (b * T + i) * 3 * d + h * hd; let dot = 0;
+        for (let j = 0; j <= i; j++) {
+          const vj = (b * T + j) * 3 * d + 2 * d + h * hd, p = A[ab + i * T + j]; let s = 0;
+          for (let k = 0; k < hd; k++) { const go = out.g[oi + k]; s += go * Qd[vj + k]; G[vj + k] += p * go; }   // dV
+          dP[j] = s; dot += s * p;
+        }
+        for (let j = 0; j <= i; j++) {
+          const ds = A[ab + i * T + j] * (dP[j] - dot) * sc, kj = (b * T + j) * 3 * d + d + h * hd;
+          for (let k = 0; k < hd; k++) { G[qi + k] += ds * Qd[kj + k]; G[kj + k] += ds * Qd[qi + k]; }   // dQ, dK
+        }
+      }
+    }
+  });
+  out.att = A;
+  return out;
+}
+
 // ---------- komórki sieci rekurencyjnych: jeden krok czytania (jedna litera) ----------
 // xw: wkład bieżącej litery (embedding × W + bias), h: pamięć po poprzedniej literze, U: wagi pamięci.
 
@@ -221,4 +307,4 @@ function pca2(M, rows, cols) {
   return pts;
 }
 
-if (typeof module !== 'undefined') module.exports = { T, param, zeros, matmul, addBias, tanh, sigmoid, add, sub, mul, sliceRows, sliceCols, concatRows, rnnCell, gruCell, gather, view, crossEntropy, backward, Adam, pca2 };
+if (typeof module !== 'undefined') module.exports = { T, param, zeros, matmul, addBias, tanh, sigmoid, add, sub, mul, sliceRows, sliceCols, concatRows, rnnCell, gruCell, addPos, layerNorm, gelu, causalAttention, gather, view, crossEntropy, backward, Adam, pca2 };

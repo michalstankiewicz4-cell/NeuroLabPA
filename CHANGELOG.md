@@ -3,6 +3,26 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.21.0
+- Laboratorium języka, **krok 4: transformer** w wersji „tylko dekoder”, jak GPT.
+  - Uwaga przyczynowa z kilkoma głowami, wektory pozycji, normalizacja warstwy, GELU i połączenia omijające.
+  - Do wyboru: warstwy, szerokość, głowy i okno.
+- **Mapa uwagi:** klikasz literę i widzisz, na które wcześniejsze patrzy wybrana głowa. Przy każdej głowie jest podane, jak daleko średnio sięga.
+  - Po 2000 krokach na Grabińskim głowy pierwszej warstwy patrzą 1–2 litery wstecz (jedna w 85% na poprzednią literę), a głowy drugiej warstwy ok. 12 liter wstecz.
+- **Przełącznik CPU/GPU** dla transformera.
+  - Nowy silnik `lang/js/gpu.js` w WebGPU: 18 shaderów WGSL dla każdego działania w przód i wstecz, przycięcia gradientu i Adama.
+  - Cały krok nauki jest nagrany raz i odtwarzany na karcie; do procesora wraca tylko błąd, a wagi co kilka sekund (do próbek i map).
+- **Test zgodności przy pierwszym wyborze GPU:** ten sam start i ta sama porcja tekstu na CPU i GPU. Błąd zgadza się do 5–7 cyfr, wagi po kroku różnią się o ok. 1e-4 (zaokrąglenia). Bez WebGPU opcja jest wyłączona z wyjaśnieniem.
+- Czas kroku nauki (ms, CPU albo GPU z nazwą karty) w metrykach i w nowej kolumnie tabeli porównania.
+- Silnik CPU: `addPos`, `layerNorm`, `gelu`, `causalAttention` z ręcznie liczonym gradientem, sprawdzone numerycznie.
+- Wyniki na Grabińskim (błąd sprawdzający):
+  - transformer 2×32, 4 głowy, okno 64, 2000 kroków na CPU: 2,05;
+  - GRU: 2,08;
+  - zwykła RNN: 2,15;
+  - sieć z oknem: 2,22;
+  - bigram: 2,52.
+- Silnik GPU sprawdzony tu tylko w emulacji (SwiftShader): wyniki są poprawne, ale prawdziwą szybkość widać dopiero na prawdziwej karcie.
+
 ## 0.20.0
 - Laboratorium języka, **krok 3: sieć rekurencyjna** do wyboru w dwóch wersjach: zwykła RNN (Elman 1990) i GRU z bramkami (2014).
   - Nauka na kawałkach tekstu z obciętą propagacją wstecz i przycinaniem gradientu.

@@ -1,5 +1,5 @@
 // Laboratorium języka · wątek treningowy. Liczy w tle, żeby strona nigdy się nie zawieszała.
-importScripts('engine.js');
+importScripts('engine.js', 'gpu.js');
 
 let tokens = null, V = 0, chars = [], nTrain = 0, valIdx = null, nlIdx = 0, dataLabel = '';
 let running = null;                 // aktualny trening: {kind, stop}
@@ -194,27 +194,157 @@ function rnnBatch(B, Tn) {
   return { X, Y };
 }
 
-// ---------- wspólna pętla nauki (krok 2 i 3) ----------
+
+// ---------- krok 4: transformer (Vaswani i in. 2017; tu wersja „tylko dekoder”, jak w GPT) ----------
+// Każda pozycja w oknie T liter jednocześnie patrzy na wszystkie wcześniejsze (uwaga) i sama wybiera,
+// które są ważne. Nic nie musi przejść przez wąską pamięć jak w RNN, a wszystkie pozycje liczą się naraz.
+function buildTransformer(hp, ch) {
+  const { layers: L, dim: d, heads: nh, ctx: T } = hp, Vm = ch.length, nl = Math.max(0, ch.indexOf('\n'));
+  const one = n => { const t = zeros([n]); t.d.fill(1); return t; };
+  const Emb = param([Vm, d], .3), P = param([T, d], .1), params = [Emb, P], blocks = [];
+  const s = 1 / Math.sqrt(d), sr = s / Math.sqrt(2 * L);     // wyjścia bloków mniejsze: suma wielu warstw nie rośnie
+  for (let l = 0; l < L; l++) {
+    const b = { g1: one(d), b1: zeros([d]), Wqkv: param([d, 3 * d], s), bqkv: zeros([3 * d]), Wp: param([d, d], sr), bp: zeros([d]),
+      g2: one(d), b2: zeros([d]), W1: param([d, 4 * d], s), c1: zeros([4 * d]), W2: param([4 * d, d], sr / 2), c2: zeros([d]) };
+    blocks.push(b); params.push(...Object.values(b));
+  }
+  const gf = one(d), bf = zeros([d]), Wo = param([d, Vm], .01), bo = zeros([Vm]);
+  params.push(gf, bf, Wo, bo);
+  // X: B okien po Tw liter, wiersz b*Tw + t. Zwraca logity dla każdej pozycji i tensory uwagi z każdej warstwy.
+  const forward = (X, B, Tw) => {
+    let x = addPos(gather(Emb, X), P, Tw); const atts = [];
+    for (const b of blocks) {
+      const at = causalAttention(addBias(matmul(layerNorm(x, b.g1, b.b1), b.Wqkv), b.bqkv), B, Tw, nh); atts.push(at);
+      x = add(x, addBias(matmul(at, b.Wp), b.bp));                                   // uwaga + połączenie omijające (residual)
+      x = add(x, addBias(matmul(gelu(addBias(matmul(layerNorm(x, b.g2, b.b2), b.W1), b.c1)), b.W2), b.c2));   // sieć w każdej pozycji osobno
+    }
+    return { logits: addBias(matmul(layerNorm(x, gf, bf), Wo), bo), atts };
+  };
+  return { kind: 'transformer', hp, chars: ch, E: Emb, params, forward, count: params.reduce((a, p) => a + p.size, 0),
+    stepper: () => c => {
+      const w = c.length ? c.slice(-T) : [nl], X = Int32Array.from(w);
+      const lg = forward(X, 1, X.length).logits;
+      return softmaxRow(lg.d.subarray((X.length - 1) * Vm, X.length * Vm));
+    } };
+}
+function tfBatch(B, T, from, to) {
+  const X = new Int32Array(B * T), Y = new Int32Array(B * T);
+  for (let b = 0; b < B; b++) { const s = from + randInt(to - from - T - 1); for (let t = 0; t < T; t++) { X[b * T + t] = tokens[s + t]; Y[b * T + t] = tokens[s + t + 1]; } }
+  return { X, Y };
+}
+// Sprawdzanie: okna z tekstu sprawdzającego; liczą się tylko pozycje z drugiej połowy okna,
+// żeby każda przewidywana litera miała przed sobą co najmniej T/2 liter (jak rozgrzanie w RNN).
+function evalTF(m, from, to, S = 32) {
+  const T = m.hp.ctx, Vm = m.chars.length, span = to - from - T - 2, X = new Int32Array(S * T), Y = new Int32Array(S * T);
+  for (let b = 0; b < S; b++) { const s = from + Math.floor(span * (b + .5) / S); for (let t = 0; t < T; t++) { X[b * T + t] = tokens[s + t]; Y[b * T + t] = tokens[s + t + 1]; } }
+  const lg = m.forward(X, S, T).logits.d; let loss = 0, n = 0;
+  for (let b = 0; b < S; b++) for (let t = T >> 1; t < T; t++) {
+    const o = (b * T + t) * Vm; let mx = -Infinity; for (let j = 0; j < Vm; j++) mx = Math.max(mx, lg[o + j]);
+    let sum = 0; for (let j = 0; j < Vm; j++) sum += Math.exp(lg[o + j] - mx);
+    loss += Math.log(sum) + mx - lg[o + Y[b * T + t]]; n++;
+  }
+  return loss / n;
+}
+// Mapa uwagi: jedno okno tekstu sprawdzającego, wagi uwagi z każdej warstwy i głowy
+// oraz to, jak daleko wstecz każda głowa średnio patrzy.
+function attentionProbe(m) {
+  const T = m.hp.ctx, nh = m.hp.heads, s = nTrain + 1 + randInt(tokens.length - nTrain - T - 2), X = tokens.slice(s, s + T);
+  const { atts } = m.forward(X, 1, T);
+  const heads = [];
+  atts.forEach((a, l) => { for (let h = 0; h < nh; h++) {
+    let dist = 0; for (let i = 0; i < T; i++) for (let j = 0; j <= i; j++) dist += a.att[h * T * T + i * T + j] * (i - j);
+    heads.push({ layer: l, head: h, dist: dist / T });
+  } });
+  return { text: Array.from(X, i => m.chars[i]).join(''), T, L: atts.length, nh, att: atts.map(a => a.att), heads };
+}
+function trainTF(hp) {
+  const m = buildTransformer(hp, chars);
+  trainLoop(m, hp, {
+    loss: () => { const { X, Y } = tfBatch(hp.batch, hp.ctx, 0, nTrain); return crossEntropy(m.forward(X, hp.batch, hp.ctx).logits, Y); },
+    val: () => evalTF(m, nTrain + 1, tokens.length), train: () => evalTF(m, 1, nTrain), valMs: 2500, clip: 1,
+    extras: () => ({ attn: attentionProbe(m), emb: { labels: chars, pts: pca2(m.E.d, V, hp.dim) } }),
+  });
+}
+
+// ---------- transformer na karcie graficznej ----------
+let gpuEng = null;
+async function getGPU() { if (!gpuEng || gpuEng.lost) gpuEng = await GPUEngine.create(); return gpuEng; }
+function tfEvalXY(T, from, to, S = 32) {
+  const span = to - from - T - 2, X = new Int32Array(S * T), Y = new Int32Array(S * T);
+  for (let b = 0; b < S; b++) { const s = from + Math.floor(span * (b + .5) / S); for (let t = 0; t < T; t++) { X[b * T + t] = tokens[s + t]; Y[b * T + t] = tokens[s + t + 1]; } }
+  return { X, Y };
+}
+async function trainTFGPU(hp) {
+  const eng = await getGPU(), m = buildTransformer(hp, chars), job = { kind: 'transformer', stop: false };
+  running = job; models.transformer = m; m.label = dataLabel;
+  const T = hp.ctx, S = 32, g = new GPUTransformer(eng, m, hp.batch, S);
+  const vXY = tfEvalXY(T, nTrain + 1, tokens.length, S), tXY = tfEvalXY(T, 1, nTrain, S);
+  const evalLoss = async ({ X, Y }) => { const r = await g.evalRows(X, Y); let l = 0, n = 0; for (let b = 0; b < S; b++) for (let t = T >> 1; t < T; t++) { l += r[b * T + t]; n++; } return l / n; };
+  const extras = () => ({ attn: attentionProbe(m), emb: { labels: chars, pts: pca2(m.E.d, V, hp.dim) } });
+  let step = 0, ema = null, lastVal = await evalLoss(vXY), best = { val: lastVal, step: 0 }, tVal = now(), tExtra = now(), k = 1, ms = null;
+  g.snapshot();
+  const base = () => ({ kind: 'transformer', step, train: ema, val: lastVal, params: m.count, bestStep: best.step, bestVal: best.val, ms, device: 'GPU · ' + eng.name });
+  post({ type: 'progress', ...base(), sample: sampleText(m, '', .8, 240), ...extras() });
+  while (!job.stop && step < hp.steps) {
+    const n = Math.min(k, hp.steps - step), t0 = now();
+    const lr = hp.lr * (step > hp.steps * .7 ? .2 : 1);
+    g.steps(Array.from({ length: n }, () => tfBatch(hp.batch, T, 0, nTrain)), lr, 1);
+    const L = await g.lastLoss(); step += n;            // odczyt błędu czeka, aż karta skończy
+    ms = (now() - t0) / n; k = Math.max(1, Math.min(64, Math.round(150 / ms)));
+    ema = ema == null ? L : ema * Math.pow(.97, n) + L * (1 - Math.pow(.97, n));
+    const msg = { type: 'progress' };
+    if (now() - tVal > 1500) { tVal = now(); lastVal = await evalLoss(vXY); if (lastVal < best.val - 1e-4) { best = { val: lastVal, step }; g.snapshot(); } }
+    if (now() - tExtra > 9000) { tExtra = now(); await g.pull(); Object.assign(msg, { sample: sampleText(m, '', .8, 240) }, extras()); }
+    post({ ...msg, ...base() });
+    await new Promise(r => setTimeout(r, 0));           // miejsce na wiadomość „stop”
+  }
+  let val = await evalLoss(vXY), restored = false;
+  if (val < best.val - 1e-4) best = { val, step };
+  else if (val > best.val + .01) { g.restore(); val = best.val; restored = true; }
+  await g.pull();
+  m.val = val; m.step = step; m.bestStep = best.step;
+  post({ type: 'done', ...base(), val, train: await evalLoss(tXY), restored, sample: sampleText(m, '', .8, 300), stopped: job.stop, hp, ...extras() });
+  running = null;
+}
+// Zgodność: ten sam start i ta sama porcja tekstu na CPU i GPU, jeden krok nauki, porównanie wyników.
+async function gpuSelfTest() {
+  const eng = await getGPU(), hp = { layers: 2, dim: 32, heads: 4, ctx: 32, lr: .003 }, B = 4;
+  const mC = buildTransformer(hp, chars), mG = buildTransformer(hp, chars);
+  mG.params.forEach((p, i) => p.d.set(mC.params[i].d));
+  const { X, Y } = tfBatch(B, hp.ctx, 0, nTrain);
+  const opt = new Adam(mC.params, hp.lr), loss = crossEntropy(mC.forward(X, B, hp.ctx).logits, Y);
+  opt.zeroGrad(); backward(loss); opt.clip(1); opt.step();
+  eng.dev.pushErrorScope('validation');
+  const g = new GPUTransformer(eng, mG, B, 1);
+  g.steps([{ X, Y }], hp.lr, 1);
+  const err = await eng.dev.popErrorScope();
+  if (err) throw new Error('WebGPU: ' + err.message);
+  const lossG = await g.lastLoss(); await g.pull();
+  let diff = 0; mG.params.forEach((p, i) => { for (let j = 0; j < p.size; j++) diff = Math.max(diff, Math.abs(p.d[j] - mC.params[i].d[j])); });
+  return { name: eng.name, lossC: loss.d[0], lossG, diff };
+}
+
+// ---------- wspólna pętla nauki (krok 2, 3 i 4) ----------
 // Pamięta najlepszą wersję sieci: gdy błąd sprawdzający zaczyna rosnąć (uczenie na pamięć),
 // na koniec wracamy do wag z najlepszego momentu.
 function trainLoop(m, hp, fns) {
   const opt = new Adam(m.params, hp.lr), job = { kind: m.kind, stop: false };
   running = job; models[m.kind] = m; m.label = dataLabel;
-  let step = 0, ema = null, lastVal = null, best = null, tVal = 0, tExtra = 0;
+  let step = 0, ema = null, lastVal = null, best = null, tVal = 0, tExtra = 0, ms = null;
   const snap = () => m.params.map(p => p.d.slice());
   const report = (extras, withVal) => {
     if (withVal) {
       lastVal = fns.val();
       if (!best || lastVal < best.val - 1e-4) best = { val: lastVal, step, w: snap() };
     }
-    const msg = { type: 'progress', kind: m.kind, step, train: ema, val: lastVal, params: m.count, bestStep: best && best.step, bestVal: best && best.val };
+    const msg = { type: 'progress', kind: m.kind, step, train: ema, val: lastVal, params: m.count, bestStep: best && best.step, bestVal: best && best.val, ms, device: 'CPU' };
     if (extras) Object.assign(msg, { sample: sampleText(m, '', .8, 240) }, fns.extras());
     post(msg);
   };
   report(true, true);
   const tick = () => {
     if (job.stop || step >= hp.steps) { finish(); return; }
-    const t0 = now();
+    const t0 = now(), s0 = step;
     while (now() - t0 < 60 && step < hp.steps) {
       const loss = fns.loss();
       opt.zeroGrad(); backward(loss);
@@ -223,6 +353,7 @@ function trainLoop(m, hp, fns) {
       opt.step(); step++;
       ema = ema == null ? loss.d[0] : ema * .97 + loss.d[0] * .03;
     }
+    ms = (now() - t0) / (step - s0);
     const t = now(), doVal = t - tVal > fns.valMs, doExtra = t - tExtra > 9000;
     if (doVal) tVal = t; if (doExtra) tExtra = t;
     report(doExtra, doVal);
@@ -235,7 +366,7 @@ function trainLoop(m, hp, fns) {
     m.params.forEach((p, i) => p.d.set(best.w[i])); val = best.val; restored = true; }
     m.val = val; m.step = step; m.bestStep = best.step;
     post({ type: 'done', kind: m.kind, step, train: fns.train(), val, params: m.count, bestStep: best.step, bestVal: best.val, restored,
-      sample: sampleText(m, '', .8, 300), stopped: job.stop, hp, ...fns.extras() });
+      sample: sampleText(m, '', .8, 300), stopped: job.stop, hp, ms, device: 'CPU', ...fns.extras() });
     running = null;
   };
   setTimeout(tick, 0);
@@ -274,7 +405,7 @@ function importModel(j) {
   const t = j.tensors.map(unb64); let m;
   if (j.kind === 'bigram') m = bigramModel(t[0], j.chars);
   else {
-    m = j.kind === 'mlp' ? buildMLP(j.hp, j.chars) : buildRNN(j.hp, j.chars);
+    m = j.kind === 'mlp' ? buildMLP(j.hp, j.chars) : j.kind === 'transformer' ? buildTransformer(j.hp, j.chars) : buildRNN(j.hp, j.chars);
     if (t.length !== m.params.length || t.some((a, i) => a.length !== m.params[i].size)) throw new Error('Plik modelu jest niekompletny albo z innej wersji.');
     m.params.forEach((p, i) => p.d.set(t[i]));
   }
@@ -284,6 +415,7 @@ function importModel(j) {
   if (same) {
     if (m.kind === 'bigram') { let l = 0, n = 0; for (let i = nTrain + 1; i < tokens.length; i++) { l -= Math.log(m.P[tokens[i - 1] * V + tokens[i]]); n++; } val = l / n; }
     else if (m.kind === 'mlp') val = evalMLP(m, valIdx);
+    else if (m.kind === 'transformer') val = evalTF(m, nTrain + 1, tokens.length);
     else val = evalRNN(m, nTrain + 1, tokens.length);
   }
   m.val = val ?? j.val;
@@ -297,13 +429,14 @@ self.onmessage = e => {
     if (m.cmd === 'data') { if (running) running.stop = true; setData(m.text, m.chars, m.label); post({ type: 'ready', n: tokens.length, train: nTrain }); }
     else if (m.cmd === 'train') {
       if (running) running.stop = true;
-      if (m.kind === 'bigram') trainBigram(); else if (m.kind === 'mlp') trainMLP(m.hp); else trainRNN(m.hp);
+      if (m.kind === 'bigram') trainBigram(); else if (m.kind === 'mlp') trainMLP(m.hp); else if (m.kind === 'transformer') { if (m.hp.device === 'gpu') trainTFGPU(m.hp).catch(err => { running = null; post({ type: 'error', msg: 'GPU: ' + (err && err.message || err) }); }); else trainTF(m.hp); } else trainRNN(m.hp);
     }
     else if (m.cmd === 'stop') { if (running) running.stop = true; }
     else if (m.cmd === 'sample') {
       const model = models[m.kind];
       post({ type: 'sample', id: m.id, kind: m.kind, text: model ? sampleText(model, m.prompt, m.temp, m.len) : null });
     }
+    else if (m.cmd === 'gputest') gpuSelfTest().then(r => post({ type: 'gputest', ok: true, ...r }), err => post({ type: 'gputest', ok: false, msg: String(err && err.message || err) }));
     else if (m.cmd === 'export') post({ type: 'export', kind: m.kind, json: exportModel(m.kind) });
     else if (m.cmd === 'import') post({ type: 'imported', ...importModel(m.json) });
   } catch (err) { post({ type: 'error', msg: String(err && err.message || err) }); }

@@ -20,9 +20,22 @@ const STEPS = [
     why: 'Usuwa sztywne okno z kroku 2: te same wagi działają na każdej pozycji, więc kontekst może być dowolnie długi bez dokładania parametrów. Zwykła RNN (Elman 1990) ma jednak problem: przy nauce sygnał o błędzie słabnie z każdą literą wstecz („zanikający gradient”). GRU (2014) dodaje bramki, które same decydują, co w pamięci zostawić, a co nadpisać. Przez zostawioną pamięć gradient przechodzi bez osłabiania.',
     lim: 'Czyta po kolei: litera 50 czeka na 49, więc nauki nie da się zrównoleglić po długości tekstu i trwa ona długo. Cała przeszłość musi się zmieścić w jednym małym wektorze, więc szczegóły sprzed setek liter i tak się zacierają. To naprawia dopiero uwaga (krok 4).',
     more: 'Uczymy na kawałkach po kilkadziesiąt liter (obcięta propagacja wstecz). Gdy gradient nagle urośnie, jest przycinany do długości 1, bo w sieciach rekurencyjnych potrafi eksplodować. Sprawdzanie czyta tekst ciągiem: pierwsze 40 liter rozgrzewa pamięć i nie wlicza się do błędu.' },
-  { kind: 'transformer', name: '4 · Transformer', sub: 'uwaga, wkrótce', ready: false },
+  { kind: 'transformer', name: '4 · Transformer', sub: 'uwaga, 2017', ready: true,
+    what: 'Sieć widzi naraz okno ostatnich liter (np. 64). Każda pozycja zadaje pytanie (zapytanie), każda wcześniejsza ma etykietę (klucz) i treść (wartość). Pozycja bierze treści tych liter, których klucze najlepiej pasują do jej pytania. To jest uwaga. Kilka „głów” pyta równolegle o różne rzeczy, a kilka warstw powtarza to na coraz bardziej przetworzonej treści.',
+    why: 'Usuwa wąskie gardło RNN: nic nie musi przecisnąć się przez jeden mały wektor pamięci, bo każda litera może sięgnąć wprost do dowolnej wcześniejszej w oknie, bez osłabiania sygnału. Wszystkie pozycje liczą się jednocześnie, a nie po kolei, więc ogromnie zyskuje na kartach graficznych. To dlatego wygrał i na nim stoją GPT, Claude i inne duże modele.',
+    lim: 'Widzi tylko okno: litera sprzed 65 pozycji przy oknie 64 nie istnieje. Koszt uwagi rośnie z kwadratem długości okna (każda pozycja z każdą). Sama uwaga nie zna kolejności liter, trzeba ją dodać osobno (wektory pozycji). Na małych danych i w małej skali nie musi wygrać z GRU: przewaga pojawia się przy większych modelach, tekstach i GPU.',
+    more: 'Każdy blok: normalizacja warstwy → uwaga → dodanie do wejścia (połączenie omijające) → normalizacja → mała sieć w każdej pozycji osobno (4× szersza, GELU) → dodanie. Sprawdzanie liczy tylko drugą połowę każdego okna, żeby każda litera miała przed sobą kontekst.' },
 ];
 const HP = {
+  transformer: [
+    { id: 'layers', label: 'Warstwy', hint: 'bloków uwagi', opts: [1, 2, 3, 4], val: 2 },
+    { id: 'dim', label: 'Szerokość', hint: 'liczb na pozycję', opts: [32, 48, 64], val: 32 },
+    { id: 'heads', label: 'Głowy', hint: 'uwagi na warstwę', opts: [1, 2, 4], val: 4 },
+    { id: 'ctx', label: 'Okno', hint: 'liter naraz', opts: [32, 64, 128], val: 64 },
+    { id: 'steps', label: 'Kroki nauki', hint: 'po 16 okien', opts: [300, 1000, 2000, 4000], val: 1000 },
+    { id: 'lr', label: 'Tempo nauki', hint: 'wielkość kroku', opts: [.001, .003], val: .003 },
+    { id: 'device', label: 'Liczy', hint: 'urządzenie', opts: [['cpu', 'procesor (CPU)'], ['gpu', 'karta graficzna (GPU)']], val: 'cpu' },
+  ],
   mlp: [
     { id: 'ctx', label: 'Okno', hint: 'liter wstecz', opts: [3, 5, 8, 12], val: 8 },
     { id: 'emb', label: 'Embedding', hint: 'liczb na literę', opts: [2, 8, 16, 32], val: 16 },
@@ -125,15 +138,17 @@ function renderHP() {
     lab.querySelector('b').textContent = h.label; lab.querySelector('small').textContent = h.hint;
     const sel = document.createElement('select'); sel.id = 'hp-' + h.id;
     h.opts.forEach(o => Array.isArray(o) ? sel.add(new Option(o[1], o[0])) : sel.add(new Option(String(o).replace('.', ','), o)));
-    sel.value = h.val; sel.addEventListener('change', () => { h.val = isNaN(+sel.value) ? sel.value : +sel.value; updateParamNote(); });
+    if (h.id === 'device' && !('gpu' in navigator)) { sel.options[1].disabled = true; sel.options[1].textContent += ' — niedostępne w tej przeglądarce'; }
+    sel.value = h.val; sel.addEventListener('change', () => { h.val = isNaN(+sel.value) ? sel.value : +sel.value; updateParamNote(); if (h.id === 'device' && h.val === 'gpu') checkGPU(); });
     lab.appendChild(sel); $('hp').appendChild(lab);
   });
   updateParamNote();
 }
-function hpValues(kind = cur) { const o = {}; (HP[kind] || []).forEach(h => o[h.id] = h.val); o.batch = kind === 'rnn' ? 16 : 64; return o; }
+function hpValues(kind = cur) { const o = {}; (HP[kind] || []).forEach(h => o[h.id] = h.val); o.batch = kind === 'rnn' || kind === 'transformer' ? 16 : 64; return o; }
 function paramCount(kind, V, h) {
   if (kind === 'bigram') return V * V;
   if (kind === 'mlp') return V * h.emb + h.ctx * h.emb * h.hidden + h.hidden + h.hidden * V + V;
+  if (kind === 'transformer') { const d = h.dim; return V * d + h.ctx * d + h.layers * (12 * d * d + 13 * d) + 2 * d + d * V + V; }
   if (kind === 'rnn') { const k = h.cell === 'gru' ? 3 : 1, H = h.hidden; return V * h.emb + h.emb * k * H + k * H + H * k * H + (h.cell === 'gru' ? H : 0) + H * V + V; }
   return 0;
 }
@@ -143,15 +158,30 @@ function updateParamNote() {
   $('paramNote').textContent = `${n.toLocaleString('pl')} parametrów` + (cur === 'bigram' ? ' (komórek tabeli)' : ` · ${(n * 4 / 1024).toFixed(0)} KB`);
 }
 
+// ---------- karta graficzna ----------
+// Przy pierwszym wyborze GPU: ten sam krok nauki na CPU i na karcie, porównanie wyników.
+let gpuState = null;   // null = nie sprawdzano, 'testing', {ok, ...}
+function checkGPU() {
+  if (gpuState && gpuState.ok) return gpuNote();
+  if (gpuState === 'testing') return;
+  gpuState = 'testing'; $('train').disabled = true; $('paramNote').textContent = 'Sprawdzam kartę graficzną: ten sam krok nauki na CPU i GPU…';
+  worker.postMessage({ cmd: 'gputest' });
+}
+function gpuNote() {
+  if (!gpuState || gpuState === 'testing') return;
+  if (gpuState.ok) notice(`Karta: ${gpuState.name}. Test zgodności: ten sam krok nauki na CPU i GPU dał błąd ${fmt(gpuState.lossC, 5)} i ${fmt(gpuState.lossG, 5)}, a wagi po kroku różnią się najwyżej o ${gpuState.diff.toExponential(1).replace('.', ',')} (zaokrąglenia liczb). Na słabej karcie albo przy małej sieci GPU może być wolniejsze od CPU: przesyłanie zadań też kosztuje. Porównaj czas kroku w tabeli.`);
+  else notice(`Karta graficzna niedostępna: ${gpuState.msg}. Liczę na procesorze.`);
+}
 // ---------- nauka ----------
 let series = { train: [], val: [] }, live = null, training = false;
 const extras = {};                     // ostatnie wizualizacje z wątku, osobno dla każdego kroku
 const reachDone = [];                  // zakończone pomiary zasięgu pamięci, do porównania RNN i GRU
 const have = new Set();                // kroki, dla których istnieje model (wytrenowany albo wczytany)
-let vizMode = 'neurons', neuronSel = 0, neuronPicked = false;
+let neuronSel = 0, neuronPicked = false, attSel = { head: 0, pos: -1 }, attLayout = null;
 function runLabel(kind, hp) {
   if (kind === 'mlp') return `2 · Sieć z oknem (okno ${hp.ctx}, emb ${hp.emb})`;
   if (kind === 'rnn') return `3 · ${hp.cell === 'gru' ? 'GRU' : 'Zwykła RNN'} (pamięć ${hp.hidden})`;
+  if (kind === 'transformer') return `4 · Transformer (${hp.layers}×${hp.dim}, ${hp.heads} gł., okno ${hp.ctx}${hp.device === 'gpu' ? ', GPU' : ''})`;
   return STEPS.find(s => s.kind === kind).name;
 }
 function resetLearn() {
@@ -189,6 +219,11 @@ function selectStep(kind) { cur = kind; renderSteps(); renderExplain(); renderHP
 worker.onmessage = e => {
   const m = e.data;
   if (m.type === 'error') { showErr(m.msg); $('train').disabled = false; $('stop').disabled = true; return; }
+  if (m.type === 'gputest') {
+    gpuState = m; $('train').disabled = training;
+    if (!m.ok) { const h = HP.transformer.find(x => x.id === 'device'); h.val = 'cpu'; if ($('hp-device')) $('hp-device').value = 'cpu'; }
+    updateParamNote(); gpuNote(); return;
+  }
   if (m.type === 'sample') { if (m.text != null) $('sample').textContent = $('prompt').value + m.text; return; }
   if (m.type === 'export') {
     const blob = new Blob([JSON.stringify(m.json)], { type: 'application/json' }), a = document.createElement('a');
@@ -213,7 +248,7 @@ worker.onmessage = e => {
   if (m.train != null) series.train.push([m.step, m.train]);
   if (m.val != null && (!series.val.length || series.val[series.val.length - 1][0] !== m.step)) series.val.push([m.step, m.val]);
   live = m;
-  if (m.heat || m.emb || m.reach || m.neurons) { extras[m.kind] = { ...(extras[m.kind] || {}), ...pickExtras(m) }; drawViz(); }
+  if (m.heat || m.emb || m.reach || m.neurons || m.attn) { extras[m.kind] = { ...(extras[m.kind] || {}), ...pickExtras(m) }; drawViz(); }
   drawChart(); renderMetrics(m);
   if (m.sample) $('sample').textContent = m.sample;
   if (m.type === 'done') {
@@ -221,11 +256,11 @@ worker.onmessage = e => {
     $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = false; $('saveModel').disabled = false;
     if (m.restored) notice(`Pod koniec błąd sprawdzający zaczął rosnąć, więc zostawiłem wersję sieci z kroku ${m.bestStep.toLocaleString('pl')} (najlepszą). Tak działa „wczesne zatrzymanie”.`);
     if (m.reach) { reachDone.push({ label: runLabel(m.kind, m.hp), r: m.reach }); if (reachDone.length > 4) reachDone.shift(); drawViz(); }
-    runs.push({ kind: m.kind, label: runLabel(m.kind, m.hp || hpValues(m.kind)), params: m.params, val: m.val, sample: m.sample, stopped: m.stopped });
+    runs.push({ kind: m.kind, label: runLabel(m.kind, m.hp || hpValues(m.kind)), params: m.params, val: m.val, sample: m.sample, stopped: m.stopped, ms: m.ms, device: m.device });
     renderCmp();
   }
 };
-function pickExtras(m) { const o = {}; ['heat', 'emb', 'reach', 'neurons'].forEach(k => { if (m[k]) o[k] = m[k]; }); if (m.hp) o.hp = m.hp; return o; }
+function pickExtras(m) { const o = {}; ['heat', 'emb', 'reach', 'neurons', 'attn'].forEach(k => { if (m[k]) o[k] = m[k]; }); if (m.hp) o.hp = m.hp; return o; }
 
 function renderMetrics(m) {
   const V = vocab ? vocab.chars.length : 0, val = m ? m.val : null;
@@ -234,7 +269,7 @@ function renderMetrics(m) {
     ['Błąd sprawdzający', fmt(val, 3), m && m.train != null ? `treningowy ${fmt(m.train, 3)}` : 'mniej = lepiej'],
     ['Bity na znak', fmt(val != null ? val / LN2 : null), `bez wiedzy: ${fmt(Math.log(V) / LN2)}`],
     ['Waha się między', val != null ? `${fmt(Math.exp(val), 1)} literami` : '–', `z ${V} możliwych`],
-    ['Krok', m ? m.step.toLocaleString('pl') : '–', m ? `${m.params.toLocaleString('pl')} parametrów` + (best ? ' · ' + best : '') : ''],
+    ['Krok', m ? m.step.toLocaleString('pl') : '–', m ? `${m.params.toLocaleString('pl')} parametrów` + (m.ms ? ` · ${fmt(m.ms, 0)} ms/krok (${m.device})` : '') + (best ? ' · ' + best : '') : ''],
   ];
   $('metrics').innerHTML = rows.map(() => '<div><dt></dt><dd></dd></div>').join('');
   [...$('metrics').children].forEach((d, i) => { d.querySelector('dt').textContent = rows[i][0]; const dd = d.querySelector('dd'); dd.textContent = rows[i][1]; const s = document.createElement('small'); s.textContent = rows[i][2]; dd.appendChild(s); });
@@ -275,14 +310,16 @@ function drawChart() {
 }
 
 // ---------- wizualizacje ----------
-const VIZ_MODES = [['neurons', 'Neurony pamięci'], ['reach', 'Zasięg pamięci'], ['emb', 'Mapa liter']];
+const VIZ_MODES = { rnn: [['neurons', 'Neurony pamięci'], ['reach', 'Zasięg pamięci'], ['emb', 'Mapa liter']], transformer: [['attn', 'Uwaga'], ['emb', 'Mapa liter']] };
+const vizModeOf = {};
+function curMode() { const list = VIZ_MODES[cur]; if (!list) return 'emb'; if (!list.some(x => x[0] === vizModeOf[cur])) vizModeOf[cur] = list[0][0]; return vizModeOf[cur]; }
 function renderVizTabs() {
-  const box = $('vizTabs'), rnn = cur === 'rnn';
-  box.hidden = !rnn; if (!rnn) return;
-  box.innerHTML = '';
-  VIZ_MODES.forEach(([id, name]) => {
+  const box = $('vizTabs'), list = VIZ_MODES[cur];
+  box.hidden = !list; if (!list) return;
+  box.innerHTML = ''; const vizMode = curMode();
+  list.forEach(([id, name]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = name; b.setAttribute('aria-pressed', vizMode === id ? 'true' : 'false');
-    b.addEventListener('click', () => { vizMode = id; drawViz(); }); box.appendChild(b);
+    b.addEventListener('click', () => { vizModeOf[cur] = id; drawViz(); }); box.appendChild(b);
   });
 }
 function waitViz(c, W, H, text) { c.fillStyle = css('--muted'); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(text, W / 2, H / 2); }
@@ -306,7 +343,8 @@ function drawViz() {
     }
     return;
   }
-  const mode = cur === 'rnn' ? vizMode : 'emb';
+  const mode = curMode(); attLayout = null;
+  if (mode === 'attn') return drawAttention(c, W, H, ex.attn);
   if (mode === 'neurons') return drawNeurons(c, W, H, ex.neurons);
   if (mode === 'reach') return drawReach(c, W, H, ex.reach);
   $('vizTitle').textContent = 'Mapa liter (embeddingi)';
@@ -357,6 +395,48 @@ function drawNeurons(c, W, H, nr) {
   }
 }
 
+// Uwaga: wybierz literę (klik), a tło wcześniejszych liter pokaże, ile uwagi od niej dostają w wybranej głowie.
+function drawAttention(c, W, H, at) {
+  $('vizTitle').textContent = 'Uwaga';
+  if (!at) { $('vizNote').textContent = 'Po chwili nauki zobaczysz, na które wcześniejsze litery patrzy każda pozycja.'; return waitViz(c, W, H, 'Czeka na naukę.'); }
+  const nH = at.L * at.nh; attSel.head = Math.min(attSel.head, nH - 1);
+  if (attSel.pos < 0 || attSel.pos >= at.T) attSel.pos = at.T - 1;
+  const ctl = $('vizCtl'); ctl.hidden = false; ctl.innerHTML = '';
+  at.heads.forEach((h, k) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
+    b.textContent = `warstwa ${h.layer + 1}, głowa ${h.head + 1}: średnio ${fmt(h.dist, 1)} lit. wstecz`;
+    b.setAttribute('aria-pressed', k === attSel.head ? 'true' : 'false');
+    b.addEventListener('click', () => { attSel.head = k; drawViz(); }); ctl.appendChild(b);
+  });
+  $('vizNote').textContent = 'Kliknij literę: obramowana to pozycja, która „pyta”, a tło liter przed nią pokazuje, ile uwagi każda z nich dostaje (najjaśniejsza = najwięcej, razem 100%). Litery po prawej są szare: sieć nie może patrzeć w przyszłość. Głowy uczą się różnych zadań: jedne patrzą na poprzednią literę, inne na początek słowa albo na spację. Liczba przy głowie mówi, jak daleko średnio sięga.';
+  const { layer, head } = at.heads[attSel.head], A = at.att[layer], T = at.T, i = attSel.pos, row = A.subarray(head * T * T + i * T, head * T * T + i * T + T);
+  let mx = 0; for (let j = 0; j <= i; j++) mx = Math.max(mx, row[j]);
+  const txt = [...at.text], cols = 32, cw = (W - 16) / cols, ch = 30;
+  c.font = '15px "JetBrains Mono",monospace'; c.textAlign = 'center'; c.textBaseline = 'middle';
+  const cells = [];
+  let col = 0, r = 0;
+  txt.forEach((t, j) => {
+    const x = 8 + col * cw, y = 8 + r * ch; cells.push([x, y, cw, ch - 4]);
+    if (j <= i) { const a = row[j] / (mx || 1); c.fillStyle = `rgba(156,172,112,${(a * .95).toFixed(3)})`; c.fillRect(x, y, cw - 1, ch - 6); }
+    if (j === i) { c.strokeStyle = css('--fg'); c.lineWidth = 2; c.strokeRect(x + 1, y + 1, cw - 3, ch - 8); }
+    c.fillStyle = j > i ? 'rgba(150,150,165,.4)' : (row[j] / (mx || 1) > .6 ? css('--bg') : css('--fg'));
+    c.fillText(t === '\n' ? '↵' : t === ' ' ? '·' : t, x + cw / 2, y + (ch - 6) / 2);
+    col++; if (col >= cols) { col = 0; r++; }
+  });
+  // najmocniejsze trzy litery
+  const top = [...Array(i + 1).keys()].sort((a, b) => row[b] - row[a]).slice(0, 3);
+  c.font = '13px "Atkinson Hyperlegible",system-ui,sans-serif'; c.textAlign = 'left'; c.fillStyle = css('--muted');
+  const show2 = t => t === ' ' ? 'spacja' : t === '\n' ? 'nowa linia' : `„${t}”`;
+  c.fillText(`Pozycja ${i + 1} (${show2(txt[i])}) patrzy najmocniej na: ` + top.map(j => `${show2(txt[j])} ${i - j === 0 ? '(siebie)' : `(${i - j} wstecz)`} ${Math.round(row[j] * 100)}%`).join(', '), 8, 8 + (r + 1) * ch + 14);
+  attLayout = cells;
+}
+$('viz').addEventListener('click', e => {
+  if (!attLayout) return;
+  const rc = e.currentTarget.getBoundingClientRect(), x = (e.clientX - rc.left) * 640 / rc.width, y = (e.clientY - rc.top) * 420 / rc.height;
+  const k = attLayout.findIndex(([cx, cy, w, h]) => x >= cx && x < cx + w && y >= cy && y < cy + h);
+  if (k >= 0) { attSel.pos = k; drawViz(); }
+});
+
 // Zasięg pamięci: jak silny sygnał uczący dociera do pamięci sprzed d liter (skala logarytmiczna).
 function drawReach(c, W, H, reach) {
   $('vizTitle').textContent = 'Zasięg pamięci';
@@ -384,12 +464,12 @@ function drawReach(c, W, H, reach) {
 const runs = [];
 function renderCmp() {
   const tb = $('cmp').querySelector('tbody'); tb.innerHTML = '';
-  if (!runs.length) { tb.innerHTML = '<tr><td colspan="6" class="note">Tu trafi każda zakończona nauka, żeby porównać konstrukcje na tym samym tekście.</td></tr>'; return; }
+  if (!runs.length) { tb.innerHTML = '<tr><td colspan="7" class="note">Tu trafi każda zakończona nauka, żeby porównać konstrukcje na tym samym tekście.</td></tr>'; return; }
   const best = Math.min(...runs.map(r => r.val));
   runs.forEach(r => {
     const tr = document.createElement('tr'); if (r.val === best) tr.className = 'best';
-    [r.label + (r.stopped ? ' · przerwana' : ''), r.params.toLocaleString('pl'), fmt(r.val, 3), fmt(r.val / LN2), fmt(Math.exp(r.val), 1), r.sample.slice(0, 60)].forEach((v, i) => {
-      const td = document.createElement('td'); td.textContent = v; if (i === 5) td.className = 's'; tr.appendChild(td);
+    [r.label + (r.stopped ? ' · przerwana' : ''), r.params.toLocaleString('pl'), r.ms ? `${fmt(r.ms, 0)} ms · ${r.device.split(' · ')[0]}` : '–', fmt(r.val, 3), fmt(r.val / LN2), fmt(Math.exp(r.val), 1), r.sample.slice(0, 60)].forEach((v, i) => {
+      const td = document.createElement('td'); td.textContent = v; if (i === 6) td.className = 's'; tr.appendChild(td);
     });
     tb.appendChild(tr);
   });
