@@ -39,6 +39,10 @@
     <div class="steps" role="tablist" aria-label="Konstrukcja sieci" id="steps"></div>
     <div class="explain" id="explain"></div>
     <div class="hp" id="hp"></div>
+    <details class="hint">
+      <summary>Czym się różnią sposoby liczenia?</summary>
+      <p><b>Procesor, zwykły JS:</b> każde mnożenie osobno, jedna liczba naraz. <b>Procesor, WASM SIMD:</b> ten sam procesor, ale kod w WebAssembly, który jedną instrukcją mnoży 4 liczby naraz; mnożenie macierzy jest ok. 9× szybsze, cały krok nauki 2–4×. <b>Karta graficzna (tylko transformer):</b> tysiące mnożeń naraz, cały krok nauki zostaje na karcie. Opłaca się przy większych sieciach; przy małych koszt wysyłania zadań na kartę może zjeść zysk. Wszystkie trzy liczą to samo: wyniki różnią się tylko zaokrągleniami.</p>
+    </details>
     <div class="actions">
       <button id="train" type="button">Ucz</button>
       <button id="stop" class="ghost" type="button" disabled>Stop</button>
@@ -83,6 +87,7 @@
   <footer class="note">Laboratorium języka · część NeuroLabPA</footer>
 </div>
 <script src="js/data.js"></script>
+<script src="js/wasm.js"></script>
 <script src="js/lang.js"></script>
 </body>
 </html>

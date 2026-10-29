@@ -43,10 +43,12 @@ Osobna strona `lang/` (link w nagłówku): sieć uczy się polskiego od zera, na
 lang/index.html       strona laboratorium
 lang/lang.css         układ (kolory i czcionki z css/style.css)
 lang/js/engine.js     silnik CPU: tensory, autograd, komórki RNN i GRU, klocki transformera, Adam z obcinaniem gradientu, PCA
+lang/js/wasm.js       mnożenie macierzy w WebAssembly SIMD (wygenerowane z lang/tools/matmul.wat)
 lang/js/gpu.js        silnik GPU (WebGPU, shadery WGSL) dla transformera: nagrany raz cały krok nauki
 lang/js/data.js       przykładowy tekst, słownik liter
 lang/js/worker.js     trening w tle (Web Worker): bigram, sieć z oknem, RNN/GRU, najlepsza wersja, zapis/wczytanie modelu
 lang/js/lang.js       strona: dane, wykres, wizualizacje, porównanie
+lang/tools/           matmul.wat (źródło WASM) i build_wasm.js (kompilacja: npm install wabt@1.0.36, potem node lang/tools/build_wasm.js)
 lang/data/            zestawy przykładowe: grabinski/, wikipedia/ (manifest.json, opis i licencje w README)
 ```
 

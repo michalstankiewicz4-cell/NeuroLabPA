@@ -3,6 +3,15 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.22.0
+- Laboratorium języka: **mnożenie macierzy w WebAssembly z SIMD**, 4 liczby jedną instrukcją procesora.
+  - Moduł ma 902 bajty, napisany ręcznie w tekstowym formacie WASM (`lang/tools/matmul.wat`). Kompiluje go `lang/tools/build_wasm.js` do `lang/js/wasm.js`.
+  - Samo mnożenie jest ok. 9× szybsze (3,45 wobec 0,38 mld mnożeń na sekundę), a wyniki zgadzają się z JS do 5e-7.
+  - Cały krok nauki w przeglądarce: sieć z oknem 15 → 5 ms, GRU 93 → 32 ms, transformer ok. 375 → 109 ms.
+- Przełącznik **„Liczy”** w krokach 2–4: procesor z WASM SIMD (domyślnie), procesor ze zwykłym JS (do porównania), a dla transformera także karta graficzna. Pod ustawieniami jest wyjaśnienie, czym się różnią. Gdy przeglądarka nie obsługuje SIMD, opcja jest wyłączona.
+- Domyślnie 2000 kroków dla RNN/GRU i transformera, bo nauka jest teraz kilka razy szybsza.
+- Sieć z oknem sprawdza błąd co 1,5 s zamiast co 0,4 s: w zwykłym JS sprawdzanie zajmowało więcej czasu niż sama nauka.
+
 ## 0.21.0
 - Laboratorium języka, **krok 4: transformer** w wersji „tylko dekoder”, jak GPT.
   - Uwaga przyczynowa z kilkoma głowami, wektory pozycji, normalizacja warstwy, GELU i połączenia omijające.

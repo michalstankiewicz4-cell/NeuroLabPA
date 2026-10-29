@@ -25,15 +25,39 @@ function param(shape, scale) {
 }
 function zeros(shape) { const t = new T(new Float32Array(shape.reduce((a, b) => a * b, 1)), shape); t.isParam = true; return t; }
 
+// ---------- mnożenie macierzy: zwykły JS albo WebAssembly z SIMD ----------
+// To ono zajmuje 70–85% czasu nauki. WASM SIMD liczy 4 liczby jedną instrukcją procesora.
+let WASM = null, WASM_ON = false;
+function setBackend(name) {
+  if (name !== 'wasm') { WASM_ON = false; return 'js'; }
+  if (!WASM) {
+    if (typeof WebAssembly === 'undefined' || typeof WASM_MATMUL_B64 === 'undefined') throw new Error('Brak WebAssembly w tej przeglądarce.');
+    const bytes = Uint8Array.from(atob(WASM_MATMUL_B64), c => c.charCodeAt(0));
+    if (!WebAssembly.validate(bytes)) throw new Error('Ta przeglądarka nie obsługuje WebAssembly SIMD.');
+    WASM = new WebAssembly.Instance(new WebAssembly.Module(bytes), {}).exports;
+  }
+  WASM_ON = true; return 'wasm';
+}
+// Kopiuje A, B (i C, gdy dodajemy) do pamięci modułu, liczy, kopiuje wynik do C.
+function wasmMM(fn, A, B, C, n, k, m, acc) {
+  const need = (A.length + B.length + C.length) * 4 + 64, mem = WASM.mem;
+  if (mem.buffer.byteLength < need) mem.grow(Math.ceil((need - mem.buffer.byteLength) / 65536));
+  const F = new Float32Array(mem.buffer), a = 0, b = A.length, c = b + B.length;
+  F.set(A, a); F.set(B, b); if (acc) F.set(C, c);
+  WASM[fn](a * 4, b * 4, c * 4, n, k, m, acc);
+  C.set(new Float32Array(mem.buffer, c * 4, C.length));
+}
 // [n,k] × [k,m] → [n,m]
 function matmul(a, b) {
   const [n, k] = a.s, m = b.s[1], A = a.d, B = b.d, O = new Float32Array(n * m);
-  for (let i = 0; i < n; i++) {
+  if (WASM_ON) wasmMM('mm', A, B, O, n, k, m, 0);
+  else for (let i = 0; i < n; i++) {
     const oi = i * m, ai = i * k;
     for (let p = 0; p < k; p++) { const av = A[ai + p]; if (av === 0) continue; const bp = p * m; for (let j = 0; j < m; j++) O[oi + j] += av * B[bp + j]; }
   }
   const out = new T(O, [n, m], [a, b], () => {
     const G = out.g, AG = a.g, BG = b.g;
+    if (WASM_ON) { wasmMM('mmTB', G, B, AG, n, m, k, 1); wasmMM('mmTA', A, G, BG, k, n, m, 1); return; }   // dA += G·Bᵀ, dB += Aᵀ·G
     for (let i = 0; i < n; i++) {
       const oi = i * m, ai = i * k;
       for (let p = 0; p < k; p++) {
@@ -307,4 +331,4 @@ function pca2(M, rows, cols) {
   return pts;
 }
 
-if (typeof module !== 'undefined') module.exports = { T, param, zeros, matmul, addBias, tanh, sigmoid, add, sub, mul, sliceRows, sliceCols, concatRows, rnnCell, gruCell, addPos, layerNorm, gelu, causalAttention, gather, view, crossEntropy, backward, Adam, pca2 };
+if (typeof module !== 'undefined') module.exports = { setBackend, T, param, zeros, matmul, addBias, tanh, sigmoid, add, sub, mul, sliceRows, sliceCols, concatRows, rnnCell, gruCell, addPos, layerNorm, gelu, causalAttention, gather, view, crossEntropy, backward, Adam, pca2 };

@@ -32,9 +32,9 @@ const HP = {
     { id: 'dim', label: 'Szerokość', hint: 'liczb na pozycję', opts: [32, 48, 64], val: 32 },
     { id: 'heads', label: 'Głowy', hint: 'uwagi na warstwę', opts: [1, 2, 4], val: 4 },
     { id: 'ctx', label: 'Okno', hint: 'liter naraz', opts: [32, 64, 128], val: 64 },
-    { id: 'steps', label: 'Kroki nauki', hint: 'po 16 okien', opts: [300, 1000, 2000, 4000], val: 1000 },
+    { id: 'steps', label: 'Kroki nauki', hint: 'po 16 okien', opts: [300, 1000, 2000, 4000, 8000], val: 2000 },
     { id: 'lr', label: 'Tempo nauki', hint: 'wielkość kroku', opts: [.001, .003], val: .003 },
-    { id: 'device', label: 'Liczy', hint: 'urządzenie', opts: [['cpu', 'procesor (CPU)'], ['gpu', 'karta graficzna (GPU)']], val: 'cpu' },
+    { id: 'device', label: 'Liczy', hint: 'jak liczyć', opts: [['wasm', 'procesor, WASM SIMD'], ['cpu', 'procesor, zwykły JS'], ['gpu', 'karta graficzna (GPU)']], val: 'wasm' },
   ],
   mlp: [
     { id: 'ctx', label: 'Okno', hint: 'liter wstecz', opts: [3, 5, 8, 12], val: 8 },
@@ -42,14 +42,16 @@ const HP = {
     { id: 'hidden', label: 'Neurony', hint: 'w warstwie ukrytej', opts: [64, 128, 256], val: 128 },
     { id: 'steps', label: 'Kroki nauki', hint: 'po 64 przykłady', opts: [1000, 3000, 6000, 12000], val: 3000 },
     { id: 'lr', label: 'Tempo nauki', hint: 'wielkość kroku', opts: [.001, .003, .01], val: .003 },
+    { id: 'device', label: 'Liczy', hint: 'jak liczyć', opts: [['wasm', 'procesor, WASM SIMD'], ['cpu', 'procesor, zwykły JS']], val: 'wasm' },
   ],
   rnn: [
     { id: 'cell', label: 'Komórka', hint: 'rodzaj pamięci', opts: [['rnn', 'zwykła RNN'], ['gru', 'GRU (z bramkami)']], val: 'gru' },
     { id: 'hidden', label: 'Pamięć', hint: 'liczb w wektorze', opts: [32, 64, 128], val: 64 },
     { id: 'emb', label: 'Embedding', hint: 'liczb na literę', opts: [8, 16, 32], val: 16 },
     { id: 'seq', label: 'Kawałek', hint: 'liter na raz', opts: [16, 32, 64], val: 32 },
-    { id: 'steps', label: 'Kroki nauki', hint: 'po 16 kawałków', opts: [300, 1000, 2000, 4000], val: 1000 },
+    { id: 'steps', label: 'Kroki nauki', hint: 'po 16 kawałków', opts: [300, 1000, 2000, 4000, 8000], val: 2000 },
     { id: 'lr', label: 'Tempo nauki', hint: 'wielkość kroku', opts: [.001, .003, .01], val: .003 },
+    { id: 'device', label: 'Liczy', hint: 'jak liczyć', opts: [['wasm', 'procesor, WASM SIMD'], ['cpu', 'procesor, zwykły JS']], val: 'wasm' },
   ],
 };
 let cur = 'bigram';
@@ -138,7 +140,9 @@ function renderHP() {
     lab.querySelector('b').textContent = h.label; lab.querySelector('small').textContent = h.hint;
     const sel = document.createElement('select'); sel.id = 'hp-' + h.id;
     h.opts.forEach(o => Array.isArray(o) ? sel.add(new Option(o[1], o[0])) : sel.add(new Option(String(o).replace('.', ','), o)));
-    if (h.id === 'device' && !('gpu' in navigator)) { sel.options[1].disabled = true; sel.options[1].textContent += ' — niedostępne w tej przeglądarce'; }
+    if (h.id === 'device') [...sel.options].forEach(o => {
+      if ((o.value === 'gpu' && !('gpu' in navigator)) || (o.value === 'wasm' && !wasmOK)) { o.disabled = true; o.textContent += ' — niedostępne tutaj'; if (h.val === o.value) h.val = 'cpu'; }
+    });
     sel.value = h.val; sel.addEventListener('change', () => { h.val = isNaN(+sel.value) ? sel.value : +sel.value; updateParamNote(); if (h.id === 'device' && h.val === 'gpu') checkGPU(); });
     lab.appendChild(sel); $('hp').appendChild(lab);
   });
@@ -158,6 +162,8 @@ function updateParamNote() {
   $('paramNote').textContent = `${n.toLocaleString('pl')} parametrów` + (cur === 'bigram' ? ' (komórek tabeli)' : ` · ${(n * 4 / 1024).toFixed(0)} KB`);
 }
 
+// WebAssembly SIMD: sprawdzenie, czy przeglądarka przyjmie moduł (bez uruchamiania).
+const wasmOK = (() => { try { return typeof WebAssembly !== 'undefined' && WebAssembly.validate(Uint8Array.from(atob(WASM_MATMUL_B64), c => c.charCodeAt(0))); } catch (e) { return false; } })();
 // ---------- karta graficzna ----------
 // Przy pierwszym wyborze GPU: ten sam krok nauki na CPU i na karcie, porównanie wyników.
 let gpuState = null;   // null = nie sprawdzano, 'testing', {ok, ...}

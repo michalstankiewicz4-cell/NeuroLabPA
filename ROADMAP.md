@@ -6,7 +6,8 @@ Plany z rozmów projektowych, w kolejności, w jakiej najpewniej je zrobimy.
 - **Partia ocen od Claude'a.** Claude ocenia zombie (te same miniatury co Ty: przód i bok, pierwsza klatka chodu) i zapisuje oceny jako `rater: "claude"`. Strona odbiera je na żywo i uczy się z nich z mniejszą wagą niż z Twoich (`CLAUDE_WEIGHT`).
 
 ## Laboratorium języka
-- **Szybszy procesor:** WebAssembly z SIMD (4 liczby naraz) i nauka na kilku wątkach jednocześnie, dla wszystkich kroków.
+- **Uwaga w WASM SIMD:** przy dużym transformerze to ona jest teraz najwolniejsza na procesorze.
+- **Nauka na kilku wątkach naraz.** Każdy wątek liczy gradient na części porcji, potem są uśredniane. Bez pamięci współdzielonej (GitHub Pages nie ustawia potrzebnych nagłówków), więc gradienty trzeba co krok przesyłać; opłaca się przy większych sieciach.
 - **GPU także dla RNN/GRU**, żeby pokazać na liczbach, że sieć czytająca po kolei zyskuje na karcie dużo mniej niż transformer.
 - Tokeny większe niż litera (BPE), potem rozmowa: dostrajanie na dialogach.
 

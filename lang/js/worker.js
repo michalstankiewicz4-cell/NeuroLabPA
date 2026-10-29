@@ -1,5 +1,5 @@
 // Laboratorium języka · wątek treningowy. Liczy w tle, żeby strona nigdy się nie zawieszała.
-importScripts('engine.js', 'gpu.js');
+importScripts('engine.js', 'wasm.js', 'gpu.js');
 
 let tokens = null, V = 0, chars = [], nTrain = 0, valIdx = null, nlIdx = 0, dataLabel = '';
 let running = null;                 // aktualny trening: {kind, stop}
@@ -327,7 +327,13 @@ async function gpuSelfTest() {
 // ---------- wspólna pętla nauki (krok 2, 3 i 4) ----------
 // Pamięta najlepszą wersję sieci: gdy błąd sprawdzający zaczyna rosnąć (uczenie na pamięć),
 // na koniec wracamy do wag z najlepszego momentu.
+// Sposób liczenia na procesorze: 'wasm' (WebAssembly SIMD) albo zwykły JS.
+function cpuBackend(hp) {
+  try { return setBackend(hp.device === 'cpu' ? 'js' : 'wasm') === 'wasm' ? 'WASM SIMD' : 'JS'; }
+  catch (err) { post({ type: 'error', msg: err.message + ' Liczę zwykłym JS.' }); setBackend('js'); return 'JS'; }
+}
 function trainLoop(m, hp, fns) {
+  const devName = cpuBackend(hp);
   const opt = new Adam(m.params, hp.lr), job = { kind: m.kind, stop: false };
   running = job; models[m.kind] = m; m.label = dataLabel;
   let step = 0, ema = null, lastVal = null, best = null, tVal = 0, tExtra = 0, ms = null;
@@ -337,7 +343,7 @@ function trainLoop(m, hp, fns) {
       lastVal = fns.val();
       if (!best || lastVal < best.val - 1e-4) best = { val: lastVal, step, w: snap() };
     }
-    const msg = { type: 'progress', kind: m.kind, step, train: ema, val: lastVal, params: m.count, bestStep: best && best.step, bestVal: best && best.val, ms, device: 'CPU' };
+    const msg = { type: 'progress', kind: m.kind, step, train: ema, val: lastVal, params: m.count, bestStep: best && best.step, bestVal: best && best.val, ms, device: devName };
     if (extras) Object.assign(msg, { sample: sampleText(m, '', .8, 240) }, fns.extras());
     post(msg);
   };
@@ -366,7 +372,7 @@ function trainLoop(m, hp, fns) {
     m.params.forEach((p, i) => p.d.set(best.w[i])); val = best.val; restored = true; }
     m.val = val; m.step = step; m.bestStep = best.step;
     post({ type: 'done', kind: m.kind, step, train: fns.train(), val, params: m.count, bestStep: best.step, bestVal: best.val, restored,
-      sample: sampleText(m, '', .8, 300), stopped: job.stop, hp, ms, device: 'CPU', ...fns.extras() });
+      sample: sampleText(m, '', .8, 300), stopped: job.stop, hp, ms, device: devName, ...fns.extras() });
     running = null;
   };
   setTimeout(tick, 0);
@@ -377,7 +383,7 @@ function trainMLP(hp) {
   const trainCheck = Int32Array.from({ length: Math.min(3000, nTrain - 1) }, () => 1 + randInt(nTrain - 1));
   trainLoop(m, hp, {
     loss: () => { const pos = Array.from({ length: hp.batch }, () => 1 + randInt(nTrain - 1)), { X, Y } = mlpBatch(pos, hp.ctx); return crossEntropy(m.forward(X), Y); },
-    val: () => evalMLP(m, valIdx), train: () => evalMLP(m, trainCheck), valMs: 400,
+    val: () => evalMLP(m, valIdx), train: () => evalMLP(m, trainCheck), valMs: 1500,
     extras: () => ({ emb: { labels: chars, pts: pca2(m.E.d, V, hp.emb) } }),
   });
 }
