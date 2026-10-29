@@ -1,0 +1,25 @@
+ROZMOWY DO DOSTRAJANIA: ŹRÓDŁO I LICENCJA
+=========================================
+
+Plik rozmowy.txt zawiera 140 krótkich dialogów w formacie:
+
+  Ty: …
+  Sieć: …
+
+Rozmowy są oddzielone pustą linią. Napisał je Claude (model językowy firmy Anthropic)
+29 października 2026, specjalnie dla Laboratorium języka w repozytorium NeuroLabPA.
+To tekst oryginalny, nie przepisany z żadnego źródła.
+
+LICENCJA
+--------
+Domena publiczna: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/deed.pl
+
+Można go dowolnie kopiować, zmieniać i wykorzystywać, także do nauki innych sieci,
+bez obowiązku podawania autora.
+
+UWAGI
+-----
+Kwestie „Sieci” są pisane z perspektywy małej sieci z tego laboratorium: skromnie,
+krótko, bez podawania faktów o świecie. Dzięki temu dostrojona sieć nie uczy się
+udawać, że coś wie.

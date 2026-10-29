@@ -1,2 +1,2 @@
 // Single source of the app version; bump it together with CHANGELOG.md.
-const APP_VERSION='0.22.0';
+const APP_VERSION='0.23.0';

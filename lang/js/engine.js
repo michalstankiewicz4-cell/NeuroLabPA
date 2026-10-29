@@ -151,20 +151,23 @@ function view(a, shape) {
 // Softmax + entropia krzyżowa naraz: średni błąd przewidywania następnej litery.
 // Błąd = −ln(prawdopodobieństwo, jakie sieć dała prawdziwej literze).
 function crossEntropy(logits, targets) {
-  const [n, V] = logits.s, P = new Float32Array(n * V); let loss = 0;
+  // Cel < 0 oznacza „tej pozycji nie oceniaj” (maskowanie, np. kwestie rozmówcy przy dostrajaniu do rozmowy).
+  const [n, V] = logits.s, P = new Float32Array(n * V); let loss = 0, nv = 0;
   for (let i = 0; i < n; i++) {
+    if (targets[i] < 0) continue;
     const o = i * V; let mx = -Infinity;
     for (let j = 0; j < V; j++) mx = Math.max(mx, logits.d[o + j]);
     let sum = 0;
     for (let j = 0; j < V; j++) { const e = Math.exp(logits.d[o + j] - mx); P[o + j] = e; sum += e; }
     for (let j = 0; j < V; j++) P[o + j] /= sum;
-    loss -= Math.log(P[o + targets[i]] + 1e-12);
+    loss -= Math.log(P[o + targets[i]] + 1e-12); nv++;
   }
-  const out = new T(new Float32Array([loss / n]), [1], [logits], () => {
-    const g = out.g[0] / n;
-    for (let i = 0; i < n; i++) { const o = i * V; for (let j = 0; j < V; j++) logits.g[o + j] += g * (P[o + j] - (j === targets[i] ? 1 : 0)); }
+  const out = new T(new Float32Array([nv ? loss / nv : 0]), [1], [logits], () => {
+    if (!nv) return;
+    const g = out.g[0] / nv;
+    for (let i = 0; i < n; i++) { if (targets[i] < 0) continue; const o = i * V; for (let j = 0; j < V; j++) logits.g[o + j] += g * (P[o + j] - (j === targets[i] ? 1 : 0)); }
   });
-  out.probs = P;
+  out.probs = P; out.nValid = nv;
   return out;
 }
 

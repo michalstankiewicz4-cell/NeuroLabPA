@@ -1,7 +1,9 @@
 // Laboratorium języka · wątek treningowy. Liczy w tle, żeby strona nigdy się nie zawieszała.
-importScripts('engine.js', 'wasm.js', 'gpu.js');
+importScripts('engine.js', 'wasm.js', 'gpu.js', 'bpe.js');
 
-let tokens = null, V = 0, chars = [], nTrain = 0, valIdx = null, nlIdx = 0, dataLabel = '';
+let tmask = null, ftSaved = null;   // maska celów (dostrajanie do rozmowy) i odłożone dane głównego tekstu
+const tgt = i => tmask && !tmask[i] ? -1 : tokens[i];
+let tokens = null, V = 0, chars = [], nTrain = 0, valIdx = null, nlIdx = 0, dataLabel = '', tok = null, topIdx = [], cpt = 1;
 let running = null;                 // aktualny trening: {kind, stop}
 const models = {};                  // wytrenowane modele, do próbek, zapisu i porównań
 
@@ -9,17 +11,35 @@ const post = m => self.postMessage(m);
 const randInt = n => Math.floor(Math.random() * n);
 const now = () => performance.now();
 
-function setData(text, ch, label) {
-  chars = ch; V = ch.length; dataLabel = label || '';
-  const stoi = new Map(ch.map((c, i) => [c, i]));
-  tokens = new Int32Array(text.length);
-  for (let i = 0; i < text.length; i++) tokens[i] = stoi.get(text[i]) ?? 0;
+// Jednostka tekstu: litery albo tokeny BPE. `chars` to zawsze słownik jednostek (litery albo kawałki słów).
+function setData(text, ch, label, unit) {
+  dataLabel = label || '';
+  const nm = /^bpe(\d+)$/.exec(unit || '');
+  tok = nm ? bpeTrain(text, +nm[1], (r, n) => post({ type: 'tokprogress', r, n })) : charTokenizer(ch);
+  chars = tok.vocab; V = chars.length;
+  tokens = Int32Array.from(tok.encode(text));
   nTrain = Math.floor(tokens.length * .9);           // ostatnie 10% tekstu zostaje do sprawdzania (walidacja)
   const nv = Math.min(3000, tokens.length - nTrain - 1);
   valIdx = Int32Array.from({ length: nv }, () => nTrain + 1 + randInt(tokens.length - nTrain - 1));
-  nlIdx = stoi.has('\n') ? stoi.get('\n') : 0;
+  nlIdx = Math.max(0, chars.indexOf('\n'));
   for (const k in models) delete models[k];
+  // ile znaków przypada średnio na jednostkę w tekście sprawdzającym: do przeliczania błędu na literę
+  let vc = 0; for (let i = nTrain; i < tokens.length; i++) vc += chars[tokens[i]].length;
+  cpt = vc / (tokens.length - nTrain);
+  const freq = new Float64Array(V); for (let i = 0; i < nTrain; i++) freq[tokens[i]]++;
+  topIdx = [...Array(V).keys()].sort((a, b) => freq[b] - freq[a]).slice(0, 150);
+  const info = { V, cpt, n: tokens.length, train: nTrain, unit: nm ? 'bpe' : 'char', merges: [], longest: [], example: [] };
+  if (nm) {
+    info.merges = tok.merges.slice(0, 60).map(([a, b]) => [chars[a], chars[b]]);
+    info.longest = chars.slice(tok.nBase).sort((a, b) => b.length - a.length || a.localeCompare(b, 'pl')).filter(t => /\p{L}/u.test(t)).slice(0, 24);
+    const ex = tokens.slice(nTrain + 1, nTrain + 400); let st = 0;
+    for (let i = 0; i < ex.length; i++) if (chars[ex[i]] === '\n') { st = i + 1; break; }
+    info.example = Array.from(ex.slice(st, st + 90), i => chars[i]);
+  }
+  return info;
 }
+// Mapa jednostek: rzut embeddingów, tylko 150 najczęstszych (przy tokenach jest ich ponad tysiąc).
+function embOf(m, dim) { const pts = pca2(m.E.d, m.chars.length, dim), idx = topIdx.filter(i => i < m.chars.length); return { labels: idx.map(i => m.chars[i]), pts: idx.map(i => pts[i]) }; }
 
 // Losowanie kolejnej litery z rozkładu, z "temperaturą": niższa = bezpieczniej, wyższa = odważniej.
 function pick(probs, temp) {
@@ -32,10 +52,15 @@ function softmaxRow(lg) { let mx = -Infinity; for (const v of lg) mx = Math.max(
 
 // Każdy model ma własny słownik (chars), bo wczytany z pliku mógł powstać na innym tekście.
 // stepper() zwraca funkcję: podaj cały dotychczasowy tekst (numery liter), dostaniesz rozkład następnej litery.
-function sampleText(m, prompt, temp, len) {
-  const stoi = new Map(m.chars.map((c, i) => [c, i]));
-  const ctx = [...prompt].map(c => stoi.get(c)).filter(v => v !== undefined), out = [], next = m.stepper();
-  for (let i = 0; i < len; i++) { const n = pick(next(ctx), temp); ctx.push(n); out.push(m.chars[n]); }
+// Przy tokenach końcowa spacja początku tekstu zostaje odcięta: w nauce spacja należy do następnego słowa.
+function sampleText(m, prompt, temp, len, stop) {
+  const tk = m.tok || charTokenizer(m.chars), bpe = tk.merges.length > 0;
+  const ctx = tk.encode(bpe ? prompt.replace(/[^\S\n]+$/, '') : prompt), out = [], next = m.stepper();
+  let n = 0;
+  for (let i = 0; i < len && n < len; i++) {
+    const t = pick(next(ctx), temp), piece = m.chars[t]; ctx.push(t); out.push(piece); n += piece.length;
+    if (stop && stop(out.join(''))) break;
+  }
   return out.join('');
 }
 
@@ -55,7 +80,7 @@ function trainBigram() {
     for (let b = 0; b < V; b++) P[a * V + b] = (C[a * V + b] + alpha) / s;
   }
   const lossOn = (from, to) => { let l = 0, n = 0; for (let i = Math.max(1, from); i < to; i++) { l -= Math.log(P[tokens[i - 1] * V + tokens[i]]); n++; } return l / n; };
-  const model = bigramModel(P, chars);
+  const model = bigramModel(P, chars); model.tok = tok;
   model.val = lossOn(nTrain + 1, tokens.length); model.label = dataLabel;
   models.bigram = model;
   const freq = new Float64Array(V); for (let i = 0; i < nTrain; i++) freq[tokens[i]]++;
@@ -89,16 +114,16 @@ function buildMLP(hp, ch) {
 }
 function mlpBatch(positions, ctx) {
   const X = new Int32Array(positions.length * ctx), Y = new Int32Array(positions.length);
-  positions.forEach((p, b) => { for (let j = 0; j < ctx; j++) { const k = p - ctx + j; X[b * ctx + j] = k >= 0 ? tokens[k] : nlIdx; } Y[b] = tokens[p]; });
+  positions.forEach((p, b) => { for (let j = 0; j < ctx; j++) { const k = p - ctx + j; X[b * ctx + j] = k >= 0 ? tokens[k] : nlIdx; } Y[b] = tgt(p); });
   return { X, Y };
 }
 function evalMLP(m, idxs) {
-  let loss = 0; const ctx = m.hp.ctx, chunk = 500;
+  let loss = 0, n = 0; const ctx = m.hp.ctx, chunk = 500;
   for (let i = 0; i < idxs.length; i += chunk) {
-    const part = Array.from(idxs.slice(i, i + chunk)), { X, Y } = mlpBatch(part, ctx);
-    loss += crossEntropy(m.forward(X), Y).d[0] * part.length;
+    const part = Array.from(idxs.slice(i, i + chunk)), { X, Y } = mlpBatch(part, ctx), ce = crossEntropy(m.forward(X), Y);
+    loss += ce.d[0] * ce.nValid; n += ce.nValid;
   }
-  return loss / idxs.length;
+  return n ? loss / n : 0;
 }
 
 // ---------- krok 3: sieć rekurencyjna (zwykła RNN albo GRU) ----------
@@ -135,7 +160,7 @@ function evalRNN(m, from, to, S = 24, warm = 40, count = 160) {
   for (let i = 0; i < S; i++) {
     const s = from + Math.floor(span * (i + .5) / S);
     for (let t = 0; t < L; t++) X[t * S + i] = tokens[s + t];
-    for (let t = 0; t < count; t++) Y[t * S + i] = tokens[s + warm + t + 1];
+    for (let t = 0; t < count; t++) Y[t * S + i] = tgt(s + warm + t + 1);
   }
   const hs = m.run(X, S);
   return crossEntropy(m.out(hs.slice(warm)), Y).d[0];
@@ -164,13 +189,15 @@ function neuronProbe(m, show = 320, scan = 2500) {
   const isL = c => /\p{L}/u.test(c), feats = { 'litera (nie odstęp)': [], 'pozycja w słowie': [], 'w cudzysłowie': [], 'w nawiasie': [], 'samogłoska': [] };
   let pos = 0, q = 0, par = 0;
   for (let t = 0; t < len; t++) {
-    const c = m.chars[X[t]];
-    pos = isL(c) ? pos + 1 : 0;
-    if (c === '„' || c === '«') q = 1; else if (c === '”' || c === '»') q = 0; else if (c === '"') q = 1 - q;
-    if (c === '(') par++; else if (c === ')') par = Math.max(0, par - 1);
-    if (c === '\n') { q = 0; par = 0; }
-    feats['litera (nie odstęp)'].push(isL(c) ? 1 : 0); feats['pozycja w słowie'].push(Math.min(pos, 10));
-    feats['w cudzysłowie'].push(q); feats['w nawiasie'].push(par > 0 ? 1 : 0); feats['samogłoska'].push('aąeęioóuyAĄEĘIOÓUY'.includes(c) ? 1 : 0);
+    const piece = m.chars[X[t]], last = piece[piece.length - 1];   // przy tokenach: stan po całym kawałku
+    pos = /^[^\p{L}]/u.test(piece) ? (isL(last) ? 1 : 0) : (isL(last) ? pos + 1 : 0);
+    for (const c of piece) {
+      if (c === '„' || c === '«') q = 1; else if (c === '”' || c === '»') q = 0; else if (c === '"') q = 1 - q;
+      if (c === '(') par++; else if (c === ')') par = Math.max(0, par - 1);
+      if (c === '\n') { q = 0; par = 0; }
+    }
+    feats['litera (nie odstęp)'].push(isL(last) ? 1 : 0); feats['pozycja w słowie'].push(Math.min(pos, 10));
+    feats['w cudzysłowie'].push(q); feats['w nawiasie'].push(par > 0 ? 1 : 0); feats['samogłoska'].push('aąeęioóuyAĄEĘIOÓUY'.includes(last) ? 1 : 0);
   }
   const found = [];
   for (const [name, f] of Object.entries(feats)) {
@@ -186,11 +213,11 @@ function neuronProbe(m, show = 320, scan = 2500) {
     found.push(best);
   }
   const s0 = Math.max(0, len - show);                  // pokazujemy końcówkę: pamięć jest już „rozgrzana”
-  return { text: Array.from(X.subarray(s0), i => m.chars[i]).join(''), H, acts: acts.slice(s0 * H), found };
+  return { pieces: Array.from(X.subarray(s0), i => m.chars[i]), H, acts: acts.slice(s0 * H), found };
 }
 function rnnBatch(B, Tn) {
   const X = new Int32Array(Tn * B), Y = new Int32Array(Tn * B);
-  for (let i = 0; i < B; i++) { const s = randInt(nTrain - Tn - 1); for (let t = 0; t < Tn; t++) { X[t * B + i] = tokens[s + t]; Y[t * B + i] = tokens[s + t + 1]; } }
+  for (let i = 0; i < B; i++) { const s = randInt(nTrain - Tn - 1); for (let t = 0; t < Tn; t++) { X[t * B + i] = tokens[s + t]; Y[t * B + i] = tgt(s + t + 1); } }
   return { X, Y };
 }
 
@@ -229,21 +256,22 @@ function buildTransformer(hp, ch) {
 }
 function tfBatch(B, T, from, to) {
   const X = new Int32Array(B * T), Y = new Int32Array(B * T);
-  for (let b = 0; b < B; b++) { const s = from + randInt(to - from - T - 1); for (let t = 0; t < T; t++) { X[b * T + t] = tokens[s + t]; Y[b * T + t] = tokens[s + t + 1]; } }
+  for (let b = 0; b < B; b++) { const s = from + randInt(to - from - T - 1); for (let t = 0; t < T; t++) { X[b * T + t] = tokens[s + t]; Y[b * T + t] = tgt(s + t + 1); } }
   return { X, Y };
 }
 // Sprawdzanie: okna z tekstu sprawdzającego; liczą się tylko pozycje z drugiej połowy okna,
 // żeby każda przewidywana litera miała przed sobą co najmniej T/2 liter (jak rozgrzanie w RNN).
 function evalTF(m, from, to, S = 32) {
   const T = m.hp.ctx, Vm = m.chars.length, span = to - from - T - 2, X = new Int32Array(S * T), Y = new Int32Array(S * T);
-  for (let b = 0; b < S; b++) { const s = from + Math.floor(span * (b + .5) / S); for (let t = 0; t < T; t++) { X[b * T + t] = tokens[s + t]; Y[b * T + t] = tokens[s + t + 1]; } }
+  for (let b = 0; b < S; b++) { const s = from + Math.floor(span * (b + .5) / S); for (let t = 0; t < T; t++) { X[b * T + t] = tokens[s + t]; Y[b * T + t] = tgt(s + t + 1); } }
   const lg = m.forward(X, S, T).logits.d; let loss = 0, n = 0;
   for (let b = 0; b < S; b++) for (let t = T >> 1; t < T; t++) {
+    if (Y[b * T + t] < 0) continue;
     const o = (b * T + t) * Vm; let mx = -Infinity; for (let j = 0; j < Vm; j++) mx = Math.max(mx, lg[o + j]);
     let sum = 0; for (let j = 0; j < Vm; j++) sum += Math.exp(lg[o + j] - mx);
     loss += Math.log(sum) + mx - lg[o + Y[b * T + t]]; n++;
   }
-  return loss / n;
+  return n ? loss / n : 0;
 }
 // Mapa uwagi: jedno okno tekstu sprawdzającego, wagi uwagi z każdej warstwy i głowy
 // oraz to, jak daleko wstecz każda głowa średnio patrzy.
@@ -255,14 +283,14 @@ function attentionProbe(m) {
     let dist = 0; for (let i = 0; i < T; i++) for (let j = 0; j <= i; j++) dist += a.att[h * T * T + i * T + j] * (i - j);
     heads.push({ layer: l, head: h, dist: dist / T });
   } });
-  return { text: Array.from(X, i => m.chars[i]).join(''), T, L: atts.length, nh, att: atts.map(a => a.att), heads };
+  return { pieces: Array.from(X, i => m.chars[i]), T, L: atts.length, nh, att: atts.map(a => a.att), heads };
 }
-function trainTF(hp) {
-  const m = buildTransformer(hp, chars);
-  trainLoop(m, hp, {
+function trainTF(hp) { const m = buildTransformer(hp, chars); trainLoop(m, hp, fnsTF(m, hp)); }
+function fnsTF(m, hp) {
+  return ({
     loss: () => { const { X, Y } = tfBatch(hp.batch, hp.ctx, 0, nTrain); return crossEntropy(m.forward(X, hp.batch, hp.ctx).logits, Y); },
     val: () => evalTF(m, nTrain + 1, tokens.length), train: () => evalTF(m, 1, nTrain), valMs: 2500, clip: 1,
-    extras: () => ({ attn: attentionProbe(m), emb: { labels: chars, pts: pca2(m.E.d, V, hp.dim) } }),
+    extras: () => ({ attn: attentionProbe(m), emb: embOf(m, hp.dim) }),
   });
 }
 
@@ -280,7 +308,7 @@ async function trainTFGPU(hp) {
   const T = hp.ctx, S = 32, g = new GPUTransformer(eng, m, hp.batch, S);
   const vXY = tfEvalXY(T, nTrain + 1, tokens.length, S), tXY = tfEvalXY(T, 1, nTrain, S);
   const evalLoss = async ({ X, Y }) => { const r = await g.evalRows(X, Y); let l = 0, n = 0; for (let b = 0; b < S; b++) for (let t = T >> 1; t < T; t++) { l += r[b * T + t]; n++; } return l / n; };
-  const extras = () => ({ attn: attentionProbe(m), emb: { labels: chars, pts: pca2(m.E.d, V, hp.dim) } });
+  const extras = () => ({ attn: attentionProbe(m), emb: embOf(m, hp.dim) });
   let step = 0, ema = null, lastVal = await evalLoss(vXY), best = { val: lastVal, step: 0 }, tVal = now(), tExtra = now(), k = 1, ms = null;
   g.snapshot();
   const base = () => ({ kind: 'transformer', step, train: ema, val: lastVal, params: m.count, bestStep: best.step, bestVal: best.val, ms, device: 'GPU · ' + eng.name });
@@ -324,6 +352,53 @@ async function gpuSelfTest() {
   return { name: eng.name, lossC: loss.d[0], lossG, diff };
 }
 
+// ---------- krok 5: dostrajanie do rozmowy ----------
+// Bierzemy kopię wytrenowanej sieci i uczymy ją dalej na dialogach „Ty: … / Sieć: …”. Przy maskowaniu
+// błąd liczy się tylko na kwestiach Sieci: sieć ma się nauczyć odpowiadać, a nie mówić za rozmówcę.
+function restoreData() { if (ftSaved) { ({ tokens, nTrain, valIdx, chars, V, tok, cpt, topIdx, nlIdx } = ftSaved); ftSaved = null; } tmask = null; }
+function finetune(baseKind, fhp, dialog) {
+  restoreData();
+  const b = models[baseKind];
+  if (!b || !b.params) throw new Error('Najpierw naucz albo wczytaj sieć, którą chcesz dostroić (krok 2, 3 albo 4).');
+  const m = b.kind === 'mlp' ? buildMLP(b.hp, b.chars) : b.kind === 'rnn' ? buildRNN(b.hp, b.chars) : buildTransformer(b.hp, b.chars);
+  m.params.forEach((p, i) => p.d.set(b.params[i].d)); m.slot = 'chat'; m.base = baseKind;
+  ftSaved = { tokens, nTrain, valIdx, chars, V, tok, cpt, topIdx, nlIdx };
+  tok = b.tok || charTokenizer(b.chars); chars = b.chars; V = chars.length; nlIdx = Math.max(0, chars.indexOf('\n'));
+  const known = new Set(tok.vocab.slice(0, tok.nBase));
+  const convs = [...dialog.replace(/\r\n?/g, '\n')].filter(c => known.has(c)).join('').split(/\n\s*\n/).map(c => c.trim()).filter(Boolean);
+  const nv = Math.max(4, Math.round(convs.length * .1));
+  const trainText = convs.slice(0, -nv).join('\n\n') + '\n\n', full = trainText + convs.slice(-nv).join('\n\n') + '\n';
+  // maska znaków: 1 dla treści kwestii Sieci (po „Sieć:”, razem z końcem linii), 0 dla reszty
+  const cm = new Uint8Array(full.length); let ls = 0;
+  for (let i = 0; i <= full.length; i++) if (i === full.length || full[i] === '\n') {
+    if (full.startsWith('Sieć:', ls)) for (let j = ls + 5; j <= Math.min(i, full.length - 1); j++) cm[j] = 1;
+    ls = i + 1;
+  }
+  const ids = tok.encode(full); tokens = Int32Array.from(ids); nTrain = tok.encode(trainText).length;
+  const tm = new Uint8Array(ids.length); let pos = 0;
+  ids.forEach((t, i) => { tm[i] = cm[pos] || 0; pos += chars[t].length; });
+  tmask = fhp.mask ? tm : null;
+  const vpos = []; for (let i = nTrain + 1; i < tokens.length; i++) if (!tmask || tmask[i]) vpos.push(i);
+  valIdx = Int32Array.from(vpos.slice(0, 3000));
+  let vc = 0; for (let i = nTrain; i < tokens.length; i++) vc += chars[tokens[i]].length; cpt = vc / (tokens.length - nTrain);
+  const freq = new Float64Array(V); for (let i = 0; i < nTrain; i++) freq[tokens[i]]++;
+  topIdx = [...Array(V).keys()].sort((a, c) => freq[c] - freq[a]).slice(0, 150);
+  post({ type: 'ftinfo', cpt, conv: convs.length, val: nv, tokens: tokens.length, learn: tm.reduce((a, c) => a + c, 0) });
+  const hp = { ...b.hp, steps: fhp.steps, lr: fhp.lr, device: fhp.device, base: baseKind, mask: fhp.mask };
+  m.label = `rozmowy (${convs.length - nv} do nauki, ${nv} do sprawdzania)`;
+  const fns = b.kind === 'mlp' ? fnsMLP(m, hp) : b.kind === 'rnn' ? fnsRNN(m, hp) : fnsTF(m, hp);
+  fns.prompt = 'Ty: Cześć! Jak się masz?\nSieć:'; fns.done = restoreData;
+  trainLoop(m, hp, fns);
+}
+// Odpowiedź w czacie: historia rozmowy + „Ty: …\nSieć:”, losujemy do końca linii.
+function chatReply(slot, history, temp) {
+  const m = models[slot];
+  if (!m) throw new Error('Brak sieci do rozmowy.');
+  // początkowe odstępy i nowe linie pomijamy; kwestia kończy się na pierwszym końcu linii po treści
+  const raw = sampleText(m, history, temp, 260, out => out.trimStart().includes('\n'));
+  return raw.trimStart().split('\n')[0].trim();
+}
+
 // ---------- wspólna pętla nauki (krok 2, 3 i 4) ----------
 // Pamięta najlepszą wersję sieci: gdy błąd sprawdzający zaczyna rosnąć (uczenie na pamięć),
 // na koniec wracamy do wag z najlepszego momentu.
@@ -333,9 +408,9 @@ function cpuBackend(hp) {
   catch (err) { post({ type: 'error', msg: err.message + ' Liczę zwykłym JS.' }); setBackend('js'); return 'JS'; }
 }
 function trainLoop(m, hp, fns) {
-  const devName = cpuBackend(hp);
-  const opt = new Adam(m.params, hp.lr), job = { kind: m.kind, stop: false };
-  running = job; models[m.kind] = m; m.label = dataLabel;
+  const devName = cpuBackend(hp), slot = m.slot || m.kind; m.tok = tok;
+  const opt = new Adam(m.params, hp.lr), job = { kind: slot, stop: false };
+  running = job; models[slot] = m; m.label = m.label || dataLabel;
   let step = 0, ema = null, lastVal = null, best = null, tVal = 0, tExtra = 0, ms = null;
   const snap = () => m.params.map(p => p.d.slice());
   const report = (extras, withVal) => {
@@ -343,8 +418,8 @@ function trainLoop(m, hp, fns) {
       lastVal = fns.val();
       if (!best || lastVal < best.val - 1e-4) best = { val: lastVal, step, w: snap() };
     }
-    const msg = { type: 'progress', kind: m.kind, step, train: ema, val: lastVal, params: m.count, bestStep: best && best.step, bestVal: best && best.val, ms, device: devName };
-    if (extras) Object.assign(msg, { sample: sampleText(m, '', .8, 240) }, fns.extras());
+    const msg = { type: 'progress', kind: slot, step, train: ema, val: lastVal, params: m.count, bestStep: best && best.step, bestVal: best && best.val, ms, device: devName };
+    if (extras) Object.assign(msg, { sample: sampleText(m, fns.prompt || '', .8, 240) }, fns.extras());
     post(msg);
   };
   report(true, true);
@@ -371,28 +446,29 @@ function trainLoop(m, hp, fns) {
     else if (val > best.val + .01) {   // mniejsze różnice to szum pomiaru, nie uczenie na pamięć
     m.params.forEach((p, i) => p.d.set(best.w[i])); val = best.val; restored = true; }
     m.val = val; m.step = step; m.bestStep = best.step;
-    post({ type: 'done', kind: m.kind, step, train: fns.train(), val, params: m.count, bestStep: best.step, bestVal: best.val, restored,
-      sample: sampleText(m, '', .8, 300), stopped: job.stop, hp, ms, device: devName, ...fns.extras() });
+    post({ type: 'done', kind: slot, step, train: fns.train(), val, params: m.count, bestStep: best.step, bestVal: best.val, restored,
+      sample: sampleText(m, fns.prompt || '', .8, 300), stopped: job.stop, hp, ms, device: devName, ...fns.extras() });
     running = null;
+    if (fns.done) fns.done();
   };
   setTimeout(tick, 0);
 }
 
-function trainMLP(hp) {
-  const m = buildMLP(hp, chars);
+function trainMLP(hp) { const m = buildMLP(hp, chars); trainLoop(m, hp, fnsMLP(m, hp)); }
+function fnsMLP(m, hp) {
   const trainCheck = Int32Array.from({ length: Math.min(3000, nTrain - 1) }, () => 1 + randInt(nTrain - 1));
-  trainLoop(m, hp, {
+  return ({
     loss: () => { const pos = Array.from({ length: hp.batch }, () => 1 + randInt(nTrain - 1)), { X, Y } = mlpBatch(pos, hp.ctx); return crossEntropy(m.forward(X), Y); },
     val: () => evalMLP(m, valIdx), train: () => evalMLP(m, trainCheck), valMs: 1500,
-    extras: () => ({ emb: { labels: chars, pts: pca2(m.E.d, V, hp.emb) } }),
+    extras: () => ({ emb: embOf(m, hp.emb) }),
   });
 }
-function trainRNN(hp) {
-  const m = buildRNN(hp, chars);
-  trainLoop(m, hp, {
+function trainRNN(hp) { const m = buildRNN(hp, chars); trainLoop(m, hp, fnsRNN(m, hp)); }
+function fnsRNN(m, hp) {
+  return ({
     loss: () => { const { X, Y } = rnnBatch(hp.batch, hp.seq); return crossEntropy(m.out(m.run(X, hp.batch)), Y); },
     val: () => evalRNN(m, nTrain + 1, tokens.length), train: () => evalRNN(m, 1, nTrain), valMs: 2500, clip: 1,
-    extras: () => ({ reach: gradReach(m), neurons: neuronProbe(m), emb: { labels: chars, pts: pca2(m.E.d, V, hp.emb) } }),
+    extras: () => ({ reach: gradReach(m), neurons: neuronProbe(m), emb: embOf(m, hp.emb) }),
   });
 }
 
@@ -403,7 +479,7 @@ function exportModel(kind) {
   const m = models[kind];
   if (!m) throw new Error('Brak wytrenowanego modelu tego rodzaju.');
   const tensors = m.kind === 'bigram' ? [m.P] : m.params.map(p => p.d);
-  return { format: 'neurolab-lang-model', version: 1, kind: m.kind, hp: m.hp, chars: m.chars, trainedOn: m.label || '',
+  return { format: 'neurolab-lang-model', version: 1, kind: m.kind, hp: m.hp, chars: m.chars, tok: m.tok && m.tok.merges.length ? { merges: m.tok.merges, nBase: m.tok.nBase } : null, trainedOn: m.label || '',
     val: m.val ?? null, step: m.step ?? null, params: m.count, savedAt: new Date().toISOString(), tensors: tensors.map(b64) };
 }
 function importModel(j) {
@@ -416,6 +492,7 @@ function importModel(j) {
     m.params.forEach((p, i) => p.d.set(t[i]));
   }
   m.label = j.trainedOn; m.step = j.step;
+  m.tok = j.tok ? bpeTokenizer(j.chars, j.tok.merges, j.tok.nBase) : charTokenizer(j.chars);
   const same = j.chars.length === chars.length && j.chars.every((c, i) => c === chars[i]);
   let val = null;
   if (same) {
@@ -432,9 +509,12 @@ function importModel(j) {
 self.onmessage = e => {
   const m = e.data;
   try {
-    if (m.cmd === 'data') { if (running) running.stop = true; setData(m.text, m.chars, m.label); post({ type: 'ready', n: tokens.length, train: nTrain }); }
+    if (m.cmd === 'data') { if (running) running.stop = true; ftSaved = null; tmask = null; post({ type: 'ready', ...setData(m.text, m.chars, m.label, m.unit) }); }
+    else if (m.cmd === 'finetune') { if (running) running.stop = true; setTimeout(() => { try { finetune(m.base, m.hp, m.dialog); } catch (err) { restoreData(); post({ type: 'error', msg: String(err.message || err) }); } }, 0); }
+    else if (m.cmd === 'chat') post({ type: 'chat', id: m.id, text: chatReply(m.slot, m.history, m.temp) });
     else if (m.cmd === 'train') {
       if (running) running.stop = true;
+      restoreData();
       if (m.kind === 'bigram') trainBigram(); else if (m.kind === 'mlp') trainMLP(m.hp); else if (m.kind === 'transformer') { if (m.hp.device === 'gpu') trainTFGPU(m.hp).catch(err => { running = null; post({ type: 'error', msg: 'GPU: ' + (err && err.message || err) }); }); else trainTF(m.hp); } else trainRNN(m.hp);
     }
     else if (m.cmd === 'stop') { if (running) running.stop = true; }

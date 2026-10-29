@@ -3,6 +3,26 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.23.0
+- Laboratorium języka: **tokeny BPE** (`lang/js/bpe.js`).
+  - Przełącznik „Jednostka”: litery albo tokeny BPE z 256, 512 lub 1024 sklejeniami.
+  - Tokenizer uczy się w wątku w ok. 1–2 s na 1,1 mln znaków. Podział jak w GPT-2: na słowa ze spacją z przodu, sklejenia tylko w obrębie słowa. Podział jest odwracalny.
+  - Podgląd: fragment tekstu pocięty na tokeny, pierwsze sklejenia („i+e”, „r+z”, „c+z”, „c+h”…) i najdłuższe tokeny („ jeszcze”, „ chwili”, „ pociąg”…).
+- **Błąd na literę:** przy tokenach błąd na token jest dzielony przez średnią liczbę znaków na token. Dzięki temu w tabeli i na wykresie da się uczciwie porównać litery i tokeny. Tabela porównania zostaje po zmianie jednostki.
+- Neurony pamięci, mapa uwagi i mapa jednostek działają na kawałkach różnej długości. Mapa pokazuje 150 najczęstszych jednostek.
+- Wyniki na Grabińskim (błąd na literę, litery → BPE 512):
+  - bigram 2,52 → 1,96;
+  - GRU, 1000 kroków: 2,19 → 2,09;
+  - transformer, 1000 kroków: 2,22 → 2,04;
+  - transformer na BPE, 2000 kroków: 2,00, najlepiej ze wszystkich.
+  - Sieć z oknem się nie poprawia: przy 626 tokenach ma za mało kroków na dużą warstwę wyjściową.
+- **Krok 5: rozmowa.**
+  - Kopia sieci z kroku 2, 3 albo 4 dostrajana na dialogach „Ty: … / Sieć: …”.
+  - Błąd liczony tylko na kwestiach Sieci (maskowanie), do wyboru też cały dialog.
+  - Okno czatu: rozmowa z siecią przed dostrojeniem albo po nim. Przed dostrojeniem sieć pisze dalej jak w opowiadaniu, po dostrojeniu odpowiada krótko, we własnej kolejce, z kropką na końcu. Uczy się formy, nie treści.
+- `lang/data/rozmowy/`: 140 dialogów napisanych przez Claude'a dla laboratorium, w domenie publicznej (CC0).
+- Silnik: funkcja błędu pomija cele < 0 (maskowanie) i podaje liczbę ocenianych pozycji.
+
 ## 0.22.0
 - Laboratorium języka: **mnożenie macierzy w WebAssembly z SIMD**, 4 liczby jedną instrukcją procesora.
   - Moduł ma 902 bajty, napisany ręcznie w tekstowym formacie WASM (`lang/tools/matmul.wat`). Kompiluje go `lang/tools/build_wasm.js` do `lang/js/wasm.js`.

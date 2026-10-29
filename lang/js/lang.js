@@ -20,6 +20,11 @@ const STEPS = [
     why: 'Usuwa sztywne okno z kroku 2: te same wagi działają na każdej pozycji, więc kontekst może być dowolnie długi bez dokładania parametrów. Zwykła RNN (Elman 1990) ma jednak problem: przy nauce sygnał o błędzie słabnie z każdą literą wstecz („zanikający gradient”). GRU (2014) dodaje bramki, które same decydują, co w pamięci zostawić, a co nadpisać. Przez zostawioną pamięć gradient przechodzi bez osłabiania.',
     lim: 'Czyta po kolei: litera 50 czeka na 49, więc nauki nie da się zrównoleglić po długości tekstu i trwa ona długo. Cała przeszłość musi się zmieścić w jednym małym wektorze, więc szczegóły sprzed setek liter i tak się zacierają. To naprawia dopiero uwaga (krok 4).',
     more: 'Uczymy na kawałkach po kilkadziesiąt liter (obcięta propagacja wstecz). Gdy gradient nagle urośnie, jest przycinany do długości 1, bo w sieciach rekurencyjnych potrafi eksplodować. Sprawdzanie czyta tekst ciągiem: pierwsze 40 liter rozgrzewa pamięć i nie wlicza się do błędu.' },
+  { kind: 'chat', name: '5 · Rozmowa', sub: 'dostrajanie', ready: true, _last: true,
+    what: 'Bierze kopię sieci wytrenowanej w kroku 2, 3 albo 4 i uczy ją dalej na krótkich dialogach w formacie „Ty: … / Sieć: …”. Potem w oknie czatu dopisujemy Twoją wiadomość i „Sieć:”, a sieć dokańcza linijkę. To jest cała „rozmowa”: zwykłe przewidywanie dalszego ciągu tekstu w odpowiednim formacie.',
+    why: 'Tak samo (w ogromnej skali) powstają asystenci: najpierw sieć uczy się języka z dużej ilości tekstu, potem jest dostrajana na przykładach rozmów. Błąd liczymy tylko na kwestiach Sieci (maskowanie): sieć ma się nauczyć odpowiadać, a nie mówić za rozmówcę. Bez maski uczy się też pisać Twoje kwestie.',
+    lim: 'Uczy się formy, nie wiedzy: odpowiada we własnej kolejce, krótkimi zdaniami, w podobnym tonie, ale nie rozumie pytań i nie wie nic poza tym, co przeczytała. 140 rozmów to bardzo mało, więc szybko zaczyna je powtarzać na pamięć (pilnuje tego najlepsza wersja). Sieć z oknem widzi tylko kilka ostatnich znaków, więc nie zobaczy nawet całego pytania.',
+    more: 'Dialogi napisał Claude dla tego laboratorium (domena publiczna, plik lang/data/rozmowy). Słownik liter albo tokenów zostaje taki jak w sieci bazowej. Najlepiej dostrajać transformer albo GRU wytrenowane wcześniej na Grabińskim.' },
   { kind: 'transformer', name: '4 · Transformer', sub: 'uwaga, 2017', ready: true,
     what: 'Sieć widzi naraz okno ostatnich liter (np. 64). Każda pozycja zadaje pytanie (zapytanie), każda wcześniejsza ma etykietę (klucz) i treść (wartość). Pozycja bierze treści tych liter, których klucze najlepiej pasują do jej pytania. To jest uwaga. Kilka „głów” pyta równolegle o różne rzeczy, a kilka warstw powtarza to na coraz bardziej przetworzonej treści.',
     why: 'Usuwa wąskie gardło RNN: nic nie musi przecisnąć się przez jeden mały wektor pamięci, bo każda litera może sięgnąć wprost do dowolnej wcześniejszej w oknie, bez osłabiania sygnału. Wszystkie pozycje liczą się jednocześnie, a nie po kolei, więc ogromnie zyskuje na kartach graficznych. To dlatego wygrał i na nim stoją GPT, Claude i inne duże modele.',
@@ -27,6 +32,13 @@ const STEPS = [
     more: 'Każdy blok: normalizacja warstwy → uwaga → dodanie do wejścia (połączenie omijające) → normalizacja → mała sieć w każdej pozycji osobno (4× szersza, GELU) → dodanie. Sprawdzanie liczy tylko drugą połowę każdego okna, żeby każda litera miała przed sobą kontekst.' },
 ];
 const HP = {
+  chat: [
+    { id: 'base', label: 'Sieć bazowa', hint: 'co dostroić', opts: [['transformer', 'transformer (krok 4)'], ['rnn', 'RNN/GRU (krok 3)'], ['mlp', 'sieć z oknem (krok 2)']], val: 'transformer' },
+    { id: 'steps', label: 'Kroki', hint: 'dostrajania', opts: [100, 300, 600, 1000], val: 300 },
+    { id: 'lr', label: 'Tempo nauki', hint: 'mniejsze niż przy nauce', opts: [.0003, .001, .003], val: .001 },
+    { id: 'mask', label: 'Błąd liczony na', hint: 'maskowanie', opts: [[1, 'tylko kwestiach Sieci'], [0, 'całym dialogu']], val: 1 },
+    { id: 'device', label: 'Liczy', hint: 'jak liczyć', opts: [['wasm', 'procesor, WASM SIMD'], ['cpu', 'procesor, zwykły JS']], val: 'wasm' },
+  ],
   transformer: [
     { id: 'layers', label: 'Warstwy', hint: 'bloków uwagi', opts: [1, 2, 3, 4], val: 2 },
     { id: 'dim', label: 'Szerokość', hint: 'liczb na pozycję', opts: [32, 48, 64], val: 32 },
@@ -57,7 +69,15 @@ const HP = {
 let cur = 'bigram';
 
 // ---------- dane ----------
-let corpus = '', vocab = null, dataLabel = '';
+let corpus = '', vocab = null, dataLabel = '', unitInfo = null;
+// Jednostka tekstu: litery albo tokeny BPE. Błąd sieci na tokenach przeliczamy na literę (dzielimy przez średnią
+// liczbę znaków na token), inaczej porównanie byłoby nieuczciwe: przewidzenie całego słowa to więcej niż jednej litery.
+const VV = () => unitInfo ? unitInfo.V : vocab ? vocab.chars.length : 2;
+const CPT = () => cur === 'chat' && ftInfo ? ftInfo.cpt : unitInfo ? unitInfo.cpt : 1;
+let ftInfo = null;
+const isBPE = () => !!unitInfo && unitInfo.unit === 'bpe';
+const pc = v => v == null ? null : v / CPT();
+const showTok = t => t.replace(/ /g, '·').replace(/\n/g, '↵');
 const worker = new Worker('js/worker.js');
 
 function loadText(text, label) {
@@ -73,9 +93,31 @@ function loadText(text, label) {
   $('dataNote').textContent = corpus.length < 200000
     ? `To ${corpus.length.toLocaleString('pl')} znaków. Sieć nauczy się z tego głównie sylab i krótkich słów, a łatwo zapamięta tekst na pamięć. Do sensownej nauki wgraj kilkaset tysięcy znaków.`
     : 'Wystarczająco dużo tekstu, żeby sieć uczyła się języka, a nie tylko zapamiętywała.';
-  runs.length = 0; reachDone.length = 0; have.clear(); for (const k in extras) delete extras[k]; renderCmp(); resetLearn();
-  worker.postMessage({ cmd: 'data', text: corpus, chars: vocab.chars, label });
-  updateParamNote();
+  runs.length = 0; renderCmp();
+  sendData();
+}
+// Wysyła tekst do wątku; przy tokenach wątek najpierw buduje słownik BPE. Tabela porównania zostaje,
+// bo błąd na literę da się porównać między jednostkami.
+function sendData() {
+  if (!corpus) return;
+  unitInfo = null; reachDone.length = 0; have.clear(); for (const k in extras) delete extras[k];
+  $('train').disabled = true; resetLearn(); renderTokView();
+  worker.postMessage({ cmd: 'data', text: corpus, chars: vocab.chars, label: dataLabel, unit: $('unit').value });
+}
+$('unit').addEventListener('change', sendData);
+function renderTokView() {
+  const box = $('tokView'), u = unitInfo;
+  const st = $('dataStats'), add = (k, v) => { let d = st.querySelector(`[data-k="${k}"]`); if (!d) { d = document.createElement('div'); d.dataset.k = k; d.innerHTML = '<dt></dt><dd></dd>'; st.appendChild(d); } d.querySelector('dt').textContent = k; d.querySelector('dd').textContent = v; };
+  st.querySelectorAll('[data-k]').forEach(d => d.remove());
+  if (!u || u.unit !== 'bpe') { box.hidden = true; return; }
+  add('Tokeny w słowniku', u.V.toLocaleString('pl')); add('Znaków na token', fmt(u.cpt, 2));
+  box.hidden = false; box.innerHTML = '';
+  const h = (t, cls) => { const e = document.createElement(t); if (cls) e.className = cls; return e; };
+  const p1 = h('p', 'note'); p1.textContent = `Ten sam fragment tekstu sprawdzającego podzielony na tokeny (kolejne tokeny mają naprzemienne tło, · to spacja). ${u.n.toLocaleString('pl')} tokenów zamiast ${corpus.length.toLocaleString('pl')} znaków: sieć widzi ${fmt(u.cpt, 1)}× więcej tekstu w tym samym oknie, ale ma ${u.V.toLocaleString('pl')} możliwości do wyboru zamiast ${vocab.chars.length}.`;
+  const ex = h('div', 'toks'); u.example.forEach((t, i) => { const s = h('span', i % 2 ? 'b' : 'a'); s.textContent = showTok(t); ex.appendChild(s); });
+  const p2 = h('p', 'note'); p2.textContent = 'Pierwsze sklejenia, w kolejności: ' + u.merges.slice(0, 30).map(([a, b]) => `${showTok(a)}+${showTok(b)}`).join('  ');
+  const p3 = h('p', 'note'); p3.textContent = 'Najdłuższe tokeny: ' + u.longest.map(showTok).join('  ');
+  box.append(p1, ex, p2, p3);
 }
 // Przykłady: zestawy tekstów z lang/data/ (lista w manifest.json, bo serwer statyczny nie pokazuje zawartości folderu).
 // Gdy ich brak albo strona jest otwarta z dysku, zostaje krótki tekst wbudowany w data.js.
@@ -118,7 +160,7 @@ $('files').addEventListener('change', async e => {
 // ---------- wybór kroku ----------
 function renderSteps() {
   $('steps').innerHTML = '';
-  STEPS.forEach(s => {
+  [...STEPS.filter(s => !s._last), ...STEPS.filter(s => s._last)].forEach(s => {
     const b = document.createElement('button');
     b.type = 'button'; b.setAttribute('role', 'tab'); b.id = 'step-' + s.kind;
     b.setAttribute('aria-selected', s.kind === cur ? 'true' : 'false'); b.disabled = !s.ready;
@@ -143,13 +185,14 @@ function renderHP() {
     if (h.id === 'device') [...sel.options].forEach(o => {
       if ((o.value === 'gpu' && !('gpu' in navigator)) || (o.value === 'wasm' && !wasmOK)) { o.disabled = true; o.textContent += ' — niedostępne tutaj'; if (h.val === o.value) h.val = 'cpu'; }
     });
-    sel.value = h.val; sel.addEventListener('change', () => { h.val = isNaN(+sel.value) ? sel.value : +sel.value; updateParamNote(); if (h.id === 'device' && h.val === 'gpu') checkGPU(); });
+    sel.value = h.val; sel.addEventListener('change', () => { h.val = isNaN(+sel.value) ? sel.value : +sel.value; updateParamNote(); if (h.id === 'base') drawViz(); if (h.id === 'device' && h.val === 'gpu') checkGPU(); });
     lab.appendChild(sel); $('hp').appendChild(lab);
   });
   updateParamNote();
 }
 function hpValues(kind = cur) { const o = {}; (HP[kind] || []).forEach(h => o[h.id] = h.val); o.batch = kind === 'rnn' || kind === 'transformer' ? 16 : 64; return o; }
 function paramCount(kind, V, h) {
+  if (kind === 'chat') return paramCount(h.base, V, hpValues(h.base));
   if (kind === 'bigram') return V * V;
   if (kind === 'mlp') return V * h.emb + h.ctx * h.emb * h.hidden + h.hidden + h.hidden * V + V;
   if (kind === 'transformer') { const d = h.dim; return V * d + h.ctx * d + h.layers * (12 * d * d + 13 * d) + 2 * d + d * V + V; }
@@ -158,7 +201,7 @@ function paramCount(kind, V, h) {
 }
 function updateParamNote() {
   if (!vocab) return;
-  const n = paramCount(cur, vocab.chars.length, hpValues());
+  const n = paramCount(cur, VV(), hpValues());
   $('paramNote').textContent = `${n.toLocaleString('pl')} parametrów` + (cur === 'bigram' ? ' (komórek tabeli)' : ` · ${(n * 4 / 1024).toFixed(0)} KB`);
 }
 
@@ -184,9 +227,11 @@ const extras = {};                     // ostatnie wizualizacje z wątku, osobno
 const reachDone = [];                  // zakończone pomiary zasięgu pamięci, do porównania RNN i GRU
 const have = new Set();                // kroki, dla których istnieje model (wytrenowany albo wczytany)
 let neuronSel = 0, neuronPicked = false, attSel = { head: 0, pos: -1 }, attLayout = null;
+function unitLabel() { return isBPE() ? ` · BPE ${unitInfo.V - vocab.chars.length}` : ''; }
 function runLabel(kind, hp) {
   if (kind === 'mlp') return `2 · Sieć z oknem (okno ${hp.ctx}, emb ${hp.emb})`;
   if (kind === 'rnn') return `3 · ${hp.cell === 'gru' ? 'GRU' : 'Zwykła RNN'} (pamięć ${hp.hidden})`;
+  if (kind === 'chat') return `5 · Rozmowa: ${runLabel(hp.base || 'transformer', HP[hp.base] ? Object.fromEntries(HP[hp.base].map(h => [h.id, h.val])) : {}).replace(/^\d · /, '')}${hp.mask === 0 ? ', bez maski' : ''}`;
   if (kind === 'transformer') return `4 · Transformer (${hp.layers}×${hp.dim}, ${hp.heads} gł., okno ${hp.ctx}${hp.device === 'gpu' ? ', GPU' : ''})`;
   return STEPS.find(s => s.kind === kind).name;
 }
@@ -202,9 +247,18 @@ $('train').addEventListener('click', () => {
   series = { train: [], val: [] }; training = true; delete extras[cur]; neuronPicked = false;
   $('train').disabled = true; $('stop').disabled = cur === 'bigram'; $('saveModel').disabled = true; $('notice') && $('notice').remove();
   $('sample').textContent = cur === 'bigram' ? 'Liczę pary liter…' : 'Sieć zaczyna od losowych wag, więc pierwsze próbki to przypadkowe znaki…';
-  worker.postMessage({ cmd: 'train', kind: cur, hp: hpValues() });
+  if (cur === 'chat') startFinetune(); else worker.postMessage({ cmd: 'train', kind: cur, hp: hpValues() });
   drawViz();
 });
+let dialogText = null;
+async function startFinetune() {
+  const hp = hpValues('chat');
+  $('sample').textContent = 'Dostrajam: sieć zaczyna od tego, co umie po nauce na tekście bazowym…';
+  try {
+    if (!dialogText) dialogText = await (await fetch('data/rozmowy/rozmowy.txt')).text();
+    worker.postMessage({ cmd: 'finetune', base: hp.base, hp, dialog: dialogText });
+  } catch (e) { showErr('Nie udało się wczytać rozmów (data/rozmowy/rozmowy.txt). Strona musi być otwarta przez serwer.'); training = false; $('train').disabled = false; $('stop').disabled = true; }
+}
 $('stop').addEventListener('click', () => worker.postMessage({ cmd: 'stop' }));
 $('temp').addEventListener('input', () => $('tempOut').textContent = (+$('temp').value).toFixed(1).replace('.', ','));
 let sampleId = 0;
@@ -220,17 +274,21 @@ function notice(text) {
   let n = $('notice'); if (!n) { n = document.createElement('p'); n.id = 'notice'; n.className = 'notice'; $('metrics').parentNode.after(n); }
   n.textContent = text;
 }
-function selectStep(kind) { cur = kind; renderSteps(); renderExplain(); renderHP(); resetLearn(); }
+function selectStep(kind) { cur = kind; renderSteps(); renderExplain(); renderHP(); resetLearn(); renderChat(); }
 
 worker.onmessage = e => {
   const m = e.data;
-  if (m.type === 'error') { showErr(m.msg); $('train').disabled = false; $('stop').disabled = true; return; }
+  if (m.type === 'error') { showErr(m.msg); training = false; $('train').disabled = false; $('stop').disabled = true; chatBusy(false); return; }
+  if (m.type === 'ftinfo') { ftInfo = m; notice(`Rozmowy: ${m.conv} dialogów (${m.conv - m.val} do nauki, ${m.val} do sprawdzania), ${m.tokens.toLocaleString('pl')} jednostek tekstu, z czego ${m.learn.toLocaleString('pl')} to kwestie Sieci.`); return; }
+  if (m.type === 'chat') { chatAnswer(m); return; }
+  if (m.type === 'tokprogress') { $('paramNote').textContent = `Buduję słownik tokenów: ${m.r} / ${m.n} sklejeń…`; return; }
+  if (m.type === 'ready') { unitInfo = m; $('train').disabled = training; renderTokView(); updateParamNote(); drawChart(); renderMetrics(null); return; }
   if (m.type === 'gputest') {
     gpuState = m; $('train').disabled = training;
     if (!m.ok) { const h = HP.transformer.find(x => x.id === 'device'); h.val = 'cpu'; if ($('hp-device')) $('hp-device').value = 'cpu'; }
     updateParamNote(); gpuNote(); return;
   }
-  if (m.type === 'sample') { if (m.text != null) $('sample').textContent = $('prompt').value + m.text; return; }
+  if (m.type === 'sample') { if (m.text != null) $('sample').textContent = (isBPE() ? $('prompt').value.replace(/[^\S\n]+$/, '') : $('prompt').value) + m.text; return; }
   if (m.type === 'export') {
     const blob = new Blob([JSON.stringify(m.json)], { type: 'application/json' }), a = document.createElement('a');
     a.href = URL.createObjectURL(blob); a.download = `neurolab-lang-${m.kind}${m.json.hp && m.json.hp.cell ? '-' + m.json.hp.cell : ''}-${new Date().toISOString().slice(0, 10)}.json`;
@@ -246,7 +304,7 @@ worker.onmessage = e => {
     notice(m.same
       ? `Wczytany model (${runLabel(m.kind, m.hp || {})}), uczony na: ${m.trainedOn || 'nieznany tekst'}. Błąd sprawdzający policzony na obecnym tekście.`
       : `Wczytany model ma inny słownik liter niż obecny tekst (uczony na: ${m.trainedOn || 'nieznany tekst'}), więc nie da się go sprawdzić na tym tekście. Generowanie działa.`);
-    if (m.same && m.val != null) { runs.push({ kind: m.kind, label: runLabel(m.kind, m.hp || {}) + ' · wczytany', params: m.params, val: m.val, sample: m.sample }); renderCmp(); }
+    if (m.same && m.val != null) { runs.push({ kind: m.kind, label: runLabel(m.kind, m.hp || {}) + unitLabel() + ' · wczytany', params: m.params, val: pc(m.val), sample: m.sample }); renderCmp(); }
     return;
   }
   if (m.type !== 'progress' && m.type !== 'done') return;
@@ -262,19 +320,19 @@ worker.onmessage = e => {
     $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = false; $('saveModel').disabled = false;
     if (m.restored) notice(`Pod koniec błąd sprawdzający zaczął rosnąć, więc zostawiłem wersję sieci z kroku ${m.bestStep.toLocaleString('pl')} (najlepszą). Tak działa „wczesne zatrzymanie”.`);
     if (m.reach) { reachDone.push({ label: runLabel(m.kind, m.hp), r: m.reach }); if (reachDone.length > 4) reachDone.shift(); drawViz(); }
-    runs.push({ kind: m.kind, label: runLabel(m.kind, m.hp || hpValues(m.kind)), params: m.params, val: m.val, sample: m.sample, stopped: m.stopped, ms: m.ms, device: m.device });
+    runs.push({ kind: m.kind, label: runLabel(m.kind, m.hp || hpValues(m.kind)) + unitLabel(), params: m.params, val: pc(m.val), sample: m.sample, stopped: m.stopped, ms: m.ms, device: m.device });
     renderCmp();
   }
 };
 function pickExtras(m) { const o = {}; ['heat', 'emb', 'reach', 'neurons', 'attn'].forEach(k => { if (m[k]) o[k] = m[k]; }); if (m.hp) o.hp = m.hp; return o; }
 
 function renderMetrics(m) {
-  const V = vocab ? vocab.chars.length : 0, val = m ? m.val : null;
+  const V = VV(), val = m ? pc(m.val) : null, bpe = isBPE();
   const best = m && m.bestStep != null && m.step > 1 ? `najlepsza wersja: krok ${m.bestStep.toLocaleString('pl')}` : '';
   const rows = [
-    ['Błąd sprawdzający', fmt(val, 3), m && m.train != null ? `treningowy ${fmt(m.train, 3)}` : 'mniej = lepiej'],
-    ['Bity na znak', fmt(val != null ? val / LN2 : null), `bez wiedzy: ${fmt(Math.log(V) / LN2)}`],
-    ['Waha się między', val != null ? `${fmt(Math.exp(val), 1)} literami` : '–', `z ${V} możliwych`],
+    ['Błąd na literę', fmt(val, 3), (m && m.train != null ? `treningowy ${fmt(pc(m.train), 3)}` : 'sprawdzający; mniej = lepiej') + (bpe && m && m.val != null ? ` · na token ${fmt(m.val, 3)}` : '')],
+    ['Bity na znak', fmt(val != null ? val / LN2 : null), `bez wiedzy: ${fmt(Math.log(V) / CPT() / LN2)}`],
+    ['Waha się między', val != null ? `${fmt(Math.exp(val), 1)} literami` : '–', bpe ? (m && m.val != null ? `albo ${fmt(Math.exp(m.val), 0)} tokenami z ${V.toLocaleString('pl')}` : `${V.toLocaleString('pl')} tokenów w słowniku`) : `z ${V} możliwych`],
     ['Krok', m ? m.step.toLocaleString('pl') : '–', m ? `${m.params.toLocaleString('pl')} parametrów` + (m.ms ? ` · ${fmt(m.ms, 0)} ms/krok (${m.device})` : '') + (best ? ' · ' + best : '') : ''],
   ];
   $('metrics').innerHTML = rows.map(() => '<div><dt></dt><dd></dd></div>').join('');
@@ -293,8 +351,8 @@ function prepCanvas(cv, w, h) { const d = window.devicePixelRatio || 1; cv.width
 function drawChart() {
   const W = 640, H = 260, c = prepCanvas($('chart'), W, H), L = 46, R = 12, T = 14, B = 30;
   c.clearRect(0, 0, W, H);
-  const V = vocab ? vocab.chars.length : 2, pts = [...series.train, ...series.val];
-  const top = Math.max(Math.log(V), ...pts.map(p => p[1])) * 1.05, maxX = Math.max(1, ...pts.map(p => p[0]));
+  const V = VV(), k = CPT(), sT = series.train.map(([a, b]) => [a, b / k]), sV = series.val.map(([a, b]) => [a, b / k]), pts = [...sT, ...sV];
+  const top = Math.max(Math.log(V) / k, ...pts.map(p => p[1])) * 1.05, maxX = Math.max(1, ...pts.map(p => p[0]));
   const lo = Math.max(0, Math.min(top * .3, ...pts.map(p => p[1])) - .2);
   const x = s => L + (s / maxX) * (W - L - R), y = v => T + (1 - (v - lo) / (top - lo)) * (H - T - B);
   c.font = '11px "Atkinson Hyperlegible",system-ui,sans-serif'; c.fillStyle = css('--muted'); c.strokeStyle = css('--line'); c.lineWidth = 1;
@@ -302,13 +360,13 @@ function drawChart() {
   c.textAlign = 'center'; c.textBaseline = 'top';
   [0, .5, 1].forEach(f => c.fillText(Math.round(maxX * f).toLocaleString('pl'), x(maxX * f), H - B + 8));
   // poziom „bez wiedzy”: każda litera równie prawdopodobna
-  const yb = y(Math.log(V)); c.setLineDash([4, 4]); c.strokeStyle = css('--muted'); c.beginPath(); c.moveTo(L, yb); c.lineTo(W - R, yb); c.stroke(); c.setLineDash([]);
+  const yb = y(Math.log(V) / k); c.setLineDash([4, 4]); c.strokeStyle = css('--muted'); c.beginPath(); c.moveTo(L, yb); c.lineTo(W - R, yb); c.stroke(); c.setLineDash([]);
   c.textAlign = 'left'; c.textBaseline = 'bottom'; c.fillText('bez wiedzy (losowe litery)', L + 6, yb - 3);
   const line = (arr, col, w) => { if (arr.length < 2) { if (arr.length === 1) { c.fillStyle = col; c.beginPath(); c.arc(x(arr[0][0]), y(arr[0][1]), 3, 0, 7); c.fill(); } return; } c.strokeStyle = col; c.lineWidth = w; c.beginPath(); arr.forEach((p, i) => i ? c.lineTo(x(p[0]), y(p[1])) : c.moveTo(x(p[0]), y(p[1]))); c.stroke(); };
-  line(series.train, css('--muted'), 1.4); line(series.val, css('--rot'), 2.2);
+  line(sT, css('--muted'), 1.4); line(sV, css('--rot'), 2.2);
   // najlepszy punkt: tu zostanie zapamiętana wersja sieci
   if (live && live.bestVal != null && live.step > 1 && series.val.length > 1) {
-    const bx = x(live.bestStep), by = y(live.bestVal);
+    const bx = x(live.bestStep), by = y(live.bestVal / k);
     c.strokeStyle = css('--fg'); c.lineWidth = 1.5; c.beginPath(); c.arc(bx, by, 5, 0, 7); c.stroke();
     c.fillStyle = css('--fg'); c.textAlign = bx > W - 120 ? 'right' : 'left'; c.textBaseline = 'top'; c.fillText('najlepsza', bx + (bx > W - 120 ? -8 : 8), by + 4);
   }
@@ -318,9 +376,10 @@ function drawChart() {
 // ---------- wizualizacje ----------
 const VIZ_MODES = { rnn: [['neurons', 'Neurony pamięci'], ['reach', 'Zasięg pamięci'], ['emb', 'Mapa liter']], transformer: [['attn', 'Uwaga'], ['emb', 'Mapa liter']] };
 const vizModeOf = {};
-function curMode() { const list = VIZ_MODES[cur]; if (!list) return 'emb'; if (!list.some(x => x[0] === vizModeOf[cur])) vizModeOf[cur] = list[0][0]; return vizModeOf[cur]; }
+const vizKind = () => cur === 'chat' ? hpValues('chat').base : cur;
+function curMode() { const list = VIZ_MODES[vizKind()]; if (!list) return 'emb'; if (!list.some(x => x[0] === vizModeOf[cur])) vizModeOf[cur] = list[0][0]; return vizModeOf[cur]; }
 function renderVizTabs() {
-  const box = $('vizTabs'), list = VIZ_MODES[cur];
+  const box = $('vizTabs'), list = VIZ_MODES[vizKind()];
   box.hidden = !list; if (!list) return;
   box.innerHTML = ''; const vizMode = curMode();
   list.forEach(([id, name]) => {
@@ -335,13 +394,15 @@ function drawViz() {
   c.font = '13px "Atkinson Hyperlegible",system-ui,sans-serif';
   renderVizTabs();
   $('vizCtl').hidden = true;
-  if (cur === 'bigram') {
+  if (vizKind() === 'bigram') {
     $('vizTitle').textContent = 'Tabela par liter';
     if (!ex.heat) { $('vizNote').textContent = 'Po policzeniu zobaczysz, po jakich literach co zwykle następuje.'; return waitViz(c, W, H, 'Czeka na naukę.'); }
     $('vizNote').textContent = 'Wiersz: poprzednia litera. Kolumna: następna. Im jaśniej, tym częściej. Pokazane najczęstsze znaki; ␣ to spacja, ↵ to nowa linia.';
     const { labels, m: M } = ex.heat, n = labels.length, pad = 26, cell = Math.min((W - pad - 6) / n, (H - pad - 6) / n);
     c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = '11px "JetBrains Mono",monospace'; c.fillStyle = css('--muted');
-    labels.forEach((l, i) => { c.fillText(show(l), pad + cell * i + cell / 2, pad / 2); c.fillText(show(l), pad / 2, pad + cell * i + cell / 2); });
+    const lab = l => { const t = showTok(l); return t.length > 3 ? t.slice(0, 3) : t; };
+    if (isBPE()) c.font = '9px "JetBrains Mono",monospace';
+    labels.forEach((l, i) => { c.fillText(lab(l), pad + cell * i + cell / 2, pad / 2); c.fillText(lab(l), pad / 2, pad + cell * i + cell / 2); });
     for (let a = 0; a < n; a++) for (let b = 0; b < n; b++) {
       const v = Math.sqrt(M[a][b]);       // pierwiastek, żeby rzadkie pary też było widać
       c.fillStyle = `rgba(156,172,112,${Math.min(1, v * 1.6).toFixed(3)})`;
@@ -359,11 +420,11 @@ function drawViz() {
   const { labels, pts } = ex.emb, xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
   const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), P = 26;
   const X = v => P + (v - x0) / ((x1 - x0) || 1) * (W - 2 * P), Y = v => P + (v - y0) / ((y1 - y0) || 1) * (H - 2 * P);
-  c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = '15px "JetBrains Mono",monospace';
+  c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = isBPE() ? '11px "JetBrains Mono",monospace' : '15px "JetBrains Mono",monospace';
   labels.forEach((l, i) => {
-    const vow = POLISH_VOWELS.has(l), letter = /\p{L}/u.test(l);
+    const t = l.trim(), vow = t.length > 0 && POLISH_VOWELS.has(t[t.length - 1]), letter = /\p{L}/u.test(l);
     c.fillStyle = vow ? css('--rot') : letter ? css('--fg') : '#7fa6d8';
-    c.fillText(show(l), X(pts[i][0]), Y(pts[i][1]));
+    c.fillText(showTok(l), X(pts[i][0]), Y(pts[i][1]));
   });
 }
 
@@ -387,18 +448,28 @@ function drawNeurons(c, W, H, nr) {
   next.addEventListener('click', () => { neuronSel = (neuronSel + 1) % nr.H; neuronPicked = true; drawViz(); });
   ctl.append(prev, out, next);
   $('vizNote').textContent = 'Tekst sprawdzający, a pod każdą literą stan wybranego neuronu po jej przeczytaniu: zielony = dodatni, niebieski = ujemny, im mocniej, tym bliżej ±1. Przyciski u góry to neurony, które najmocniej pokrywają się z prostą cechą tekstu (r to współczynnik korelacji). Nikt tych cech sieci nie podawał: sama uznała je za przydatne do przewidywania.';
-  const cols = 32, cw = (W - 16) / cols, ch = 24, txt = [...nr.text], rowsMax = Math.floor((H - 8) / ch);
-  const startAt = Math.max(0, txt.length - cols * rowsMax);
+  const ch = 24, cells = layoutPieces(nr.pieces, W, ch), rowsMax = Math.floor((H - 8) / ch), last = cells.length ? cells[cells.length - 1].row : 0, off = Math.max(0, last - rowsMax + 1);
   c.font = '15px "JetBrains Mono",monospace'; c.textAlign = 'center'; c.textBaseline = 'middle';
-  let col = 0, row = 0;
-  for (let i = startAt; i < txt.length && row < rowsMax; i++) {
-    const a = Math.max(-1, Math.min(1, nr.acts[i * nr.H + neuronSel])), x = 8 + col * cw, y = 4 + row * ch;
+  cells.forEach(({ x, row, w, t }, i) => {
+    if (row < off) return;
+    const a = Math.max(-1, Math.min(1, nr.acts[i * nr.H + neuronSel])), y = 4 + (row - off) * ch;
     c.fillStyle = a >= 0 ? `rgba(156,172,112,${(a * .9).toFixed(3)})` : `rgba(127,166,216,${(-a * .9).toFixed(3)})`;
-    c.fillRect(x, y, cw - 1, ch - 2);
+    c.fillRect(x, y, w - 1, ch - 2);
     c.fillStyle = Math.abs(a) > .6 ? css('--bg') : css('--fg');
-    c.fillText(txt[i] === '\n' ? '↵' : txt[i], x + cw / 2, y + ch / 2);
-    col++; if (col >= cols || txt[i] === '\n') { col = 0; row++; }
-  }
+    c.fillText(t, x + w / 2, y + ch / 2);
+  });
+}
+// Układa kawałki tekstu (litery albo tokeny) w wiersze: szerokość kawałka zależy od liczby znaków.
+function layoutPieces(pieces, W, ch) {
+  const cw = 17, out = []; let x = 8, row = 0;
+  pieces.forEach(p => {
+    const t = showTok(p), w = Math.max(1, [...t].length) * cw;
+    if (x + w > W - 8 && x > 8) { x = 8; row++; }
+    out.push({ x, row, w, t });
+    x += w + (isBPE() ? 2 : 0);
+    if (p.includes('\n')) { x = 8; row++; }
+  });
+  return out;
 }
 
 // Uwaga: wybierz literę (klik), a tło wcześniejszych liter pokaże, ile uwagi od niej dostają w wybranej głowie.
@@ -410,31 +481,31 @@ function drawAttention(c, W, H, at) {
   const ctl = $('vizCtl'); ctl.hidden = false; ctl.innerHTML = '';
   at.heads.forEach((h, k) => {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
-    b.textContent = `warstwa ${h.layer + 1}, głowa ${h.head + 1}: średnio ${fmt(h.dist, 1)} lit. wstecz`;
+    b.textContent = `warstwa ${h.layer + 1}, głowa ${h.head + 1}: średnio ${fmt(h.dist, 1)} ${isBPE() ? 'tok.' : 'lit.'} wstecz`;
     b.setAttribute('aria-pressed', k === attSel.head ? 'true' : 'false');
     b.addEventListener('click', () => { attSel.head = k; drawViz(); }); ctl.appendChild(b);
   });
   $('vizNote').textContent = 'Kliknij literę: obramowana to pozycja, która „pyta”, a tło liter przed nią pokazuje, ile uwagi każda z nich dostaje (najjaśniejsza = najwięcej, razem 100%). Litery po prawej są szare: sieć nie może patrzeć w przyszłość. Głowy uczą się różnych zadań: jedne patrzą na poprzednią literę, inne na początek słowa albo na spację. Liczba przy głowie mówi, jak daleko średnio sięga.';
-  const { layer, head } = at.heads[attSel.head], A = at.att[layer], T = at.T, i = attSel.pos, row = A.subarray(head * T * T + i * T, head * T * T + i * T + T);
-  let mx = 0; for (let j = 0; j <= i; j++) mx = Math.max(mx, row[j]);
-  const txt = [...at.text], cols = 32, cw = (W - 16) / cols, ch = 30;
+  const { layer, head } = at.heads[attSel.head], A = at.att[layer], T = at.T, i = attSel.pos, row_ = A.subarray(head * T * T + i * T, head * T * T + i * T + T);
+  let mx = 0; for (let j = 0; j <= i; j++) mx = Math.max(mx, row_[j]);
+  const txt = at.pieces, ch = 30, cells = layoutPieces(txt, W, ch);
   c.font = '15px "JetBrains Mono",monospace'; c.textAlign = 'center'; c.textBaseline = 'middle';
-  const cells = [];
-  let col = 0, r = 0;
-  txt.forEach((t, j) => {
-    const x = 8 + col * cw, y = 8 + r * ch; cells.push([x, y, cw, ch - 4]);
-    if (j <= i) { const a = row[j] / (mx || 1); c.fillStyle = `rgba(156,172,112,${(a * .95).toFixed(3)})`; c.fillRect(x, y, cw - 1, ch - 6); }
-    if (j === i) { c.strokeStyle = css('--fg'); c.lineWidth = 2; c.strokeRect(x + 1, y + 1, cw - 3, ch - 8); }
-    c.fillStyle = j > i ? 'rgba(150,150,165,.4)' : (row[j] / (mx || 1) > .6 ? css('--bg') : css('--fg'));
-    c.fillText(t === '\n' ? '↵' : t === ' ' ? '·' : t, x + cw / 2, y + (ch - 6) / 2);
-    col++; if (col >= cols) { col = 0; r++; }
+  let r = 0;
+  cells.forEach(({ x, row, w, t }, j) => {
+    const y = 8 + row * ch; r = row;
+    if (j <= i) { const a = row_[j] / (mx || 1); c.fillStyle = `rgba(156,172,112,${(a * .95).toFixed(3)})`; c.fillRect(x, y, w - 1, ch - 6); }
+    if (j === i) { c.strokeStyle = css('--fg'); c.lineWidth = 2; c.strokeRect(x + 1, y + 1, w - 3, ch - 8); }
+    c.fillStyle = j > i ? 'rgba(150,150,165,.4)' : (row_[j] / (mx || 1) > .6 ? css('--bg') : css('--fg'));
+    c.fillText(t, x + w / 2, y + (ch - 6) / 2);
   });
+  attLayout = cells.map(({ x, row, w }) => [x, 8 + row * ch, w, ch - 4]);
   // najmocniejsze trzy litery
-  const top = [...Array(i + 1).keys()].sort((a, b) => row[b] - row[a]).slice(0, 3);
+  const top = [...Array(i + 1).keys()].sort((a, b) => row_[b] - row_[a]).slice(0, 3);
   c.font = '13px "Atkinson Hyperlegible",system-ui,sans-serif'; c.textAlign = 'left'; c.fillStyle = css('--muted');
-  const show2 = t => t === ' ' ? 'spacja' : t === '\n' ? 'nowa linia' : `„${t}”`;
-  c.fillText(`Pozycja ${i + 1} (${show2(txt[i])}) patrzy najmocniej na: ` + top.map(j => `${show2(txt[j])} ${i - j === 0 ? '(siebie)' : `(${i - j} wstecz)`} ${Math.round(row[j] * 100)}%`).join(', '), 8, 8 + (r + 1) * ch + 14);
-  attLayout = cells;
+  const show2 = t => t === ' ' ? 'spacja' : t === '\n' ? 'nowa linia' : `„${showTok(t)}”`;
+  const y0 = 8 + (r + 1) * ch + 14;
+  c.fillText(`Pozycja ${i + 1} (${show2(txt[i])}) patrzy najmocniej na:`, 8, y0);
+  c.fillText(top.map(j => `${show2(txt[j])} ${i - j === 0 ? '(siebie)' : `(${i - j} wstecz)`} ${Math.round(row_[j] * 100)}%`).join(',  '), 8, y0 + 20);
 }
 $('viz').addEventListener('click', e => {
   if (!attLayout) return;
@@ -466,6 +537,37 @@ function drawReach(c, W, H, reach) {
   reachDone.forEach((rd, i) => leg(colors[i % colors.length], rd.label.replace(/^3 · /, ''), [5, 4]));
 }
 
+// ---------- okno rozmowy ----------
+const chatHist = [];
+let chatId = 0;
+function renderChat() {
+  $('chatBox').hidden = cur !== 'chat';
+  const log = $('chatLog'); log.innerHTML = '';
+  if (!chatHist.length) { const p = document.createElement('p'); p.className = 'note'; p.textContent = 'Napisz coś krótkiego, np. „Cześć, jak się masz?”. Możesz rozmawiać z siecią przed dostrojeniem i po nim: różnica pokazuje, czego uczy dostrajanie.'; log.appendChild(p); }
+  chatHist.forEach(t => { const d = document.createElement('div'); d.className = 'msg ' + (t.who === 'Ty' ? 'me' : 'net'); const b = document.createElement('b'); b.textContent = t.who === 'Ty' ? 'Ty' : `Sieć (${t.from})`; d.append(b, ' ', t.text || '…'); log.appendChild(d); });
+  log.scrollTop = log.scrollHeight;
+}
+function chatBusy(on) { $('chatSend').disabled = on; $('chatMsg').disabled = on; }
+function sendChat() {
+  const msg = $('chatMsg').value.trim(); if (!msg) return;
+  const who = $('chatWho').value, base = hpValues('chat').base, slot = who === 'chat' ? 'chat' : base;
+  if (!have.has(slot)) { showErr(who === 'chat' ? 'Najpierw dostrój sieć (przycisk „Ucz” w kroku 5).' : `Najpierw naucz sieć bazową (${runLabel(base, hpValues(base))}).`); return; }
+  $('err').hidden = true;
+  chatHist.push({ who: 'Ty', text: msg }); $('chatMsg').value = '';
+  // historia: ostatnie kwestie w formacie z nauki, na końcu „Sieć:”, które sieć dokańcza
+  const hist = chatHist.slice(-8).map(t => `${t.who === 'Ty' ? 'Ty' : 'Sieć'}: ${t.text}`).join('\n') + '\nSieć:';
+  chatHist.push({ who: 'Sieć', text: '', from: who === 'chat' ? 'dostrojona' : 'przed dostrojeniem', id: ++chatId });
+  renderChat(); chatBusy(true);
+  worker.postMessage({ cmd: 'chat', slot, history: hist, temp: +$('temp').value, id: chatId });
+}
+function chatAnswer(m) {
+  const t = chatHist.find(x => x.id === m.id); if (t) t.text = m.text || '(nic)';
+  chatBusy(false); renderChat(); $('chatMsg').focus();
+}
+$('chatSend').addEventListener('click', sendChat);
+$('chatMsg').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+$('chatClear').addEventListener('click', () => { chatHist.length = 0; renderChat(); });
+
 // ---------- porównanie ----------
 const runs = [];
 function renderCmp() {
@@ -482,5 +584,5 @@ function renderCmp() {
 }
 
 // ---------- start ----------
-renderSteps(); renderExplain(); renderHP(); renderCmp();
+renderSteps(); renderExplain(); renderHP(); renderCmp(); renderChat();
 loadManifest().then(loadExample);

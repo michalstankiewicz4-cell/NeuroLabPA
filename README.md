@@ -37,7 +37,7 @@ Sieć neuronowa nie jest nigdzie zapisywana: przy każdym otwarciu uczy się od 
 
 ## Laboratorium języka
 
-Osobna strona `lang/` (link w nagłówku): sieć uczy się polskiego od zera, na Twoich plikach .txt, na własnym silniku napisanym w JS (bez bibliotek). Konstrukcje idą w kolejności historycznej, każda naprawia słabość poprzedniej: bigram → sieć z oknem i embeddingami → sieć rekurencyjna (zwykła RNN i GRU) → transformer. Transformer może liczyć na procesorze albo na karcie graficznej (WebGPU). Wszystkie mierzone tą samą miarą (błąd na tekście sprawdzającym, bity na znak), więc różnice widać w tabeli porównania.
+Osobna strona `lang/` (link w nagłówku): sieć uczy się polskiego od zera, na Twoich plikach .txt, na własnym silniku napisanym w JS (bez bibliotek). Konstrukcje idą w kolejności historycznej, każda naprawia słabość poprzedniej: bigram → sieć z oknem i embeddingami → sieć rekurencyjna (zwykła RNN i GRU) → transformer. Transformer może liczyć na procesorze albo na karcie graficznej (WebGPU). Tekst może być dzielony na litery albo na tokeny BPE, a krok 5 dostraja wytrenowaną sieć do rozmowy i pozwala z nią porozmawiać. Wszystkie mierzone tą samą miarą (błąd na tekście sprawdzającym, bity na znak), więc różnice widać w tabeli porównania.
 
 ```
 lang/index.html       strona laboratorium
@@ -46,6 +46,7 @@ lang/js/engine.js     silnik CPU: tensory, autograd, komórki RNN i GRU, klocki 
 lang/js/wasm.js       mnożenie macierzy w WebAssembly SIMD (wygenerowane z lang/tools/matmul.wat)
 lang/js/gpu.js        silnik GPU (WebGPU, shadery WGSL) dla transformera: nagrany raz cały krok nauki
 lang/js/data.js       przykładowy tekst, słownik liter
+lang/js/bpe.js        tokenizer BPE: nauka sklejeń, kodowanie i dekodowanie
 lang/js/worker.js     trening w tle (Web Worker): bigram, sieć z oknem, RNN/GRU, najlepsza wersja, zapis/wczytanie modelu
 lang/js/lang.js       strona: dane, wykres, wizualizacje, porównanie
 lang/tools/           matmul.wat (źródło WASM) i build_wasm.js (kompilacja: npm install wabt@1.0.36, potem node lang/tools/build_wasm.js)

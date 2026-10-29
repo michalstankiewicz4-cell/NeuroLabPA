@@ -25,8 +25,16 @@
         <label class="sr" for="sampleSet">Przykładowy tekst</label><select id="sampleSet"></select>
         <button id="useSample" class="ghost" type="button">Wczytaj przykład</button>
       </div>
+      <label class="unit" for="unit"><span>Jednostka</span>
+        <select id="unit">
+          <option value="char">litery</option>
+          <option value="bpe256">tokeny BPE, 256 sklejeń</option>
+          <option value="bpe512">tokeny BPE, 512 sklejeń</option>
+          <option value="bpe1024">tokeny BPE, 1024 sklejenia</option>
+        </select></label>
       <dl class="stats" id="dataStats"></dl>
     </div>
+    <div class="tokview" id="tokView" hidden></div>
     <p class="note" id="dataNote"></p>
     <details class="hint">
       <summary>Skąd wziąć więcej polskiego tekstu?</summary>
@@ -70,6 +78,15 @@
       <label for="temp">Temperatura <output id="tempOut">0,8</output><input id="temp" type="range" min="0.2" max="1.5" step="0.1" value="0.8"></label>
       <button id="gen" class="ghost" type="button" disabled>Generuj</button>
     </div>
+    <div class="chatbox" id="chatBox" hidden>
+      <div class="chatlog" id="chatLog" aria-live="polite"></div>
+      <div class="chatin">
+        <label class="sr" for="chatMsg">Wiadomość</label><input id="chatMsg" type="text" maxlength="200" placeholder="Napisz wiadomość…" autocomplete="off">
+        <label class="sr" for="chatWho">Rozmawiaj z</label><select id="chatWho"><option value="chat">sieć dostrojona</option><option value="base">sieć przed dostrojeniem</option></select>
+        <button id="chatSend" type="button">Wyślij</button>
+        <button id="chatClear" class="ghost" type="button">Wyczyść</button>
+      </div>
+    </div>
     <p class="note">Temperatura: niska = sieć wybiera najpewniejsze litery (bezpiecznie, ale powtarzalnie), wysoka = odważniej (ciekawiej, ale więcej błędów).</p>
     <h3 id="vizTitle">Co sieć wie o literach</h3>
     <div class="viztabs" id="vizTabs" role="group" aria-label="Widok" hidden></div>
@@ -80,8 +97,8 @@
 
   <section class="panel" aria-labelledby="h-cmp">
     <h2 id="h-cmp"><span class="num">4</span> Porównanie</h2>
-    <div class="tablebox"><table id="cmp"><thead><tr><th>Konstrukcja</th><th>Parametry</th><th>Krok nauki</th><th>Błąd (sprawdzający)</th><th>Bity na znak</th><th>Waha się między</th><th>Próbka</th></tr></thead><tbody></tbody></table></div>
-    <p class="note">Bity na znak: ile informacji sieć „traci” na każdą literę; mniej znaczy lepiej. „Waha się między N literami”: tyle równie prawdopodobnych liter musiałaby losować sieć bez żadnej wiedzy, żeby być tak samo niepewna. Bez nauki to cały słownik.</p>
+    <div class="tablebox"><table id="cmp"><thead><tr><th>Konstrukcja</th><th>Parametry</th><th>Krok nauki</th><th>Błąd na literę</th><th>Bity na znak</th><th>Waha się między</th><th>Próbka</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">Błąd na literę: przy tokenach błąd na token podzielony przez średnią liczbę znaków na token, więc litery i tokeny da się porównać. Bity na znak: ile informacji sieć „traci” na każdą literę; mniej znaczy lepiej. „Waha się między N literami”: tyle równie prawdopodobnych liter musiałaby losować sieć bez żadnej wiedzy, żeby być tak samo niepewna. Bez nauki to cały słownik.</p>
     <p class="err" id="err" hidden></p>
   </section>
   <footer class="note">Laboratorium języka · część NeuroLabPA</footer>

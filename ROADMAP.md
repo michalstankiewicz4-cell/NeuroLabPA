@@ -9,7 +9,8 @@ Plany z rozmów projektowych, w kolejności, w jakiej najpewniej je zrobimy.
 - **Uwaga w WASM SIMD:** przy dużym transformerze to ona jest teraz najwolniejsza na procesorze.
 - **Nauka na kilku wątkach naraz.** Każdy wątek liczy gradient na części porcji, potem są uśredniane. Bez pamięci współdzielonej (GitHub Pages nie ustawia potrzebnych nagłówków), więc gradienty trzeba co krok przesyłać; opłaca się przy większych sieciach.
 - **GPU także dla RNN/GRU**, żeby pokazać na liczbach, że sieć czytająca po kolei zyskuje na karcie dużo mniej niż transformer.
-- Tokeny większe niż litera (BPE), potem rozmowa: dostrajanie na dialogach.
+- Więcej i różnorodniejszych rozmów do dostrajania; dostrajanie także na GPU.
+- Większy model bazowy na GPU (np. 4×64, okno 128, BPE 1024) uczony dłużej na Grabińskim i Wikipedii razem.
 
 ## Następne
 - **Różnorodność kolorów ubrań.** Reguła kontrastu (0.16.0) usunęła zlewające się zestawy, ale przy okazji zawęziła paletę: koszule rdzawe i fioletowe to razem 52% (zamiast 33%), a zielone i musztardowe spadły do 8–9%. Pomysł: każdy kolor w wariancie jasnym i ciemnym, wtedy reguła ma z czego wybierać, zamiast odrzucać całe kolory.

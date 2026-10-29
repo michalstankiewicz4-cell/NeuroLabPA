@@ -6,6 +6,7 @@ Gdy zestawów brak (albo strona jest otwarta z dysku), używa krótkiego tekstu 
 | Folder | Zawartość | Licencja |
 |---|---|---|
 | `grabinski/` | 43 nowele i opowiadania Stefana Grabińskiego z Wolnych Lektur, ok. 1,1 mln znaków | domena publiczna, szczegóły w `grabinski/LICENCJA.txt` |
+| `rozmowy/` | 140 krótkich dialogów „Ty: … / Sieć: …” do dostrajania w kroku 5 (nie jest przykładem do wyboru) | CC0, napisane przez Claude'a, `rozmowy/LICENCJA.txt` |
 | `wikipedia/` | 42 „Artykuły na medal” z polskiej Wikipedii z różnych dziedzin, ok. 1,2 mln znaków | CC BY-SA 4.0, autorzy, wersje i zmiany w `wikipedia/LICENCJA.txt` |
 
 Oba zestawy mają podobną wielkość, żeby porównanie tej samej sieci na prozie i na tekście encyklopedycznym było uczciwe.

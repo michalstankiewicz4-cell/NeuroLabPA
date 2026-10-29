@@ -78,3 +78,24 @@ footer{margin-top:8px}
 .vizctl .nav{font-size:14px;padding:5px 10px;box-shadow:none}
 .vizctl output{font-family:var(--mono);min-width:9ch;text-align:center}
 .notice{margin:0;padding:10px 14px;border:1px solid var(--rot);background:var(--panel);max-width:80ch}
+.unit{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.unit select{max-width:260px}
+.tokview{display:grid;gap:8px;max-width:100%}
+.tokview .note{margin:0;max-width:90ch;word-break:break-word}
+.toks{font-family:var(--mono);font-size:14px;line-height:2;background:var(--panel);border:1px solid var(--line);padding:8px 10px;word-break:break-all}
+.toks span{padding:2px 1px;border-radius:2px}
+.toks .a{background:rgba(156,172,112,.28)}
+.toks .b{background:rgba(127,166,216,.28)}
+.chatbox{display:grid;gap:10px}
+.chatlog{background:var(--panel);border:1px solid var(--line);padding:12px 14px;max-height:360px;overflow-y:auto;display:grid;gap:8px;align-content:start}
+.chatlog .note{margin:0}
+.msg{max-width:80%;padding:8px 12px;border:1px solid var(--line);line-height:1.45;word-break:break-word}
+.msg b{font-family:var(--display);font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:2px}
+.msg.me{justify-self:end;background:rgba(127,166,216,.12)}
+.msg.me b{color:#7fa6d8}
+.msg.net{justify-self:start;background:rgba(156,172,112,.12)}
+.msg.net b{color:var(--rot)}
+.chatin{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;align-items:center}
+@media (max-width:640px){.chatin{grid-template-columns:1fr 1fr}.chatin input{grid-column:1/-1}}
+.chatin input{font:inherit;background:var(--panel);color:var(--fg);border:1px solid var(--line);padding:9px 10px;width:100%}
+.chatin button{font-size:15px;padding:9px 14px}
