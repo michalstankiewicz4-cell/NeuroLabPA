@@ -1,0 +1,246 @@
+TEKSTY PRZYKŁADOWE LABORATORIUM JĘZYKA: WIKIPEDIA, ŹRÓDŁO I LICENCJA
+=====================================================================
+
+Zawartość: 42 artykuły z polskiej Wikipedii (https://pl.wikipedia.org),
+wybranych z listy „Artykuły na medal” po kilka z różnych dziedzin; razem ok. 1,16 mln znaków.
+Pobrano 29 października 2026.
+
+LICENCJA
+--------
+Teksty Wikipedii są udostępnione na licencji Creative Commons Uznanie
+autorstwa – Na tych samych warunkach 4.0 (CC BY-SA 4.0):
+https://creativecommons.org/licenses/by-sa/4.0/deed.pl
+
+Pliki TXT w folderze lang/data/wikipedia/ są utworami zależnymi od tych
+artykułów i również są udostępnione na licencji CC BY-SA 4.0. Przy dalszym
+udostępnianiu należy zachować ten plik (autorstwo, źródło, licencja, zmiany).
+
+AUTORZY
+-------
+Autorami artykułów są wolontariusze Wikipedii. Pełna lista autorów każdego
+artykułu znajduje się w jego historii edycji (linki niżej). Link „wersja użyta”
+prowadzi do dokładnie tej wersji artykułu, z której powstał plik.
+
+ZMIANY WOBEC ORYGINAŁU
+----------------------
+Z każdego artykułu zachowano tylko tytuł, akapity tekstu i nagłówki sekcji.
+Usunięto: tabele i infoboksy, ilustracje i ich podpisy, przypisy i odsyłacze
+do nich, wzory, listy, a także sekcje od „Przypisy”, „Uwagi”, „Bibliografia”,
+„Zobacz też” lub „Linki zewnętrzne” do końca artykułu. Formatowanie zamieniono
+na zwykły tekst. Treści akapitów nie zmieniano.
+
+Kod NeuroLabPA nie jest objęty tą informacją; dotyczy ona wyłącznie plików
+tekstowych w folderze lang/data/wikipedia/.
+
+LISTA ARTYKUŁÓW
+---------------
+- Afera Cambridge Analytica (Polityka i prawo)
+  plik: afera-cambridge-analytica.txt
+  artykuł: https://pl.wikipedia.org/wiki/Afera_Cambridge_Analytica
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=81049743
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Afera_Cambridge_Analytica&action=history
+- Algorytm Earleya (Informatyka)
+  plik: algorytm-earleya.txt
+  artykuł: https://pl.wikipedia.org/wiki/Algorytm_Earleya
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=77024567
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Algorytm_Earleya&action=history
+- Bitwa pod Radzyminem (1920) (= Historia najnowsza)
+  plik: bitwa-pod-radzyminem-1920.txt
+  artykuł: https://pl.wikipedia.org/wiki/Bitwa_pod_Radzyminem_%281920%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80790517
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Bitwa_pod_Radzyminem_%281920%29&action=history
+- Cerkiew Opieki Matki Bożej w Sławatyczach (= Architektura sakralna)
+  plik: cerkiew-opieki-matki-bozej-w-slawatyczach.txt
+  artykuł: https://pl.wikipedia.org/wiki/Cerkiew_Opieki_Matki_Bo%C5%BCej_w_S%C5%82awatyczach
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=79715067
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Cerkiew_Opieki_Matki_Bo%C5%BCej_w_S%C5%82awatyczach&action=history
+- Copán (Archeologia)
+  plik: copan.txt
+  artykuł: https://pl.wikipedia.org/wiki/Cop%C3%A1n
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=79616357
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Cop%C3%A1n&action=history
+- Efekt Dopplera (Fizyka)
+  plik: efekt-dopplera.txt
+  artykuł: https://pl.wikipedia.org/wiki/Efekt_Dopplera
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80619442
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Efekt_Dopplera&action=history
+- Efekt potwierdzenia (Psychologia)
+  plik: efekt-potwierdzenia.txt
+  artykuł: https://pl.wikipedia.org/wiki/Efekt_potwierdzenia
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80582094
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Efekt_potwierdzenia&action=history
+- Fonologia i fonetyka języka angielskiego (Językoznawstwo)
+  plik: fonologia-i-fonetyka-jezyka-angielskiego.txt
+  artykuł: https://pl.wikipedia.org/wiki/Fonologia_i_fonetyka_j%C4%99zyka_angielskiego
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80202026
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Fonologia_i_fonetyka_j%C4%99zyka_angielskiego&action=history
+- Główny Szlak Karpacki (Geografia)
+  plik: glowny-szlak-karpacki.txt
+  artykuł: https://pl.wikipedia.org/wiki/G%C5%82%C3%B3wny_Szlak_Karpacki
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80701363
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=G%C5%82%C3%B3wny_Szlak_Karpacki&action=history
+- Historia Gryfic (= Historia lokalna)
+  plik: historia-gryfic.txt
+  artykuł: https://pl.wikipedia.org/wiki/Historia_Gryfic
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80930255
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Historia_Gryfic&action=history
+- Historia oświaty w Trzebiatowie (Oświata)
+  plik: historia-oswiaty-w-trzebiatowie.txt
+  artykuł: https://pl.wikipedia.org/wiki/Historia_o%C5%9Bwiaty_w_Trzebiatowie
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80882216
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Historia_o%C5%9Bwiaty_w_Trzebiatowie&action=history
+- Huragan na Kubie (1910) (= Meteorologia)
+  plik: huragan-na-kubie-1910.txt
+  artykuł: https://pl.wikipedia.org/wiki/Huragan_na_Kubie_%281910%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80355169
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Huragan_na_Kubie_%281910%29&action=history
+- Ida (film) (Film)
+  plik: ida-film.txt
+  artykuł: https://pl.wikipedia.org/wiki/Ida_%28film%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80882892
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Ida_%28film%29&action=history
+- Kerygmat (Religia)
+  plik: kerygmat.txt
+  artykuł: https://pl.wikipedia.org/wiki/Kerygmat
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80939466
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Kerygmat&action=history
+- Kumak dalekowschodni (= Batrachologia)
+  plik: kumak-dalekowschodni.txt
+  artykuł: https://pl.wikipedia.org/wiki/Kumak_dalekowschodni
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=75168034
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Kumak_dalekowschodni&action=history
+- Kuropaty (= Architektura sepulkralna)
+  plik: kuropaty.txt
+  artykuł: https://pl.wikipedia.org/wiki/Kuropaty
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80021183
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Kuropaty&action=history
+- Kurpie Białe (Socjologia kultury)
+  plik: kurpie-biale.txt
+  artykuł: https://pl.wikipedia.org/wiki/Kurpie_Bia%C5%82e
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80619998
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Kurpie_Bia%C5%82e&action=history
+- Max Rothmann (Nauka)
+  plik: max-rothmann.txt
+  artykuł: https://pl.wikipedia.org/wiki/Max_Rothmann
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=79509507
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Max_Rothmann&action=history
+- Mirror’s Edge (= Gry komputerowe)
+  plik: mirrors-edge.txt
+  artykuł: https://pl.wikipedia.org/wiki/Mirror%E2%80%99s_Edge
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80894905
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Mirror%E2%80%99s_Edge&action=history
+- Modraszek telejus (= Entomologia)
+  plik: modraszek-telejus.txt
+  artykuł: https://pl.wikipedia.org/wiki/Modraszek_telejus
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=78617288
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Modraszek_telejus&action=history
+- Olędrzy (= Historia nowożytna)
+  plik: oledrzy.txt
+  artykuł: https://pl.wikipedia.org/wiki/Ol%C4%99drzy
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80922850
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Ol%C4%99drzy&action=history
+- Pacyfikacja Michniowa (== Druga wojna światowa)
+  plik: pacyfikacja-michniowa.txt
+  artykuł: https://pl.wikipedia.org/wiki/Pacyfikacja_Michniowa
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=81027524
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Pacyfikacja_Michniowa&action=history
+- Pas Kuipera (Astronomia)
+  plik: pas-kuipera.txt
+  artykuł: https://pl.wikipedia.org/wiki/Pas_Kuipera
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80449562
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Pas_Kuipera&action=history
+- Piotr Fijas (Sport)
+  plik: piotr-fijas.txt
+  artykuł: https://pl.wikipedia.org/wiki/Piotr_Fijas
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=79279886
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Piotr_Fijas&action=history
+- Pomian (herb szlachecki) (Heraldyka)
+  plik: pomian-herb-szlachecki.txt
+  artykuł: https://pl.wikipedia.org/wiki/Pomian_%28herb_szlachecki%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80053417
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Pomian_%28herb_szlachecki%29&action=history
+- Prawo Hardy’ego-Weinberga (Biologia)
+  plik: prawo-hardyego-weinberga.txt
+  artykuł: https://pl.wikipedia.org/wiki/Prawo_Hardy%E2%80%99ego-Weinberga
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=77768686
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Prawo_Hardy%E2%80%99ego-Weinberga&action=history
+- Rosja w Konkursie Piosenki Eurowizji (= Imprezy kulturalne)
+  plik: rosja-w-konkursie-piosenki-eurowizji.txt
+  artykuł: https://pl.wikipedia.org/wiki/Rosja_w_Konkursie_Piosenki_Eurowizji
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80735418
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Rosja_w_Konkursie_Piosenki_Eurowizji&action=history
+- Stanisław Moskal (1935–2019) (Literatura)
+  plik: stanislaw-moskal-19352019.txt
+  artykuł: https://pl.wikipedia.org/wiki/Stanis%C5%82aw_Moskal_%281935%E2%80%932019%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=81068123
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Stanis%C5%82aw_Moskal_%281935%E2%80%932019%29&action=history
+- Szczętki (Zoologia)
+  plik: szczetki.txt
+  artykuł: https://pl.wikipedia.org/wiki/Szcz%C4%99tki
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80097803
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Szcz%C4%99tki&action=history
+- Tablice pamiątkowe Tchorka w Warszawie (Sztuki plastyczne)
+  plik: tablice-pamiatkowe-tchorka-w-warszawie.txt
+  artykuł: https://pl.wikipedia.org/wiki/Tablice_pami%C4%85tkowe_Tchorka_w_Warszawie
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80894017
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Tablice_pami%C4%85tkowe_Tchorka_w_Warszawie&action=history
+- Tkacz (ptak) (= Ornitologia)
+  plik: tkacz-ptak.txt
+  artykuł: https://pl.wikipedia.org/wiki/Tkacz_%28ptak%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80336698
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Tkacz_%28ptak%29&action=history
+- Ulica Aleksandrowska w Łodzi (= Urbanistyka)
+  plik: ulica-aleksandrowska-w-lodzi.txt
+  artykuł: https://pl.wikipedia.org/wiki/Ulica_Aleksandrowska_w_%C5%81odzi
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=79623562
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Ulica_Aleksandrowska_w_%C5%81odzi&action=history
+- Vader (Muzyka)
+  plik: vader.txt
+  artykuł: https://pl.wikipedia.org/wiki/Vader
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80719440
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Vader&action=history
+- Weronika Rosati (Sztuka)
+  plik: weronika-rosati.txt
+  artykuł: https://pl.wikipedia.org/wiki/Weronika_Rosati
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=81026219
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Weronika_Rosati&action=history
+- William Hawkins (kupiec) (Kultura i społeczeństwo)
+  plik: william-hawkins-kupiec.txt
+  artykuł: https://pl.wikipedia.org/wiki/William_Hawkins_%28kupiec%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=79711293
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=William_Hawkins_%28kupiec%29&action=history
+- Wojskowość w Polsce średniowiecznej (= Średniowiecze)
+  plik: wojskowosc-w-polsce-sredniowiecznej.txt
+  artykuł: https://pl.wikipedia.org/wiki/Wojskowo%C5%9B%C4%87_w_Polsce_%C5%9Bredniowiecznej
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80602562
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Wojskowo%C5%9B%C4%87_w_Polsce_%C5%9Bredniowiecznej&action=history
+- Wołanie o prawa kobiety (Filozofia)
+  plik: wolanie-o-prawa-kobiety.txt
+  artykuł: https://pl.wikipedia.org/wiki/Wo%C5%82anie_o_prawa_kobiety
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=78828163
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Wo%C5%82anie_o_prawa_kobiety&action=history
+- Współczynnik korelacji rang Spearmana (Matematyka)
+  plik: wspolczynnik-korelacji-rang-spearmana.txt
+  artykuł: https://pl.wikipedia.org/wiki/Wsp%C3%B3%C5%82czynnik_korelacji_rang_Spearmana
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=76919067
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Wsp%C3%B3%C5%82czynnik_korelacji_rang_Spearmana&action=history
+- Wydawnictwo Polskie R. Wegnera (Gospodarka)
+  plik: wydawnictwo-polskie-r-wegnera.txt
+  artykuł: https://pl.wikipedia.org/wiki/Wydawnictwo_Polskie_R._Wegnera
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80089640
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Wydawnictwo_Polskie_R._Wegnera&action=history
+- Zamach stanu w Hondurasie (2009) (== Okres powojenny)
+  plik: zamach-stanu-w-hondurasie-2009.txt
+  artykuł: https://pl.wikipedia.org/wiki/Zamach_stanu_w_Hondurasie_%282009%29
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=78191780
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Zamach_stanu_w_Hondurasie_%282009%29&action=history
+- Zamek w Mińsku (= Architektura świecka)
+  plik: zamek-w-minsku.txt
+  artykuł: https://pl.wikipedia.org/wiki/Zamek_w_Mi%C5%84sku
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=76899487
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=Zamek_w_Mi%C5%84sku&action=history
+- Żółw szylkretowy (= Herpetologia)
+  plik: zolw-szylkretowy.txt
+  artykuł: https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_szylkretowy
+  wersja użyta: https://pl.wikipedia.org/w/index.php?oldid=80875443
+  autorzy (historia edycji): https://pl.wikipedia.org/w/index.php?title=%C5%BB%C3%B3%C5%82w_szylkretowy&action=history

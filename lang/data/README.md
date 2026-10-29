@@ -1,14 +1,20 @@
 # Teksty przykładowe
 
-Przycisk **Użyj przykładu** wczytuje wszystkie pliki wymienione w `manifest.json` i skleja je w jeden tekst do nauki.
-Gdy lista jest pusta (albo strona jest otwarta z dysku), używa krótkiego tekstu z `js/data.js`.
+Lista **Przykład** na stronie laboratorium pokazuje zestawy z `manifest.json`. Przycisk **Wczytaj przykład** skleja pliki zestawu w jeden tekst do nauki.
+Gdy zestawów brak (albo strona jest otwarta z dysku), używa krótkiego tekstu z `js/data.js`.
 
-Dodanie lektury: plik TXT z wolnelektury.pl (domena publiczna) wrzuć do tego folderu i dopisz do `manifest.json`:
+| Folder | Zawartość | Licencja |
+|---|---|---|
+| `grabinski/` | 43 nowele i opowiadania Stefana Grabińskiego z Wolnych Lektur, ok. 1,1 mln znaków | domena publiczna, szczegóły w `grabinski/LICENCJA.txt` |
+| `wikipedia/` | 42 „Artykuły na medal” z polskiej Wikipedii z różnych dziedzin, ok. 1,2 mln znaków | CC BY-SA 4.0, autorzy, wersje i zmiany w `wikipedia/LICENCJA.txt` |
+
+Oba zestawy mają podobną wielkość, żeby porównanie tej samej sieci na prozie i na tekście encyklopedycznym było uczciwe.
+
+Nowy zestaw: folder z plikami TXT i `LICENCJA.txt` plus wpis w `manifest.json`:
 
 ```json
-{ "files": [
-  { "file": "latarnik.txt", "title": "Latarnik", "author": "Henryk Sienkiewicz" }
-] }
+{ "id": "moj", "name": "Mój zestaw", "label": "Mój", "dir": "moj/", "license": "moj/LICENCJA.txt",
+  "note": "Opis źródła.", "strip": null, "files": [ { "file": "tekst.txt", "title": "Tytuł" } ] }
 ```
 
-Stopka licencyjna Wolnych Lektur (na końcu pliku, po linii z `-----`) jest pomijana przy wczytywaniu do nauki, ale w plikach zostaje. Źródło i licencja tekstów: `LICENCJA.txt`.
+`"strip": "wolnelektury"` pomija przy wczytywaniu notę licencyjną Wolnych Lektur (po linii `-----`) i linię z ISBN; w plikach zostają.

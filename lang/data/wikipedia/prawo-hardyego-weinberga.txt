@@ -1,0 +1,121 @@
+Prawo Hardy’ego-Weinberga
+
+Prawo Hardy’ego-Weinberga – prawo określające stosunki pomiędzy frekwencją alleli a częstością genotypów w populacji oraz warunki, w jakich stosunki te będą zachowane.
+
+Proporcje genotypów w populacji spełniającej założenia prawa Hardy’ego-Weinberga określa się jako rozkład Hardy’ego-Weinberga (dla genu z dwoma allelami proporcje te odpowiadają rozwinięciu kwadratu sumy frekwencji alleli). Gdy genotypy w określonym locus występują z częstościami przewidzianymi na podstawie tego prawa, mówimy, że locus (gen) jest w równowadze Hardy’ego-Weinberga.
+
+Prawo zostało sformułowane przez matematyka Godfreya H. Hardy’ego i, niezależnie od niego, przez lekarza Wilhelma Weinberga . Prawo, sformułowane początkowo dla pojedynczego locus dwuallelicznego, można uogólnić dla wielu loci, dla loci wieloallelicznych oraz systemów poliploidalnych. Prawo stanowi jeden z fundamentów teorii genetyki populacji organizmów płciowych. Ma duże znaczenie dla zrozumienia procesu ewolucji i związanych z nim zmian częstości alleli i genotypów w populacjach.
+
+Definicja
+
+Jeżeli populacja mendlowska spełnia określone, podane niżej założenia, i w danym locus – w którym dwa allele, i występują z częstościami odpowiednio i to:
+
+1) częstość alleli w populacji nie zmienia się z pokolenia na pokolenie,
+
+2) częstość genotypów zależy tylko od częstości alleli genów i ustala się w kolejnych pokoleniach, niezależnie od początkowej częstości genotypów, w proporcjach odpowiadających rozwinięciu dwumianu gdzie odpowiada częstości homozygot – częstości heterozygot a – częstości homozygot
+
+Proporcję tę (dla locus z dwoma allelami – ) określa się mianem rozkładu Hardy’ego-Weinberga częstości genotypów. Gdy genotypy w danym locus występują z częstościami przewidzianymi przez rozkład Hardy’ego-Weinberga, to locus znajduje się w równowadze Hardy’ego-Weinberga.
+
+Założenia prawa Hardy’ego-Weinberga
+
+Częstości alleli i genotypów w populacji będą kształtować się zgodnie z przewidywaniami prawa Hardy’ego-Weinberga, jeżeli:
+
+Konsekwencje niespełnienia założeń
+
+Jeżeli któreś z wymienionych założeń nie jest spełnione, frekwencje alleli i genotypów będą odbiegać od przewidywanych. Zależnie od tego, które z założeń jest niespełnione, wpływ na frekwencje alleli i genotypów jest odmienny.
+
+Prawo Hardy’ego-Weinberga ma zastosowanie do populacji mendlowskich, czyli takich, które rozmnażają się płciowo, produkując gamety męskie i żeńskie, w związku z czym materiał genetycznych tworzących je osobników składa się na wspólną pulę genową. Jeżeli w populacji osobniki rozmnażają się bezpłciowo, klonalnie, każdy z klonów (ramet) jest izolowany płciowo i nie dochodzi do mieszania genów, a więc częstości genotypów nie osiągną równowagi H-W.
+
+Całkowicie losowe kojarzenie pomiędzy osobnikami (panmiksja) oznacza, że prawdopodobieństwo skojarzenia się dowolnego osobnika z dowolnym osobnikiem płci przeciwnej jest takie samo. W rezultacie np. osobniki podobne do siebie pod względem cech fenotypowych czy genetycznych nie mają tendencji do częstszego kojarzenia się wzajemnie w pary niż z osobnikami odmiennymi, podobnie osobniki zasiedlające jeden płat siedliska nie kojarzą się częściej ze sobą niż z osobnikami w innym płacie siedliska. Jeżeli kojarzenia w populacji nie są losowe (np. wskutek chowu wsobnego), częstości genotypów w kolejnych pokoleniach będą odbiegać od przewidywanych na podstawie prawa Hardy’ego-Weinberga – w przypadku chowu wsobnego następuje wzrost homozygotyczności w populacji.
+
+Prawo H-W jest w pełni spełnione tylko dla populacji o bardzo dużej liczbie osobników, teoretycznie bliskiej nieskończoności, jednak w praktyce już populacja licząca powyżej kilkuset osobników może znajdować się w równowadze H-W. Im mniejsza liczebność osobników w populacji, tym większy wpływ na kształtowanie frekwencji alleli i genotypów będą miały zdarzenia losowe (zob. dryf genetyczny, ewolucja neutralna) zmieniające zarówno częstości alleli, jak i genotypów.
+
+Jeżeli osobniki populacji różnią się względem siebie pod względem rozrodczości lub przeżywalności, to niektóre genotypy (i allele) będą częściej eliminowane lub będą zostawiały mniej potomstwa niż inne, w rezultacie ich udział w populacji zmaleje (efekt działania doboru naturalnego), co wpłynie na zmianę frekwencji alleli i genotypów w następnych pokoleniach.
+
+Brak imigracji oznacza, że do populacji nie dostają się osobniki z innych populacji, w których występują inne allele lub w których frekwencje alleli są inne, ani też osobniki o różnych genotypach nie różnią się od siebie pod względem tendencji do emigrowania z populacji, ponieważ taki przepływ genów może zmienić częstości alleli i genotypów w rozważanej populacji.
+
+Prawo H-W zakłada, że w opisywanej teoretycznie populacji geny nie mutują z jednego w allelu w drugi ani nie powstają nowe allele, bo z definicji zmienia to ich częstości występowania. Presja mutacyjna jest słabą siłą ewolucyjną, w niewielkim tylko stopniu wpływającą na częstości alleli w populacjach i na równowagę H-W.
+
+W sytuacji, gdy nie jest spełnione więcej niż jedno z założeń dotyczących mutacji, doboru, migracji, wielkości populacji, ich sumaryczny wpływ na częstości genotypów w populacji może się równoważyć, wówczas proporcje genotypów w populacji mogą (choć nie muszą) pozostawać w zgodzie z przewidywaniami prawa H-W.
+
+Przykład: locus MN u człowieka
+
+W populacji ludzkiej istnieje zmienność białek występujących na powierzchni erytrocytów. Jedno z takich białek jest kodowane przez locus MN. W badaniach elektroforetycznych można wyróżnić dwa allele występujące w tym locus (M i N) oraz trzy genotypy (MM, MN, NN). Badając grupy krwi u osób zamieszkujących Wielką Brytanię Race i Sanger (1975) stwierdzili, że wśród przebadanych 1000 osób grupę krwi M (genotyp MM) miało 298, grupę krwi MN (genotyp MN) – 489, i 213 miało grupę krwi N (genotyp NN). Aby sprawdzić, czy badany locus jest w równowadze H-W należy:
+
+2) obliczyć częstości genotypów przewidywane na podstawie prawa H-W (przyjmując obserwowane w próbce częstości alleli za reprezentatywne dla populacji):
+
+Ponieważ wielkość próby wynosi 1000 osobników, oczekiwane na podstawie prawa H-W ilości osobników o tych genotypach wynoszą odpowiednio MM = 294,3; MN = 496,4; NN = 209,3.
+
+3) sprawdzić za pomocą testu statystycznego, czy nie ma istotnych różnic między obserwowanymi i przewidywanymi liczebnościami poszczególnych genotypów (zob. też Weryfikacja hipotez statystycznych). Najłatwiej uczynić to można za pomocą testu chi-kwadrat. Statystykę tego testu oblicza się ze wzoru:
+
+Liczba stopni swobody (df) dla testu chi-kwadrat wynosi
+
+w danym przypadku df = 3 – 1 – 1 = 1. Na podstawie statystyki i liczby stopni swobody z tablic statystycznych odczytuje się wartość, określającą prawdopodobieństwo odrzucenia hipotezy zakładającej brak różnic pomiędzy porównywanymi rozkładami liczebności genotypów. W tym przypadku dla i df = 1 wynosi ono P = 0,67. Ponieważ jest ono większe niż krytyczna wartość prawdopodobieństwa oznacza to, że hipotezy o braku różnic pomiędzy obserwowanymi i oczekiwanymi liczebnościami genotypów nie można odrzucić (niewielkie różnice są wynikiem przypadku). Stąd wniosek, że ten locus w populacji brytyjskiej jest w równowadze H-W.
+
+Wyprowadzenie
+
+Sposób Hardy’ego
+
+Oto jaki sposób argumentowania zastosował G.H. Hardy:
+
+Z wielką niechęcią wtrącam się do dyskusji na tematy, w których nie jestem ekspertem, tym bardziej że spodziewam się, że pewne moje proste spostrzeżenia, które chciałbym ogłosić, powinny być już znane biologom. Jednakże pewne stwierdzenia Pana Udny Yule’go, na które zwrócił moją uwagę Pan R.C. Punnett, sugerują, że mimo wszystko zaprezentowanie mych uwag może być korzystne. (...) Załóżmy, że to para jednostek dziedziczenia (alleli), z których jest dominujące, i że w każdej generacji liczebność dominujących fenotypów heterozygot i fenotypów recesywnych pozostaje w proporcji Dodatkowo, załóżmy że liczebności są wystarczająco duże, tak że kojarzenia są losowe, że płci są równo reprezentowane pomiędzy fenotypami, i że wszystkie są równie płodne. Prosta matematyczna operacja, w postaci tabelki mnożenia wystarczy, aby zrozumieć, że w następnym pokoleniu liczebności osobników będą wynosiły co opiszmy jako Interesujące pytanie brzmi: w jakich okolicznościach taki rozkład pozostanie taki sam, jak w poprzednim pokoleniu? Łatwo stwierdzić, że będzie tak wtedy, gdy jest równe A skoro jest równe niezależnie od tego, jakie będą liczebności i rozkład liczebności pozostanie niezmieniony w następnych pokoleniach
+
+Krok po kroku
+
+Podręcznikowy sposób wyprowadzenia zależności opisanej prawem H-W wygląda tak:
+
+w diploidalnej populacji rozmnażającej się płciowo, gdzie kojarzenia są losowe, wynoszą początkowo (w pokoleniu ) odpowiednio:
+
+Prawdopodobieństwo kojarzenia pomiędzy samicą i samcem dowolnego genotypu jest równe iloczynowi częstości genotypów reprezentowanych przez danego samca i samicę. Ponieważ krzyżówki między genotypami mogą zachodzić w obu kierunkach, częstości kojarzeń (i powstałych w ich wyniku genotypów potomstwa) wynoszą:
+
+W rezultacie częstość każdego genotypu w potomstwie (pokolenie ) wynosi:
+
+Jak widać, w kolejnym pokoleniu częstości alleli nie zmieniły się i dalej wynoszą i tak jak w pokoleniu a częstości genotypów zależą tylko od częstości alleli i w następnym pokoleniu nie ulegną już zmianie.
+
+Sposób graficzny
+
+Zależność pomiędzy częstościami alleli i genotypów w populacji, postulowaną przez prawo Hardy’ego-Weinberga można też wyprowadzić graficznie – z wykorzystaniem kwadratu (szachownicy) Punnetta.
+
+Komentarz
+
+Warto zauważyć, że w gruncie rzeczy obliczenia te rozwijają jedynie prawidłowości, które wynikają z praw Mendla, i w podobnych postaciach, choć w mniej ogólny sposób (tzn. tylko dla konkretnych wartości częstości alleli lub genotypów) były formułowane wcześniej także przez innych naukowców: G.U. Yule’a, K. Pearsona, W.E. Castle’a, S. Wrighta . To, co wyróżnia sformułowanie problemu przez Hardy’ego i Weinberga, to, oprócz formalnego dowodu, który jest w gruncie rzeczy trywialny, zwrócenie uwagi na warunki, jakie muszą być spełnione (założenia prawa), żeby częstości alleli i genotypów w populacji nie zmieniały się w kolejnych pokoleniach . Weinberg ponadto pokazał, że prawo to funkcjonuje także w odniesieniu do więcej niż dwóch alleli (pomimo tego, że nie miał pojęcia o tym, czy takie wieloalleliczne układy istnieją) oraz że w takich przypadkach dojście do stanu równowagi nie będzie natychmiastowe (tj. w następnym pokoleniu), ale asymptotyczne (nastąpi po wielu pokoleniach) .
+
+Uogólnienie modelu
+
+Prawo Hardy’ego-Weinberga można uogólnić dla więcej niż dwóch alleli i więcej niż jednego locus. W przypadku trzech alleli w populacji będzie występować sześć genotypów, których częstości w stanie równowagi będą odpowiadać rozwinięciu trójmianu do kwadratu . Natomiast, jeszcze bardziej ogólnie, dla alleli, przyjmując, że allele występują z częstościami częstości poszczególnych genotypów wyrażać się będą kolejnymi wyrazami rozwinięcia kwadratu wielomianu:
+
+Prawo H-W może być również zastosowane do opisu zmian częstości genotypów w systemach poliploidalnych. Dla przypadku jednego locus, w którym występuje -różnych alleli częstości genotypów w równowadze H-W w populacji poliploidów odpowiadają rozwinięciu wielomianu:
+
+gdzie określa ploidię (np. dla organizmów tetraploidalnych ) .
+
+Zastosowanie
+
+W codziennej praktyce badaczy
+
+Prawo Hardy’ego-Weinberga stosuje się w badaniach genetyki populacji albo do oszacowania częstości genotypów w populacji na podstawie częstości alleli z próby, albo sprawdzając odchylenia obserwowanych częstości genotypów od częstości oczekiwanych, obliczonych na podstawie częstości alleli, przy założeniu, że populacja jest w równowadze. To, czy odchylenie jest znaczące, testuje się za pomocą testów statystycznych ( test Fishera) lub z wykorzystaniem metod MCMC. Ze względu na relatywnie duże prawdopodobieństwo popełnienia błędu pierwszego rodzaju przy stosowaniu testu opracowano nowe narzędzia do testowania tego, czy populacja znajduje się w stanie równowagi H-W . Testy takie dostępne są w internecie i w pakietach oprogramowania służących do analiz genetyki populacyjnej .
+
+Przykład: Oszacowanie częstości nosicieli fenyloketonurii
+
+Fenyloketonuria jest chorobą metaboliczną o podłożu genetycznym (autosomalną recesywną) – choroba rozwija się u homozygot z uszkodzonymi obydwiema kopiami genu hydroksylazy fenyloalaninowej (PAH). Występuje z częstością 1:7000 – 1:8000 osób w populacji zamieszkującej Polskę . Znając tę częstość i zakładając, że locus odpowiedzialne za tę chorobę jest w równowadze H-W, można oszacować na podstawie prawa H-W, jaką część populacji stanowią heterozygoty – nosiciele genu odpowiedzialnego za tę chorobę, u których choroba nie rozwija się w związku z obecnością jednej nieuszkodzonej kopii genu. Skoro 1 chory przypada na 8000 zdrowych: to częstość genu odpowiedzialnego za chorobę w populacji polskiej wynosi ponieważ to Stąd częstość heterozygot – zdrowych nosicieli, wynosi (1:46). Szacuje się, że jedna na 46 osób zdrowych w populacji polskiej jest nosicielem uszkodzonej kopii genu PAH .
+
+Ograniczenia zastosowania
+
+Znaczenie
+
+Hardy, podsumowując swoje osiągnięcia jako czystego matematyka, stwierdził przekornie, że w swojej karierze nie zrobił nic, z czego mogłaby wynikać jakaś praktyczna korzyść („Nothing I have ever done is of the slightest practical use”). W rzeczywistości trudno o przykład prawa mającego większe konsekwencje praktyczne, niż prawo nazwane jego imieniem. Z prawa tego wynika, że przy określonych warunkach, częstości genotypów w populacji mogą być przewidziane na podstawie częstości alleli, w rezultacie analizy mogą być przeprowadzone na podstawie częstości alleli, a nie częstości genotypów. W gruncie rzeczy całe badanie ewolucji genetycznej sprowadza się do zadawania pytań, co się stanie, gdy jedno lub więcej z założeń prawa H-W nie będzie spełnione, i identyfikowanie przyczyn powodujących odchylenia w obserwowanych częstościach genotypów od przewidywanych na podstawie prawa H-W.
+
+Prawo Hardy’ego-Weinberga stanowi fundament teorii genetyki populacji organizmów rozmnażających się płciowo. Bezpośrednio zainspirowało J.B.S. Haldane’a, R.A. Fishera i S. Wrighta w ich badaniach nad relacjami pomiędzy doborem naturalnym a genetyką populacji (które doprowadziły do nowoczesnej syntezy darwinowskiej) . Odkrycie praw Mendla i ich rozwinięcia w postaci prawa Hardy’ego-Weiberga wyeliminowało zarzuty wobec teorii ewolucji drogą doboru naturalnego wiążące się z przekonaniem, że mieszanie się u potomstwa cech rodziców powoduje nieuchronny spadek zmienności i uśrednianie cech. Wykorzystywane jest do teoretycznych badań wpływu doboru naturalnego i innych czynników powodujących ewolucję na częstości alleli i genotypów oraz przewidywania zmian tych częstości w populacjach w naturze. Np. jeżeli jakaś populacja nie znajduje się w stanie równowagi H-W, można na tej podstawie wnioskować, że jeżeli czynnik powodujący to odchylenie przestanie działać, to w następnym pokoleniu losowe kojarzenie usunie to odstępstwo; jeżeli nastąpi mutacja, to powinna ona pozostawać w populacji w swej początkowej, niskiej częstości. Prawo H-W przyniosło wyjaśnienie m.in. mechanizmów powodujących utrzymywanie w populacji ukrytej zmienności genetycznej, powodujących negatywne populacyjne efekty chowu wsobnego, stanowiło punkt wyjścia do zidentyfikowania roli przypadku i wielkości populacji dla trwałości populacji. W oparciu o prawo H-W opracowano m.in. miary nasilenia kojarzeń krewniaczych w populacji (współczynnik wsobności), zróżnicowania genetycznego wewnątrz- i międzypopulacyjnego (współczynnik Fst), do prawa H-W odwołują się metody szacowania wielkości nierównowagi gametycznej oraz siły doboru i dryfu genetycznego.
+
+Historia odkrycia
+
+Mimo ponownego „odkrycia” zapomnianych praw Mendla na początku XX wieku wielu uczonych długo pozostawało sceptycznymi wobec nich. Argumentowano na przykład, że częstość alleli dominujących zawsze będzie wzrastać w populacji. Udny Yule podczas dyskusji po wykładzie Reginalda Punnetta na forum Epidemiological Section of the Royal Society of Medicine in London w roku 1908, krytykując „szkołę mendlowską”, stwierdził, że jeśli brachydaktylia u ludzi jest determinowana przez gen dominujący i nie ma innych czynników wpływających na jej występowanie, to można się spodziewać, że będzie występować z częstością 3:1, a przecież tak nie jest. Punnett opacznie zrozumiał błędne spostrzeżenie Yule’a i uznał, że jego oponent utrzymuje, że w populacji brachydaktylia powinna się rozpowszechnić („why the nation was not slowly becoming brachydactylous” zamiast „in the course of time one would expect that in the absence of counteracting factors, to get three brachydactylous persons to one normal”) . Punnett, który uważał, że jest to argumentacja błędna, ale nie potrafił wskazać, na czym polega błąd, zwrócił się o pomoc do swojego kolegi – matematyka Godfrey H. Hardy’ego, z którym zapoznał się podczas wspólnych meczów w krykieta. Hardy, zawołany matematyk, rozstrzygnięcie tego problemu nurtującego biologów uznał, jak się wyraził, za „bardzo proste” . Do roku 1943 w świecie anglojęzycznym prawo to zwane było prawem Hardy’ego, podczas gdy publikacja Weinberga pozostawała nieznana wśród anglojęzycznych genetyków. Wówczas Stern w swoim artykule zwrócił uwagę na to, że w tym samym roku, w którym opublikował swój artykuł Hardy, niemiecki lekarz Wilhelm Weinberg opublikował w niemieckojęzycznym czasopiśmie pracę, w której niezależnie od Hardy’ego sformułował i udowodnił podobne wnioski. Stern zaproponował, by prawo to nazwać prawem Hardy’ego-Weinberga. Dlatego od 1943 roku nazwa tego prawa honoruje obydwu jego odkrywców .
+
+Anegdoty i komentarze
+
+Od lat 80. XX wieku Genetics Society of America w swoim czasopiśmie „Genetics” w okrągłe rocznice opublikowania prac, w których przedstawiono prawo H-W, zamieszcza artykuły prezentujące biogramy odkrywców prawa, tło historyczne tego odkrycia oraz komentarze i anegdoty z nimi związane .
+
+Historyk nauki Edwards znajduje wielką ironię w fakcie, że do rozwiązania tak prostego problemu trzeba było zaangażować tak znakomitego matematyka, jakim był Hardy .
+
+Z kolei J.F. Crow zwraca uwagę na bariery językowe, które spowodowały, że przez blisko 35 lat praca Weinberga pozostawała niezauważona przez anglojęzycznych genetyków, i ze smutkiem zauważa, że w owym czasie anglojęzyczni naukowcy ignorowali publikacje zawierające ważne naukowe odkrycia tylko dlatego, że były publikowane w językach innych niż angielski – taki był los genetycznych odkryć Mendla, Weinberga i G. Malécota (przy czym ten ostatni publikował nie w języku niemieckim, tylko we francuskim) .
+
+Jedną ze spraw intrygujących ludzi zainteresowanych historią nauki jest to, dlaczego tak ważna dla biologii praca Hardy’ego, uznanego angielskiego uczonego, została opublikowana w amerykańskim czasopiśmie „Science”, a nie, w zdawałoby się bliższym, brytyjskim tygodniku „Nature”. Spekulowano, że wynikało to z tego, że Hardy chciał ukryć przed kolegami-matematykami w Anglii swe zaangażowanie w rozstrzyganie tak trywialnego problemu matematycznego. Jednakże z korespondencji przyjaciela Hardy’ego, Punnetta, wynika, że w rzeczywistości spowodowane to było negatywnym, czy wręcz wrogim, stosunkiem ówczesnych edytorów „Nature” do wszystkich koncepcji związanych z mendelizmem .

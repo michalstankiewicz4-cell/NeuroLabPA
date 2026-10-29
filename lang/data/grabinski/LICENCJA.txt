@@ -22,7 +22,7 @@ Zasady wykorzystania Wolnych Lektur: https://wolnelektury.pl/info/zasady-wykorzy
 
 ZACHOWANIE INFORMACJI
 ---------------------
-Pliki są niezmienionymi kopiami plików TXT pobranych z wolnelektury.pl
+Pliki TXT w tym folderze są niezmienionymi kopiami plików TXT pobranych z wolnelektury.pl
 (29 października 2026). Każdy zawiera na końcu oryginalną notę Wolnych Lektur:
 informację o licencji, wydawcy, podstawie tekstu, osobach, które opracowały
 tekst, a w części plików także informację o „Planie współpracy z Polonią
@@ -34,7 +34,7 @@ tylko w pamięci przeglądarki, przy wczytywaniu tekstu do nauki sieci, bo nie s
 częścią utworu. Same pliki pozostają bez zmian.
 
 Kod NeuroLabPA nie jest objęty tą informacją; dotyczy ona wyłącznie plików
-tekstowych w folderze lang/data/.
+tekstowych w folderze lang/data/grabinski/.
 
 LISTA UTWORÓW
 -------------

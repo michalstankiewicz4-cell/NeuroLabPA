@@ -1,0 +1,409 @@
+Fonologia i fonetyka języka angielskiego
+
+Fonologia i fonetyka języka angielskiego – zjawiska fonetyczne i fonologiczne zachodzące we współczesnym języku angielskim. Język ten jest bogaty w samogłoski oraz dysponuje porównywalną z innymi językami indoeuropejskimi liczbą spółgłosek. Większość samogłosek ma charakter swoisty dla angielszczyzny, w przypadku niektórych trudno znaleźć ich dokładne odpowiedniki w innych językach. Bardziej przystępny dla cudzoziemców jest system spółgłoskowy, choć istnieją również spółgłoski realizowane w nieco odmienny sposób.
+
+System dźwiękowy języka angielskiego składa się z samogłosek i spółgłosek. Choć angielski alfabet składa się z 26 liter, w mowie używa się co najmniej 44 dźwięków: samogłosek, spółgłosek i dyftongów.
+
+Angielskie samogłoski i spółgłoski rzadko występują w izolacji, a najczęściej znajdują się pod wpływem otaczających je dźwięków. Dochodzi do zjawisk związanych z łączeniem międzywyrazowym takich jak asymilacja (upodabnianie do sąsiednich dźwięków), osłabianie formy, ubezdźwięcznienie samogłosek, nazalizacja i inne. Choć są to głównie zjawiska czysto fonetyczne, niektóre mogą być fonemiczne, to znaczy produkować nowe fonemy.
+
+Język angielski jest bogaty w rozwiązania prozodyczne. Istnieje kilka wzorów intonacyjnych: intonacja wysoka opadająca, krótka (niska) opadająca, niska wznosząca, wysoka wznosząca, wreszcie hybrydy wznosząco-opadająca i opadająco-wznosząca. Każda z nich niesie inne wartości dodane do tekstu i potrafi przekazać co najmniej tyle samo co czysty przekaz tekstowy.
+
+Nie istnieje jednolity wzorzec wymowy języka angielskiego, który można by uznać za jedyny „poprawny”. Najczęściej jako standardowe, zwłaszcza w kontekście języka angielskiego jako obcego, wymienia się Received Pronunciation (RP) i General American (GA). Poza nimi istnieje mnogość odmian geograficznych i etnicznych języka, cechujących się zróżnicowanymi wzorcami fonetycznymi i normami wymowy.
+
+Standard wymowy
+
+W języku angielskim nie istnieje jeden właściwy wariant wymowy; nie wypracowano także jednolitego standardu. W związku z równoległym rozwojem angielszczyzny w kilku krajach na różnych kontynentach wymowa ewoluowała na rozmaite sposoby. Sprzyjały temu wpływy języków lokalnych oraz fakt, że w przeszłości nie było stałej łączności i częstych kontaktów językowych z innymi odmianami języka. Różnice w wymowie objawiają się nie tylko na poziomie dialektów obiegowych, ale również w obrębie narodowych standardów angielszczyzny. Właściwości angielszczyzny standardowej (ogólnej, Standard English) definiuje się przede wszystkim w ramach gramatyki, zasobu słownego i konwencji ortograficznych, w zakresie akcentu zaś przewiduje się pewną dozę dowolności.
+
+Angielszczyzna cechuje się sporym zróżnicowaniem wewnętrznym, związanym z czynnikami geograficznymi i społecznymi. Zróżnicowanie to odzwierciedla się w istnieniu różnych standardów i gwar języka angielskiego. Skupiając się jedynie na aspekcie wymowy, zamiast o dialektach mówi się o różnych akcentach. Wśród nich najbardziej rozpoznawalne to brytyjski Received Pronunciation (RP) i amerykański General American (GA). To zwykle jednego z tych akcentów naucza się obcokrajowców, i to najczęściej tych akcentów używają prezenterzy radiowi i telewizyjni (RP nazywany jest przez to czasem także BBC English, ale współcześnie w BBC używa się także innych akcentów). Wśród ich rodzimych użytkowników panuje na ogół opinia, że te właśnie odmiany nie są naznaczone silnymi regionalnymi naleciałościami, a przez to można je uznać za standardowe akcenty. Nazwanie jednak któregokolwiek akcentu standardowym może być nieco kontrowersyjne, ponieważ, jak wspomniano, nie ma wyłącznie jednego modelu wymowy.
+
+W Stanach Zjednoczonych najpowszechniej używanym wariantem angielszczyzny jest General American, z wyjątkiem południowych stanów oraz wschodniego wybrzeża, zwłaszcza Bostonu, Nowego Jorku i regionu Nowej Anglii. W Wielkiej Brytanii jest większe zróżnicowanie akcentów.
+
+Na przestrzeni lat wymowa zmienia się także w obrębie jednej odmiany – wymowa wnuków nie jest identyczna jak ich dziadków i dotyczy to zarówno akcentów brytyjskich, jak i amerykańskich. W niektórych krajach, zwłaszcza w Wielkiej Brytanii, akcent i intonacja może świadczyć o przynależności do konkretnej klasy społecznej czy o miejscu pochodzenia.
+
+Ogólnie rzecz biorąc, przy porównaniu angielszczyzny brytyjskiej i amerykańskiej, zarówno Brytyjczycy, jak i Amerykanie uważają na ogół wariant brytyjski za, w pewnym sensie, nadrzędny. Amerykanie, jak twierdzi językoznawca Dennis Baron, odczuwają coś w rodzaju „językowej niepewności”, wielu uznaje, że amerykańska angielszczyzna nie jest prestiżowa, na odpowiednim poziomie, jest naszpikowana „błędami” i nieporadna. Z drugiej strony należy zaznaczyć, że od XX w. to amerykański wariant wywiera znacznie większy wpływ na angielszczyznę brytyjską niż odwrotnie.
+
+Standard brytyjski
+
+W samej Anglii dialekty dzieli się na północnoangielskie i południowoangielskie. Do tej drugiej grupy zalicza się Received Pronunciation, który jest najbardziej podobny do akcentów południowo-wschodniej Anglii. Na początku XIX w. elity Wielkiej Brytanii zaczęły porzucać swój regionalny akcent i naśladować wymowę londyńskich wyższych klas. Panowała wówczas ścisła hierarchia władzy i duże rozwarstwienie społeczne, co przekładało się również na wymowę. Kluczowym elementem podtrzymywania tego systemu było szkolnictwo kształcące klasę rządzącą, na którą było duże zapotrzebowanie w różnych obszarach imperium. Akcent wyższych sfer był nauczany w prestiżowych prywatnych szkołach (zwodniczo określanych terminem public school), stąd Daniel Jones na początku XX w. zaproponował nazwę Public School Pronunciation. Tymczasem znakomita większość Brytyjczyków nigdy nie posługiwała się takim akcentem, ani nawet go nie słyszała przed pojawieniem się radia.
+
+Następnie utrwaliła się nazwa Received Pronuncation (RP). Samo słowo received jako przymiotnik jest współcześnie używane rzadko, głównie w stałych wyrażeniach received wisdom oraz received opinion i oznacza coś ogólnie przyjętego jako właściwe, poprawne.
+
+Wśród wielu Brytyjczyków, w dużej mierze dzięki mediom, rozprzestrzeniała się wymowa RP aż do lat 60. XX w. Wówczas w wyniku rozmycia hierarchii społecznej, dekolonizacji, rozwoju kultury masowej, upubliczniania politycznych skandali, klasa wyższa przestała być postrzegana przez pryzmat prestiżu, pojawiło się raczej poczucie niesprawiedliwości. W związku z tym wymowa elit również zaczęła być postrzegana negatywnie, była obiektem drwin, a jej użytkownikom zarzucano snobizm. Dla nieuprzywilejowanej części ludności łatwiejsze stało się osiągnięcie dobrego wykształcenia, sukcesu i wyższej pozycji społecznej, przy czym często nie odczuwali potrzeby, by zmieniać w związku z tym swoją wymowę. Jednocześnie ci, którzy mieli już wysoką pozycję, mniej lub bardziej świadomie rezygnowali z RP na rzecz akcentu niższych klas.
+
+Współcześnie w Wielkiej Brytanii promuje się różnorodność. Szacuje się, że liczba Brytyjczyków używających akcentu RP bez naleciałości regionalnych wynosi jedynie około 3%. Choć jego zasięg nie jest ograniczony do jednego konkretnego obszaru, w Irlandii, Szkocji i Walii liczba użytkowników RP jest szczególnie mała. Nadal stanowi jednak punkt odniesienia dla opisu regionalnych akcentów. Znacznie więcej Brytyjczyków używa akcentu zbliżonego do Received Pronunciation, ale z pewną domieszką lokalnych cech. Tak rozumiany RP niektórzy językoznawcy zalecają określać General British lub Standard Southern British English.
+
+Co więcej, od połowy XX w. w RP zaszły istotne zmiany w wymowie. W związku z tym tradycyjna wymowa RP jest postrzegana jako przestarzała i staje się wymową nielicznych starszych osób z południowo-wschodniej Anglii. W obliczu zmian proponuje się podział RP; w przykładowym rozróżnia się Conservative RP (tradycyjna mowa arystokracji i niektórych osób starszych), Mainstream RP (forma akcentu RP neutralna pod względem wieku czy stylu życia mówców) oraz Contemporary RP (forma akcentu używana głównie przez młodych użytkowników języka). Niektórzy jednak pojęcie Received Pronunciation odnoszą tylko do wymowy tradycyjnej. Pewni fonetycy czynią wysiłki, by pod pojęciem RP rozumieć też współczesny standard, inni porzucili tę nazwę nadal żywo kojarzącą się ze snobistycznym językiem wyższych sfer na rzecz nazwy General British lub podobnych. W przypadku obecności pewnych lokalnych cech proponuje się określenie typu Regional General British. Zgodnie z takim podejściem General British jest współczesnym następcą RP, mniej jednorodnym. Przykładowo Estuary English jest akcentem łączącym RP z pewnymi cechami innych londyńskich akcentów i ludzie o wysokiej pozycji, od których niegdyś oczekiwano posługiwania się RP, uważają współcześnie za w pełni akceptowalne, by posługiwać się taką mieszanką.
+
+Standard amerykański
+
+Inaczej wygląda historia wypracowania dzisiejszego amerykańskiego standardu. W USA czynniki społeczne i geograficzne nie miały tak dużego znaczenia. Osoby, które właśne dorobiły się majątku, nie odczuwały potrzeby, by przyswajać arystokratyczne zwyczaje; imigranci starali się naśladować mowę zwykłych Amerykanów. Dużą rolę w ujednolicaniu wymowy miało rozprzestrzenianie się piśmienności oraz książka American Spelling Book (tzw. blue-backed speller) autorstwa Noaha Webstera, którą dystrybuowano nie tylko do szkół, ale z powodzeniem była sprzedawana przez ulicznych handlarzy. Do 1865 nakład osiągnął 42 miliony egzemplarzy. Dla wielu Amerykanów stanowił jedyny i najważniejszy podręcznik, określany nawet jako Moral Catechism lub Federal Catechism. Wraz z migracją na zachód wzmagał się proces tworzenia swego rodzaju wspólnego dialektu. Jednorodności sprzyjał brak jednego dominującego miasta (jak Londyn w Anglii) oraz znacznie słabszy podział na klasy.
+
+W celu rozpatrzenia zbieżności w wymowie wielu Amerykanów George Krapp w 1925 wprowadził pojęcie General American (GA). Koncept General American obejmował amerykańskie dialekty północne, zachodnie i obszaru Midland. Badania w latach 30. i 40. XX wykazały jednak, że wymowa Amerykanów nie jest tak jednorodna jak sądzono wcześniej, stąd pojawiały się trudności z definiowaniem tegoż terminu oraz jego praktycznym zastosowaniem. Współcześnie GA ma dwa znaczenia. Terminem General American określa się amerykańską angielszczyznę używaną poza obszarami południa i New England, co jednak nie jest najlepszym konceptem dla tworzenia charakterystyki, ponieważ na tak ogromnym obszarze występuje spora różnorodność dialektów. Jednak w drugim znaczeniu używa się go do opisu pewnego standardowego akcentu (Standard American English), który wywodzi się głównie z regionu zachodniego oraz Midland i charakteryzuje wymowę większości Amerykanów. Na wytworzenie się takiego standardu, uznawanego za prestiżowy, duży wpływ wywarła publiczna edukacja i nauczyciele języka angielskiego, ale ogromne znaczenie miały też media – radio i telewizja. Wielu ludzi chciało posługiwać się prezentowanym w nich akcentem. Powstał tzw. Network Standard – akcent używany w mediach, który nie zawiera charakterystycznych cech pozwalających na rozpoznanie regionu pochodzenia czy klasy społecznej jego użytkownika. W tym znaczeniu General American jest ściśle powiązany z Network Standard.
+
+Mieszanie akcentów
+
+Zdarza się niekiedy, że rodowici użytkownicy angielszczyzny posługują się innym akcentem niż ich codzienny. Przykładowo większość brytyjskich piosenkarzy popowych i rockowych podczas śpiewania swoich utworów używa amerykańskiego akcentu albo mieszanki akcentów. W taki sposób śpiewano już w latach 50. XX. Mieszankę akcentów stosowali m.in. The Beatles w latach 60. XX w., jednak z biegiem kariery zmniejszali liczbę amerykańskich wpływów w swojej wymowie w piosenkach.
+
+W utworach Adele obecne są cechy standardowej mowy brytyjskiej, cechy mowy amerykańskiej, ale również cechy gwary Cockney, np. You had my heart inside of your (h)and (zamiana /h/ w /ʔ/). Dla wymowy w utworach muzyki popularnej typowa jest niekonsekwencja, np. głoska w wyrazie może być wymieniona na niestandardową dla utworzenia rymu, lepszego brzmienia. Sam śpiew w porównaniu z mową powoduje zanik lub modyfikację pewnych cech takich jak długość samogłosek, intonacja czy rytm.
+
+Akcent, który stanowi mieszankę typowych brytyjskich i amerykańskich cech wymowy nazywany jest akcentem transatlantyckim (mid-Atlantic accent). Przed II wojną światową w amerykańskim teatrze i kinie funkcjonował on jako standardowy; w zamierzeniu miał być akcentem pozbawionym dominujących cech akcentów amerykańskich i brytyjskich.
+
+Samogłoski
+
+Samogłoska jest rodzajem głoski, przy wymawianiu której drgają więzadła głosowe, a powietrze przechodzi przez jamę ustną bez większych obstrukcji wpływających na zmianę dźwięku. Niektórzy językoznawcy kwestionują tę metodę definicji samogłosek w języku angielskim jako niejednoznaczną i wzbudzającą wątpliwości i proponują w zamian metodę dystrybucyjną, polegającą na badaniu roli i kontekstu poszczególnych głosek w izolowanych wyrazach. Trudno jest ustalić dokładną liczbę samogłosek angielskich; różne analizy wykazały różną ich liczbę. Mnogość dialektów i różnice metodologiczne spowodowały, że wyniki różnią się znacznie.
+
+Najczęściej używane symbole fonetyczne dla brytyjskiego akcentu zostały zaproponowane w 1962 dla ówczesnego Received Pronunciation wyższych klas przez fonetyka Gimsona. W ciągu dekad zaszły jednak duże zmiany społeczne i fonetyczne, przede wszystkim dotyczące wymowy samogłosek. Tymczasem współczesny zestaw symboli może sugerować, że od tego czasu niewiele się zmieniło.
+
+Głoska /æ/ w RP współcześnie brzmi raczej jak [a] (choć jest zwykle bardziej przednia niż w wielu innych językach), a /e/ bardziej jak [ɛ]. Dwugłoska /eə/ przekształciła się w pojedynczy długi dźwięk [ɛː], a dwugłoska /aɪ/, ściśle rzecz biorąc, powinna być zapisywana jako [ɑɪ] lub [ʌɪ]. Długa samogłoska /ɔː/ jest bliższa pod względem barwy do [oː] niż [ɔː], a samogłoska /ɒ/ jest bliższa [ɔ].
+
+Przegląd angielskich samogłosek
+
+W tabeli przedstawiono wszystkie samogłoski będące fonemami. W rubryce pary minimalne podano pary wyrazów z samogłoskami sąsiadującymi w diagramie Jonesa.
+
+W General American występuje samogłoska średnia centralna zapisywana jako /ɝ/ w akcentowanych sylabach i /ɚ/ w nieakcentowanych, która to wykazuje rotyczność (r-colored vowel). Bywa nazywana samogłoską retrofleksyjną, ponieważ jej dźwięk może być uzyskany przez wzniesienie przodu języka jak w spółgłoskach retrofleksyjnych z ewentualnym lekkim wygięciem jego koniuszka do tyłu na wysokości wału dziąsłowego. Alternatywnym sposobem jest wymowa przez podniesienie języka w celu zbliżenia go do podniebienia twardego, pozostawiając jego przód w niskiej pozycji.
+
+Często rozróżnia się akcentowane /ɝ/ i nieakcentowane /ɚ/, ponieważ szwa jako takie nie występuje w sylabach akcentowanych (ale niektórzy fonetycy nie stosują takiego podziału). Głoska /ɝ/ od głoski r (/ɹ/) różni się tym, że dłużej trwa, jest samogłoską i nigdy nie jest bezdźwięczna, zaś od głoski /ɚ/ różni się tym, że język przy wymowie tej pierwszej jest bardziej napięty i dźwięk również jest dłuższy.
+
+Długość samogłosek angielskich
+
+Bezwzględna długość samogłosek wyrażona w jednostkach fizycznych, np. w milisekundach i zależy od tempa mowy. Natomiast język angielski należy do języków, w których występuje tzw. iloczas, czyli rozróżnienie samogłosek pod względem długości trwania – jedne samogłoski są stosunkowo dłuższe od drugich (zjawisko niewystępujące w języku polskim, ale obecne przykładowo w języku czeskim). Długość samogłoski jest nośnikiem wartości fonemicznych, czyli jest zdolna zmienić znaczenie wyrazu (wyrazy z odpowiadającą samogłoską długą i krótką stanowią parę minimalną).
+
+Samogłoski angielskie można podzielić na dwie grupy: naturalnie długie i naturalnie krótkie – niezależnie od tempa mowy te długie będą wymawianie relatywnie dłużej niż te krótkie, znajdując się w tym samym kontekście fonetycznym, np. hit /hɪt/ będzie krótsze od heat /hiːt/. Poza tym wszystkie samogłoski angielskie zmieniają swoją długość w zależności od kontekstu fonetycznego. I tak następująca po samogłosce spółgłoska dźwięczna wydłuża ją, a bezdźwięczna (lub /m/, /n/, /ŋ/, /l/ + bezdźwięczna) skraca, zwłaszcza gdy w zapisie jest podwojona. Na przykład /æ/ w wyrazie cab /cæb/ jest dłuższe niż w wyrazie cap /cæp/, a /iː/ jest dłuższe w wyrazie believe niż w belief. Zatem w związku z tym, że na długość samogłoski wpływa jej naturalna długość oraz jej sąsiedztwo fonetyczne, ogólnie można wyróżnić 4 różne długości samogłosek. Poza tym samogłoski z natury długie skracają swą długość, jeśli tworzą pierwszy element dyftongu.
+
+Długość samogłoski zależy także od tego, ile sylab po sylabie akcentowanej znajduje się w wyrazie: im więcej występuje sylab, tym samogłoska jest krótsza. Zjawisko to występuje również w języku polskim. Wiktor Jassem podaje przykład równomiernego, rytmicznego liczenia: sto dwieście trzysta czterysta; najdłuższe jest o w wyrazie sto, a najkrótsze e w wyrazie czterysta. Odpowiednio /uː/ jest dłuższe w wyrazie lose niż w loser, /ɛ/ jest dłuższe w beg niż w beggar.
+
+Występują różnice zależne od rytmu i intonacji. Samogłoski stojące przed sylabą akcentowaną są wymawiane szczególnie krótko, i tak /ɑː/ w wyrazie artillery /ɑːˈtɪlerɪ / jest krótsze niż w art /ɑːt/. Ostatecznie więc na długość samogłoski w sylabie wpływa wiele czynników, nie tylko przynależność do grupy spółgłosek naturalnie długich lub krótkich.
+
+Samogłoski można podzielić także na napięte (tense) i luźne (lax). W GA do spółgłosek napiętych należy /iː/, /ɑː/, /ɔː/, /uː/ oraz dyftongi, natomiast do spółgłosek luźnych – /ɪ/, /ɛ/, /æ/, /ʊ/, /ʌ/ (a w RP dodatkowo /ɒ/). Samogłoski napięte występują w słowach zakończonych w zapisie na nieme e (np. mate, mete, kite, cute) i są one generalnie dłuższe niż samogłoski luźne, które występują w słowach bez niemego e (np. mat, met, kit, cut). Żadna samogłoska luźna nie może znaleźć się w akcentowanej sylabie otwartej, tzn. kiedy samogłoska luźna miałaby być akcentowana, musi następować po niej spółgłoska.
+
+Dyftongi
+
+W języku angielskim występują również dwugłoski, czyli dyftongi. Dzielą się na dwie grupy: dyftongi zamykające, tzn. dążące od samogłoski bardziej otwartej do samogłoski bardziej przymkniętej, oraz dyftongi centrujące (dośrodkowe), w których drugą samogłoską jest szwa.
+
+W General American jako należącym do akcentów rotyzujących nie ma dyftongów centrujących (a więc /ɪə/, /ʊə/, /eə/), ponieważ r (jako /ɹ/, /ɚ/ lub /ɝ/) jest wymawiane w każdej pozycji. Natomiast dyftongi centrujące we współczesnym RP mają tendencję do zaniku; wymawiane są coraz częściej jako pojedyncze długie samogłoski.
+
+Przegląd angielskich dyftongów
+
+Z uwagi na to, że dyftongi składają się z dwóch dźwięków i stadiów pośrednich, wystąpienie różnic regionalnych występuje częściej niż w przypadku pojedynczych samogłosek. W tabeli podano opis dla Received Pronunciation, a w osobnej rubryce różne realizacje dźwięku w zależności od odmiany geograficznej bądź społecznej języka.
+
+W języku angielskim czasami stosuje się podział na dyftongi o stosunkowo długim przejściu (ślizgu) między tworzącymi je dźwiękami (wide diphthongs) oraz o krótkim przejściu (narrow diphthongs). Do tych drugich należy /oʊ/ (odpowiednik brytyjskiego /əʊ/) oraz /eɪ/. W amerykańskiej odmianie języka angielskiego pierwszy człon tych dwugłosek jest napięty, na nim opiera się artykulacja, a drugi człon jest rozluźniony, następuje nieznaczny ślizg. Niektórzy fonetycy, odnosząc się od amerykańskiej odmiany, zapisują te dwugłoski jako jednogłoski (monoftongi), tzn. /eɪ/ jako długie /e/ (/eː/) i /oʊ/ jako długie /o/ (/oː/), zwłaszcza w pozycji nieakcentowanej. W związku z tym niektórzy w przypadku słów beˈlow i ˈbellow w obu stosują zapis /oʊ/, inni sugerują rozróżnienie w nich /oʊ/ i /o/, a jeszcze inni uznają za satysfakcjonującą konwencję zapisu przez /o/ w transkrypcji fonemicznej w obu przypadkach. Może to jednak prowadzić do nieporozumień.
+
+Częstotliwość samogłosek i dyftongów w RP
+
+Na 39% samogłosek w stosunku do wszystkich dźwięków w Received Pronunciation najczęściej używane są /ə/ oraz /ɪ/ – odpowiednio 10,74% i 8,33%. Następna w klasyfikacji /ɛ/ ma częstość występowania 2,97%. Wynik ten jest spowodowany występowaniem szwa w większości nieakcentowanych sylab w języku, w którym jest proporcjonalnie wiele nieakcentowanych sylab. Drugie miejsce samogłoski /ɪ/ spowodowane jest jej występowaniem zarówno w sylabach akcentowanych, jak inieakcentowanych. Podobne badania przeprowadzone na tekstach RP i GA (wziąwszy pod uwagę rozbieżności między tymi odmianami) dają zbliżone wyników zakresie pierwszych pięciu dźwięków. Oto pełna tabela:
+
+Tryftongi
+
+W brytyjskich akcentach oprócz systemu dyftongów wyróżnia się czasem trzy tryftongi (trójgłoski): /aʊə/, /aɪə/ i /eɪə/, jak w wyrazach odpowiednio power, fire i layer. Niektórzy fonetycy wyróżniają ich pięć: /eɪə aɪə ɒɪə aʊə əʊə/. Wszystkie z nich są centrujące, a ich zakończeniem jest szwa. Przykładowo dyftong /aʊə/ rozpoczyna się samogłoską otwartą tylną, po czym w środkowej fazie przechodzi do przymkniętej, jednak faza /ʊ/ jest krótka. Podobnie w środkowej fazie zachowuje się trójgłoska /aɪə/, który rozpoczyna się samogłoską otwartą przednią i w środkowej fazie zahacza o samogłoskę przymkniętą przednią, zbliżoną do /ɪ/.
+
+Podczas ich wymowy ważny jest początek dyftongu i jego koniec – środkowy dźwięk we współczesnej brytyjskiej angielszczyźnie jest prawie niesłyszalny poza bardzo staranną wymową. Nie zawsze jest jasne, czy tryftong w odczuciu mówców stanowi jedną czy dwie sylaby. Przykładowo takie wyrazy jak fire /faɪə/, hour /aʊə/ użytkownicy Received Pronunciation uważają za jednosylabowe, a player /pleɪə/ czy slower /sləʊə/ – za dwusylabowe.
+
+Dlatego w normalnym, szybkim tempie wypowiedzi tryftongi są jednak zwykle upraszczane do dyftongów. Pomijania jest wówczas środkowa faza trójgłoski. Zatem z dźwięków /aʊə/, /aɪə/ i /leɪə/ powstają dyftongi [aə], [aə] i [eə], a wyrazy power, fire i layer w praktyce wymawiane są odpowiednio: [paə], [faə] i [leə]. Niekiedy redukcja posuwa się jeszcze bardziej i dochodzi do zjawiska monoftongizacji, czyli zastąpienia trójgłoski długą samogłoską. Wyrazy power, fire mogą zatem brzmieć w wymowie [pɑː], [fɑː] (dokładnie tak samo jak brzmią wyrazy par, far).
+
+Spółgłoski
+
+Angielski system spółgłoskowy jest bliższy polskiemu niż samogłoskowy, choć istnieją spółgłoski charakterystyczne dla tego języka oraz zbliżone, różniące się miejscem artykulacji w porównaniu np. z polskimi: /d/, /t/ i /n/ jest wymawiane z językiem przyciśniętym do wału dziąsłowego, a nie zębów. Spółgłoski dźwięczne w zapisie są dźwięczne w wymowie, a ubezdźwięcznienie powoduje zmianę znaczenia wyrazu (para minimalna), np. /lɛt/ – /lɛd/.
+
+Sposób i miejsce artykulacji spółgłosek
+
+Spółgłoski różnią się między sobą przynajmniej jedną z następujących cech: miejscem artykulacji, sposobem artykulacji, wreszcie silą artykulacji, czyli dźwięcznością.
+
+Pod względem siły artykulacji spółgłoski dzielą się na mocne (fortis) i słabe (lenis). Mocne są spółgłoski bezdźwięczne, a słabe – dźwięczne.
+
+Przegląd spółgłosek angielskich
+
+W tabeli przedstawiono wszystkie spółgłoski angielskie pełniące rolę fonemiczną. W opisie podano wersję wymowy dla Received Pronunciation, warianty lokalne omówiono w osobnej rubryce tabeli.
+
+W angielszczyźnie wymowa spółgłosek /t/, /d/, /s/, /z/, /n/, /l/ jest dziąsłowa, język dotyka wału dziąsłowego podczas ich wymowy. Tymczasem w polszczyźnie przy wymowie tych głosek język dotyka tylnej ściany górnych zębów. Te angielskie mogą jednak stać się zębowe, gdy znajdują się w pozycji przed międzyzębowymi /θ/ i /ð/.
+
+Rozróżnienie samogłosek i spółgłosek
+
+W języku angielskim, jak wielu innych indoeuropejskich, fundamentalne jest rozróżnienie między samogłoskami i spółgłoskami. Ich rola jest różna w zależności od sposobu ujęcia, fonetycznego bądź fonologicznego. Pod względem fonologicznym niektóre spółgłoski mogą zachowywać się jak samogłoski, to znaczy stanowić ośrodek sylaby.
+
+Dźwięki /j/ i /w/ w odpowiednio yes → /jes/, we → /wiː/ zachowują się jak spółgłoski, ale na początku ich wymowy można usłyszeć bardzo krótkie samogłoski, odpowiednio /i/ lub /u/. Dlatego też czasami nazywa się je półsamogłoskami. Niektóre spółgłoski, sonoranty, można wypowiadać w sposób ciągły bez słyszalnego tarcia, podobnie jak samogłoski. Należą do nich spółgłoski nosowe /m/, /n/, /ŋ/ oraz /l/ i /r/, które czasem mogą pełnić funkcję zgłoskotwórczą (tworzyć sylabę bez udziału innych samogłosek).
+
+Częstotliwość występowania spółgłosek w RP
+
+Na 60,78% spółgłosek w stosunku do wszystkich dźwięków w Received Pronunciation najczęściej są używane /n/ oraz /t/ – odpowiednio 7,58% i 6,42%. Wyniki tego badania, jak iinnych pozwalają na wyodrębnienie pięciu grup:
+
+Defonologizacja głosek
+
+Defonologizacja głosek (ang. phonemic merger) polega na tym, że zanika różnica w wymowie między dwiema głoskami – zaczyna wymawiać się je tak samo. Taka defonologizacja może być warunkowa (zachodzić tylko w określonych kontekstach fonetycznych) lub bezwarunkowa (we wszystkich kontekstach). Za jedno z najbardziej zauważalnych i rozprzestrzenionych zjawisk tego typu uznaje się tzw. cot–caught merger, przykład bezwarunkowej defonologizacji. Polega ona na wymowie głosek /ɑ/ i /ɔ/ w taki sam sposób, przez co pary wyrazów typu lot–thought, Dawn-Don, hawk-hock zawierają tak samo brzmiącą samogłoskę. Taki sposób wymowy jest obecny w wielu amerykańskich akcentach, jest dominujący we wschodniej części Nowej Anglii, w Kanadzie, Zachodniej Pensylwanii, zachodniej części USA, a także w szkockiej odmianie języka angielskiego.
+
+Wśród warunkowych defonologizacji najdynamiczniej rozprzestrzenia się w amerykańskich akcentach pin-pen merger, tj. wymawianie głosek /ɪ/ i /ɛ/ tak samo (zwykle jako /ɪ/), ale wyłącznie w pozycji przed nosowymi spółgłoskami. Zjawisko to występuje głównie w południowej części USA.
+
+Głoski /æ/, /ɛ/ i dyftong /eɪ/ w pozycji przed interwokalicznym (otoczonym samogłoskami) „r” na przeważającym obszarze USA brzmią tak samo. W związku z tymi nie ma rozróżnienia między wyrazami Mary, merry i marry (Mary–merry merger). W RP w związku z przekształceniem się /eə/ w [ɛː] różnica między Mary a merry oraz fairy i ferry, zwłaszcza wśród młodszych użytkowników języka, sprowadza się do różnicy długości samogłoski.
+
+Jako przykład defonologizacji odnotowuje się także zjawisko ujednolicania wymowy samogłosek w nieakcentowanych sylabach, zwłaszcza /ɪ/ i /ʊ/, i wypowiadania wszystkich jako /ə/ (tzw. weak vowel merger). Jest ono znane w angielszczyźnie amerykańskiej, australijskiej i obserwuje się coraz częściej w angielszczyźnie brytyjskiej, w tym w RP.
+
+Defonologizacje głosek zachodziły w języku angielskim także w przeszłości, przykładowo głoski /æː/ oraz /eː/ występujące w języku staroangielskim połączyły się, dając we współczesnym angielskim głoskę /iː/ jak w wyrazach clean i meet
+
+Sylaba
+
+Sylaba jest złożeniem samogłosek i spółgłosek o specyficznej strukturze. Najkrótsze sylaby mogą być złożone z jednej samogłoski lub dyftongu, jak w przypadku wyrazów I, oh, eye. Zdecydowana większość sylab angielskich tworzy kombinacja samogłosek (V) i spółgłosek (C). Istnieje wiele możliwych ich kombinacji w obrębie sylaby:
+
+i wiele innych. Słowo może być złożone z jednej sylaby (monosylaba, słowo monosylabiczne), jak i większej liczby sylab (słowo polisylabiczne).
+
+Struktura sylaby
+
+Sylaby formowane są w specyficzny sposób, przy zastosowaniu zbioru zasad i warunków, niektórych obligatoryjnych, niektórych dodatkowych. Oto podstawowe zależności zachodzące w angielskiej sylabie:
+
+Liczba sylab w wyrazie zależy od liczby ośrodków, i tak wyraz polysyllabic ma pięć samogłosek, zatem musi być złożony z pięciu sylab. W wersji minimalnej sylaba złożona jest wyłącznie z jednego ośrodka. Wyjątkowo rzadko sylaba składa się wyłącznie ze spółgłosek: shhh, mmmm
+
+Istnieją znaczące różnice między wymową sylaby a jej realizacją graficzną (zapisem). I tak np. wyraz ooze /uːz/ kończy się na spółgłoskę i jest sylabą otwartą o strukturze VC, podczas gdy w zapisie kończy się na -e. Podobnie all ma strukturę VC, jumped /dʒʌmpt/ CVCCC a fox /fɒks/ odpowiednio CVCC.
+
+Granice sylaby
+
+W języku angielskim nie zawsze jest jasne, kiedy kończy się jedna sylaba, a zaczyna następna, i w niektórych przypadkach możliwych jest kilka opcji.
+
+Akcent
+
+Język angielski zalicza się zwykle do typowych języków o rytmie akcentowym (stress-timed language), co wiąże się ze zmiennym wzorcem pozycji akcentów i redukcją samogłosek. Rytm języka angielskiego opiera się na dużym kontraście sylab akcentowanych i nieakcentowanych. Sylaby akcentowane są wymawiane głośno, wyraźnie i dłużej w porównaniu do sylab nieakcentowanych, które ulegają redukcji. Te mocne, akcentowane sylaby występują w miarę możliwości w regularnych odstępach czasowych, a pomiędzy nimi upakowane są sylaby nieakcentowane. Dlatego też w zależności od tego, ile sylab nieakcentowanych trzeba zmieścić pomiędzy akcentowanymi, długość wymawiania sylab może być zmienna.
+
+W języku angielskim w większości nieakcentowanych sylab przeważają tylko dwie samogłoski – neutralna głoska schwa /ə/ (którą spotkać można wyłącznie w nieakcentowanych sylabach) oraz /ɪ/, jednak w szybkiej mowie i ona może ulec dalszej redukcji do /ə/.
+
+Można wyróżnić się dwa rodzaje akcentu: akcent wyrazowy i akcent zdaniowy.
+
+Akcent wyrazowy
+
+Akcentem wyrazowym jest wyrazistsze wymówienie jednej sylaby, na przykład w słowie device akcent pada na drugą sylabę. Akcent wyrazowy jest niejednolity, jak również ma funkcję dystrybutywną; to produce /tə prəˈdjuːs/ akcentowane na ostatnią sylabę oznacza „produkować”, podczas gdy some produce /sʌm ˈprɒdjuːs/ to produkty rolne (owoce i warzywa).
+
+Przesunięcie akcentu
+
+Z reguły dodanie do wyrazu końcówki nie zmienia akcentu (np. 'comic → 'comical). Istnieją jednak wyjątki:
+
+Niektóre wyrazy są obecnie w trakcie zmiany akcentu i spotyka się obie formy:
+
+Akcent zmienia się również, kiedy dwusylabowe wyrazy, zmieniając formy wydłużają się
+
+Akcent poboczny w dłuższych wyrazach
+
+Słowa o długości powyżej trzech sylab zwykle mają dwa akcenty: główny i poboczny. Akcent poboczny pada zwykle na pierwszą lub drugą sylabę słowa i jest o wiele słabszy niż akcent główny. Samogłoska akcentowana pobocznie nie zmienia swych wartości: relativity /ˌɹeləˈtɪvɪti/, characteristic /ˌkæɹɪktəˈɹɪstɪk/
+
+Akcent mający wartość gramatyczną
+
+Niektóre słowa pełnią różne funkcje w zależności od tego, jaki akcent przyjmują. Istnieje duża grupa wyrazów, głównie dwusylabowych, które mogą być akcentowane zarówno na pierwszej, jak i na drugiej sylabie. W pierwszym przypadku są rzeczownikami lub przymiotnikami, w drugim zaś czasownikami:
+
+Utrata akcentu
+
+Wiele słów, zwykle złożonych, ma dwa akcenty w pozycji izolowanej. Gdy jednak słowa te występują w mowie wiązanej, zwykle gubią jeden z akcentów według następującego wzoru:
+
+Akcent zmienny
+
+Niektóre słowa angielskie odznaczają się zmiennym akcentem. Gdy są wymawiane w izolacji bądź na końcu zdania, akcent pada na ostatnią sylabę, jednak może przesunąć się do środka, kiedy słowo występuje w zdaniu, a zwłaszcza, kiedy następujące po nim słowo jest akcentowane:
+
+Wiele krótkich fraz, często dwuwyrazowych, ma zmienny akcent:
+
+Akcent zdaniowy
+
+Akcent zdaniowy polega na zaakcentowaniu, czyli mocniejszym wymówieniu w zdaniu jednego z elementów. Z reguły akcentowane są:
+
+Inne słowa najczęściej służą do łączenia elementów mających znaczenie, wiele z nich ma formy słabe. Większość z nich to przyimki, czasowniki posiłkowe, spójniki i zaimki. Elementy znaczące wyznaczają rytm zdania. I tak w zdaniu Bert’s friend John has just sold two very fine old paintings składającym się z 11 elementów, 10 jest akcentowanych. Natomiast zdanie: It would have been better not to have paid it before you have received it składa się z 16 słów, z czego tylko 4 są akcentowane. Cechą naturalną dobrego akcentu angielskiego jest gładkie poruszanie się pomiędzy akcentowanymi sylabami i dopasowywanie słabych sylab do ogólnego rytmu zdania.
+
+Akcent zdaniowy może przypadać na dowolną część zdania, którą mówiący chce podkreślić. Każda z poniższych wypowiedzi ma nieco inne znaczenie:
+
+Wymowa wyrazów i zdań
+
+Wymowa izolowanych dźwięków języka angielskiego różni się znacznie od wymowy tych samych dźwięków w wyrazach i w zdaniach. Większość spółgłosek i niektóre samogłoski ulegają zmianom pod wpływam otoczenia i są to procesy wspólne dla określonych kontekstów, np. plozja lub ubezdźwięcznienie. Ponadto w dłuższych wypowiedziach niepoślednią rolę odgrywa kontekst fonetyczny, w jakim występują poszczególne dźwięki, a nawet całe wyrazy. Elementy nieakcentowane, tak w słowach, jak i w zdaniach tracą moc i wymawiane są jako słabe.
+
+Formy mocne i słabe
+
+W związku z redukcją samogłosek w sylabie nieakcentowanej zazwyczaj zmieniają się one w szwa /ə/ bądź /ɪ/, albo zanikają (ulegają elizji), co zdarza się również w przypadku spółgłosek. Nie istnieje reguła zamiany samogłoski peryferyjnej na słabą, każdy przypadek jest indywidualny:
+
+W języku angielskim powyższe różnice związane z akcentowaniem nie zachodzą tylko w sylabach w obrębie wyrazów. Również całe wyrazy w zdaniu (w mowie łączonej) nie zawsze wymawia się z jednakowym naciskiem. Istnieje grupa wyrazów, która w zdaniu jest zwykle nieakcentowana i wymawiana w sposób osłabiony, zredukowany. Są to tzw. wyrazy funkcyjne budujące strukturę zdania, do których należą przede wszystkim przedimki, zaimki osobowe, przyimki i czasowniki posiłkowe. Zazwyczaj używa się formy słabej (zredukowanej) takich wyrazów, jednak dla szczególnego ich podkreślenia lub na końcu zdania czy frazy (przed pauzą) pojawia się forma mocna, z pełną wymową głosek. Porównaj następujące pary zdań:
+
+Formy słabe występują we wszystkich stylach wypowiedzi, także formalnym, jednak więcej ich można zaobserwować w stylu potocznym oraz w szybkiej mowie.
+
+Tego typu słów wymawianych na dwa odrębne sposoby jest w języku angielskim około 50. Przykłady ze słowem some:
+
+Elizja
+
+Elizja polega na zaniku w wyrazie lub w zdaniu niektórych dźwięków i mogą to być zarówno samogłoski, jak i spółgłoski. Dzieje się tak z dwóch przyczyn. Po pierwsze szybkość mowy powoduje, że wymówienie wszystkich dźwięków powodowałoby konieczność szybkiego wymawiania trudnych sekwencji dźwięków, „łamańców” językowych. Po drugie zaś istnieją sytuacje, w których sąsiadują ze sobą wyrazy, których łączne wymówienie z zachowaniem cech jakościowych i ilościowych dźwięków jest trudne, a pełna realizacja niewiele wnosi, np. w zdaniu Henry the Sixth’s three advisers. Oto podstawowe zasady elizji w języku angielskim:
+
+Epenteza
+
+Oprócz elizji w języku angielskim pojawia się epenteza, czyli zjawisko dodania nienaturalnej głoski w celu ekonomizacji wymowy. Przykłady epentezy:
+
+Asymilacja
+
+Sąsiednie dźwięki mają na siebie wpływ, najczęściej upodabniający. Zjawisko to nazywa się asymilacją. Najczęściej spotyka się ją w szybkiej mowie, jednak pewien stopień asymilacji spotyka się we wszystkich stylach mówionych.
+
+Asymilacja wsteczna (regressive assimilation, także anticipatory assimilation) polega na uleganiu wpływowi następnego dźwięku po wypowiadanym. We frazie ten baloons wyraz ten będzie najprawdopodobniej brzmiał /tɛm/, ulegając następującej po /n/ spółgłosce dwuwargowej /b/. Zwrot good night w szybkiej mowie wypowiadany będzie /gʊnaɪt/, a nawet /gnaɪt/, co odzwierciedla spotykaną niekiedy pisownię g’night.
+
+Asymilacja progresywna (postępująca) polega na uleganiu przez dźwięk wpływowi poprzedniego dźwięku. I tak w wariancie Received Pronunciation zwrot bridge score będzie wymawiany /brɪdʒ ʃkɔː/ z uwagi na wpływ dziąsłowej wymowy końcówki wyrazu bridge. Podobnie nazwa Church Street wymawiana będzie /tʃɜːtʃ ʃtriːt/.
+
+Istnieje inna możliwość asymilacji, zwana coalescence – wzajemny wpływ, kiedy dwa dźwięki łączą się w jeden nowy segment. I tak w zwrocie won’t she /wəʊnt ʃiː/ kończące won’t /t/ połączy się z she tworząc nową jakość /tʃ/, a wymowa brzmiała będzie /wəʊntʃiː/.
+
+Przydech
+
+Jeśli spółgłoski zwarte bezdźwięczne /p/, /t/ lub /k/ występują przed samogłoską akcentowaną, wymawiane są z postaspiracją, czyli przydechem. Jest to możliwe wyłącznie, kiedy przed wymienionymi spółgłoskami nie stoi /s/:
+
+Należy pamiętać, że przydech w języku angielskim nie pojawia się tylko i wyłącznie na początku wyrazu, ale także w nagłosie sylaby w środku wyrazu, dlatego zjawisko to można spotkać również w takich słowach jak distaste [dɪsˈtʰeɪst] czy return [rɪˈtʰɜːn], ale nie w distand [dɪˈstɛnd] czy respond [rɪˈspɒnd], ponieważ w tych drugich w nagłosie sylaby występuje głoska /s/.
+
+Plozja
+
+Plozja, inaczej wybuch, to dość gwałtowne uwolnienie sprężonego strumienia powietrza, potrzebne do artykulacji pewnego typu spółgłosek: /p/, /b/, /t/, /d/, /k/, /g/. Z reguły unika się kumulowania plozji, np. w języku polskim nie wymawia się dwóch pełnych d w wyrazie oddać. W języku angielskim, gdy spotykają się dwie głoski zwarte (wybuchowe), pierwsza spółgłoska zwykle zastaje całkowicie pozbawiona plozji (język nie odrywa się, ale jest przytrzymywany w miejscu artykulacji), po czym bezgłośnie przechodzi do drugiej spółgłoski, by zakończyć ją wybuchem. Plozja zanika, gdy spotykają się spółgłoski obu poniżej przedstawionych grup:
+
+Reguła ta obowiązuje również na granicy wyrazów, np. what time /wɒt‿taɪm/. Siła plozji jest o wiele mniejsza, kiedy po spółgłosce wybuchowej następuje sylaba nieakcentowana Różnica ta może mieć wartość fonemiczną, np. we frazie big boy /bɪg‿bɔɪ/ wymówienie plozji po /g/ może spowodować efekt bardzo podobny do bigger boy /bɪgə bɔɪ/. Obecność szwa powoduje, że artykułuje się plozję po /g/.
+
+Plozja występuje również w wariancie nosowym i polega ona na przerzuceniu miejsca wybuchu z warg na nos. Jeśli pierwsza głoska jest ustna, a druga nosowa, plozja zawsze będzie miała charakter nosowy: cabman /ˈkæb‿mən/.
+
+Oprócz wyżej wymienionych istnieje również plozja boczna, dotycząca złożenia /t/ + /l/ i /d/ + /l/, np. w wyrazie badly. Jej realizacja jest nieco inna niż w przypadku plozji wargowej czy nosowej: strumień powietrza jest uwalniany po bokach języka, na wysokości bocznych zębów szczęki. Przy wymawianiu język nie jest odrywany od wału dziąsłowego. Plozja dotyczy obu wariantów /l/, przy dark l jest nieco mniej energiczna.
+
+Głoski /t/ i /d/ są wymawiane bez wybuchu, gdy następną głoską jest spółgłoska zwarta (np. football), a także opcjonalnie jako ostatni dźwięk słowa czy frazy (co dotyczy też innych spółgłosek zwartych). Wówczas wyrazy typu bat i bad można rozróżnić tylko po długości samogłoski.
+
+Ubezdźwięcznienie
+
+Spółgłoski w języku angielskim można podzielić na dźwięczne i bezdźwięczne. Wbrew przekonaniom wielu cudzoziemców angielskie głoski dźwięczne nie zawsze zachowują pełną dźwięczność. O ile głoski bezdźwięczne na końcu wyrazów wypowiadane są mocno i wyraźnie (mocniej niż np. w języku polskim), końcowe spółgłoski dźwięczne wypowiada się słabo i cicho. W innych kontekstach fonetycznych głoski dźwięczne również mogą tracić na swej dźwięczności.
+
+Spółgłoski dźwięczne /b/, /d/, /g/, /v/, /dʒ/, /ð/ i /ʒ/ wymawia się całkowicie dźwięcznie tylko w kontekście udźwięczniającym, czyli jeśli graniczą z obu stron z samogłoskami lub innymi spółgłoskami dźwięcznymi – w innych przypadkach są częściowo ubezdźwięcznione. Zatem w myśl tej zasady zarówno /b/, jak i /g/ w wyrazie big /bɪg/ są częściowo bezdźwięczne i brzmią odpowiednio między /b/ i /p/ oraz /k/ i /g/. Jednak w przypadku wyrażenia big animal /bɪg ˈænɪməl/ spółgłoska /g/ znajduje się w kontekście udźwięczniającym i jest wypowiadana z pełną siłą.
+
+Pewne grupy obcokrajowców, m.in. rodzimi użytkownicy języka polskiego, często popełniają jednak błąd odwrotny – całkowite ubezdźwięcznienie spółgłosek, które, przynajmniej częściowo, zachowują swoją dźwięczność. Dotyczy to m.in. dźwięcznych spółgłosek na końcu wyrazu (np. bed, change, give, bridge, good, grabbed, cleaned) i w złożeniach (drugstore, godfather). Niemniej należy zaznaczyć, że dźwięczna spółgłoska na końcu wyrazu przejawia się przede wszystkim poprzez dłuższe wymawianie poprzedzającej samogłoski w porównaniu z samogłoską stojącą przed spółgłoską bezdźwięczną. Dźwięczność na końcu wyrazu występuje także w przypadku litery „s” pełniącej funkcję gramatyczną (np. tworzącej liczbę mnogą rzeczowników), czytanej jako /z/ po samogłosce lub dźwięcznej spółgłosce (np. dogs, weekends, toes, Paul’s, ours).
+
+Intonacja
+
+Podczas wypowiedzi naturalne jest różnicowanie tonu głosu. To różnicowanie tworzy specyficzną melodię – intonację. Intonacja może m.in. wyróżniać akcentowane słowa, pozwalać odróżnić pytania od stwierdzeń, sygnalizować koniec wypowiedzi bądź kontynuację czy ukazywać emocjonalną postawę mówcy. Dzięki odpowiedniej tonacji w krótkiej wypowiedzi można zawrzeć wiele treści, co zdaniem badacza angielskiej fonetyki Wiktora Jassema jest chętnie wykorzystywane przez niezbyt wielosłownych Anglików. I tak wypowiedź:
+
+Intonacja zdań oznajmujących jest opadająca. Nieco inaczej jest w pytaniach. Intonacja wznosząca, charakterystyczna np. dla pytań w języku polskim, występuje w angielszczyźnie przede wszystkim w pytaniach o rozstrzygnięcie (Yes/No questions). W przypadku pytań o uzupełnienie, zwanych również szczegółowymi lub wh-questions, intonacja na ogół opada, choć badania wykazują pewne zróżnicowania wśród Anglików w tym zakresie.
+
+Budowa linii melodycznej zdania
+
+Struktura zdania (lub każdej innej wypowiedzi) pod względem intonacyjnym jest stała i składa się z następujących elementów:
+
+Obowiązkowa jest tylko jedna część – nucleus. Najprostsza wypowiedź składa się tylko z jądra: Yes. So? Why? Shit! Jądro zdania dźwiga na sobie zmiany tonu, która to zmiana niesie większość ładunku emocjonalnego, tym samym jest najważniejszym elementem melodii intonacyjnej zdania. W przypadku zmiany linii melodycznej podział zdania ulega przegrupowaniu:
+
+Jak już wspomniano, obowiązkowym elementem w strukturze melodycznej zdania jest jedynie jądro. W przypadku wypowiedzi silnie emfatycznej, kiedy jądrem jest pierwsza sylaba wypowiedzi, cała reszta pełni funkcję ogona:
+
+Rodzaje melodii intonacyjnych
+
+Ciężar ładunku informacji zawartych w melodii intonacyjnej (ang. pitch) bierze na siebie samogłoska w sylabie akcentowanej, zwana jądrem (nucleus). Rozróżnia się następujące sposoby zachowania się jądra wypowiedzi pod względem przyjmowanej melodii:
+
+Intonacja wysoka może być długa, czyli przebiegać aż do dolnych rejestrów wypowiedzi, może być również krótka, czyli zatrzymać się w środku rejestru.
+
+Oto melodia wypowiedzi Yes i różne jej znaczenia w zależności od rodzaju melodii intonacyjnej:
+
+Intonacja opadająca
+
+Intonacja opadająca wysoka (high fall) wskazuje na zakończenie komunikatu: mówiący dostarczył wiadomość i nie ma nic więcej do dodania. Nic więcej nie kryje się za tym komunikatem, mówiący nie ma zamiaru kontynuować ani nie oczekuje odpowiedzi. Intonacja opadająca jest charakterystyczna dla zdań oznajmujących i dla odpowiedzi na pytania. Ponadto występuje w tzw. wh-questions – pytaniach konstruowanych z użyciem zaimków pytajnych (who, what, when, where, where, why, how), gdyż jest ukryte w nich pewne założenie. Przykładowo pytanie: When will the concert be held? → Kiedy odbędzie się koncert? zakłada, że koncert w ogóle się kiedyś odbędzie. Intonacja wznosząca w tego typu pytaniach może pojawić się, gdy mówca prosi o powtórzenie odpowiedzi, bo nie dosłyszał lub chce się upewnić, że dobrze zrozumiał.
+
+Intonacja opadająca będzie też użyta w poleceniach, jeśli mówiący spodziewa się, że słuchający wykona polecenie. Poza tym występuje w pytaniach rozłącznych (question tags), kiedy mówca jest pewny tego co mówi. Jednak w przypadku, kiedy nie jest i szuka potwierdzenia, występuje intonacja wznosząca, i w zależności od tej melodii różnie można zinterpretować intencję zdania typu: The Browns are coming, aren’t they? („no przecież przyjeżdżają, tak?” lub „zdaje się, że przyjeżdżają, nie mylę się?”).
+
+Kiedy intonacja dotyczy wyrazu jednosylabowego, melodia wypowiedzi opada gwałtownie a jej zmiana następuje w dźwięcznej części sylaby: Yes. No. Why? Kiedy wypowiedź składa się z kilku sylab, melodia sylaby akcentowanej opada wysoko, a sylab następujących – nisko lub utrzymuje się na tym samym poziomie: Maybe. Yes sir. Certainly.
+
+Sylaby przed zgłoską akcentowaną wydają się być na niższym poziomie niż sylaba akcentowana, aczkolwiek zwykle nie są. Where are you going? How much is it?
+
+Intonacja opadająca niska (low fall) wyraża „prawie zakończenie”. Melodia ta różni się od intonacji opadającej wysokiej tym, że sugeruje ciąg dalszy. I tak słowo certainly wypowiedziane z wysokim opadaniem wskazuje brak zainteresowania ze strony mówiącego, wypowiedziane z intonacją opadającą niską daje wrażenie zniecierpliwienia lub braku zainteresowania.
+
+Intonacja wznosząco-opadająca jest podkreśleniem tego samego, co wyraża intonacja opadająca wysoka.
+
+Pytania typu Why don’t you, np. Why don’t you look for a job? są prawdziwymi pytaniami, jeśli zadawane są z intonacją wysoką opadającą, natomiast jeśli użyta zostanie melodia wznosząco-opadająca, wtedy jest sugestią lub propozycją.
+
+Intonacja wznosząca
+
+Intonacja wznosząca wysoka jest przeciwieństwem intonacji opadającej wysokiej. Sugeruje, że przekaz jest niepospolity, nawet absurdalny albo zaprzecza temu, co zostało powiedziane poprzednio. Używana jest, aby poprosić o powtórzenie tego, co zostało właśnie powiedziane, ponadto jest powszechna w pytaniach o rozstrzygnięcie (yes-no questions). Takie pytania nie zawierają ukrytych założeń: Will there be a concert? → Czy będzie koncert?.
+
+Jeśli akcentowana sylaba nie jest pierwszą, podniesienie tonu zaczyna się od poziomu ostatniej nieakcentowanej sylaby. Wszystkie pozostałe sylaby kontynuują proces wznoszenia się:
+
+Intonacja wznosząca krótka może być prośbą o uwagę albo sygnałem, że mówiący oczekuje kontynuowania rozmowy. Pytanie really? wypowiedziane z intonacją wznoszącą wysoką w odpowiedzi na jakieś stwierdzenie, sugeruje wątpliwość albo zdziwienie w reakcji na to, co zostało powiedziane. To samo słowo wypowiedziane z intonacją wznoszącą krótką odebrane byłoby tylko jako okazanie zainteresowania.
+
+Intonacja wznosząca może występować także w stwierdzeniach, kiedy mówca wyraża jednocześnie niepewność lub jakąś wątpliwość.
+
+Odmianą tej melodii jest intonacja opadająco-wznosząca; jest to albo alternatywny sposób zadawania pytań o rozstrzygnięcie albo sygnalizowanie pewnej niezwykłości. Niejako łączy funkcje intonacji opadającej i wznoszącej – pozwala na stwierdzanie czegoś, a jednocześnie sugeruje, że można o tym powiedzieć coś więcej, w inny sposób zinterpretować; jest to prawda, ale niekoniecznie cała prawda.
+
+Intonacja w amerykańskim wariancie angielszczyzny
+
+Intonacja w amerykańskim wariancie angielszczyzny niewiele różni się od brytyjskiej – różnice polegają na nieco innej częstości występowania i pragmatycznym wyborze danego wzorca. Przykładowo w związku z na ogół większą ekspresywnością języka ciała w pytaniu typu: You’re going, then? może być zastosowana intonacja opadająca, niczym w stwierdzeniach, a jednak mimika (zamiast intonacji wznoszącej) może wskazywać, że mówca oczekuje potwierdzenia. Możliwe są też odwrotne sytuacje – zastosowanie intonacji wznoszącej w odpowiedziach, stwierdzeniach, co jest raczej nietypowe dla brytyjskiego wariantu, ale bywa spotykane także w australijskim i nowozelandzkim. Przykładowo opcjonalnie może być zastosowana w zdaniu: He went out because he was hot and wanted some fresh air.
+
+Zakres tonalny amerykańskiego wariantu angielszczyzny w porównaniu z brytyjską jest mniejszy. W związku z tym Brytyjczykom akcent amerykański może wydawać się monotonny, a Amerykanie mogą opisywać akcent brytyjski jako bardziej śpiewny.
+
+Wymowa a pisownia oraz porównanie wymowy wyrazów w RP i GA
+
+Sposób zapisu języka angielskiego nie pokrywa się ze sposobem, w jaki są wymawiane wypowiedzi w tym języku. Przysposobienie alfabetu łacińskiego powstało na potrzeby języka staroangielskiego. Język pisany nie był jednak w stanie spowalniać zmian zachodzących w wymowie ze względu na duży poziom analfabetyzmu. W XV–XVI w. w okresie języka średnioangielskiego nastąpiła wielka przesuwka samogłoskowa, która do dziś, we współczesnym języku angielskim jest głównym źródłem wielu niezgodności pisowni z wymową. Współczesna ortografia angielska nadal odzwierciedla sposób wymowy sprzed tych zmian i, zwłaszcza w wypadku samogłosek, nie uwzględnia wielu przekształceń na przestrzeni wieków. Język angielski ma zatem ortografię etymologiczną.
+
+Od XIX–XX w. wraz z rozprzestrzenieniem się piśmienności pojawiały się tendencje do stosowania pisowni zgodnej z wymową. Zauważalne stały się szczególnie z początkiem ery cyfrowej, a zwłaszcza w krótkich wiadomościach tekstowych.
+
+W przypadku pojedynczych słów lub pewnych grup słów zawierających określony formant występują niestandardowe różnice w ich wymowie między akcentem brytyjskim a amerykańskim. Przykładowo czasowniki i utworzone od nich rzeczowniki z przedrostkiem di– są wymawiane różnie pomiędzy tymi akcentami, a nawet w ich obrębie (/daɪ/ lub /dɪ/), np. direct, dissect. Pewne słowa mogą być różnie wypowiadane w obrębie danego akcentu jak np. greasy /ˈɡɹiːsi/ lub /ˈɡɹiːzi/, (n)either zawierające głoskę /aɪ/ lub /iː/.
+
+Przemiany głosek na przestrzeni wieków
+
+We współczesnym RP w porównaniu z językiem staroangielskim (OE) zaszły następujące zmiany w obrębie samogłosek:
+
+W przypadku spółgłosek nastąpiły następujące zmiany:
+
+W anglojęzycznym kinie przyjęło się, że w filmach fantasy używa się akcentów brytyjskich, zwłaszcza RP. Wynika to m.in. z faktu, że przedstawiając świat z czasów, kiedy ludzie żyli w chatach lub zamkach, podróżowali konno i walczyli mieczem, naturalniejsze wydaje się odwołanie do akcentów związanych z Wielką Brytanią, krajem o długiej historii, zamiast prezentować akcenty amerykańskiej angielszczyzny, która nie istniała w czasach średniowiecznych. Mimo to należy mieć na uwadze, że w rzeczywistości nikt wówczas nie posługiwał się również taką wymową, jaką zakładają współczesne brytyjskie akcenty. Amerykańska angielszczyzna jest, ogólnie rzecz biorąc, bardziej konserwatywna niż brytyjska, co widoczne jest m.in. w wymowie „r”, a zatem to amerykański wariant nieco bardziej przypomina średniowieczną angielszczyznę.
+
+Różnice między wariantami angielszczyzny
+
+Opis cech danego wariantu angielszczyzny zakłada generalizację – istnieją pewne różnice w wymowie między osobami, o których mówi się, że posługują się np. szkocką czy amerykańską odmianą angielszczyzny. Nie można dokonywać uogólnień na podstawie mowy pojedynczych mówców. Rodzimi użytkownicy języka angielskiego nie zawsze potrafią trafnie rozpoznać odmiany angielszczyzny. Przykładowo niewielu Brytyjczyków potrafi odróżnić wariant kanadyjski od innych amerykańskich lub wariant australijski od nowozelandzkiego.
+
+Szacuje się, że różnice w wymowie głosek w różnych akcentach języka angielskiego są odpowiedzialne za nieco ponad ¼ przypadków nieprawidłowego zrozumienia mówionego komunikatu. Za niektóre te przypadki odpowiedzialne są stałe różnice w wymowie głosek poszczególnych akcentów, ale znakomita większość związana jest z aktualnie zachodzącymi zmianami w wymowie głosek w danym akcencie. Największa grupa pomyłek związana z różnicami w akcentach dotyczy cot-caught merger.
+
+Jedną z najbardziej wyrazistych cech różnych akcentów języka angielskiego jest występowanie rotyzacji lub jej brak. Uogólniając, można przyjąć, że rotyczne akcenty występują w Ameryce Północnej, Irlandii i Szkocji, a nierotyczne w Anglii, Walii i w akcentach południowej półkuli. Jednak w Ameryce zdarzają się także akcenty nierotyczne (Boston, Nowy Jork), a w Anglii, Walii, Nowej Zelandii – rotyczne. Poniżej przedstawiono podstawowe różnice między wariantem RP a wersjami regionalnymi języka.
+
+Angielszczyzna amerykańska
+
+Brytyjski i amerykański wariant języka angielskiego różnią się od siebie pod wieloma względami, zwłaszcza systemem samogłosek, ale w przypadku intonacji, rytmu i artykulacji spółgłosek (poza /r/ i /t/) różnice te są zasadniczo niewielkie.
+
+Istnieją dwa główne obszary różnic między RP a General American w zakresie wymowy. Pierwsza związana jest z rotyzacją, a druga z brakiem w GA samogłoski /ɒ/.
+
+W odmianie amerykańskiej nie używa się dyftongów /ɪə/, /eə/, /ʊə/ ani długiej samogłoski /ɜː/, które odpowiadają połączeniu samogłoski i /r/, np. beard /bɪrd/, fare /fɛr/, dour /dʊr/. Ma to związek z rotycznością tych akcentów – GA jest akcentem rotycznym, a RP nierotycznym, gdzie /r/ występuje zasadniczo tylko w pozycji przed samogłoskami. Sama spółgłoska /r/ może w wymowie amerykańskiej być wymawiana w alternatywny dla RP sposób, z czubkiem języka cofniętym jeszcze dalej w głąb jamy ustnej (/ɻ/).
+
+W kontekstach, gdzie w RP używane jest akcentowane /ɜː/ i nieakcentowane /ə/ w związku z niewymawianiem /r/, w GA występują samogłoski wykazujące rotyczność, odpowiednio /ɝ/ i /ɚ/. Porównaj: RP: bird /bɜːd/, early /ˈɜːli /, journey /ˈdʒɜːni/ /, later / ˈleɪtə/, solar /ˈsəʊlə/; w GA odpowiednio: /bɝd/, /ˈɝːli/, /ˈdʒɝni/, /ˈleɪt̬ɚ/, /ˈsoʊlɚ/. Natomiast w kontekstach, gdzie w RP używane są dyftongi centrujące w związku z niewymawianiem /r/, w GA wymawia się [ɹ] po samogłosce, np. here /hɪə/ w RP, ale /hɪɹ/ w GA.
+
+Drugim obszarem zasadniczych różnic jest to, że w odmianie amerykańskiej nie ma samogłoski /ɒ/. Najczęściej jego odpowiednikiem jest /ɑː/, np. cod, bottle, spot, pocket. Jednak pewien podzbiór wymienia /ɒ/ na /ɔː/, np. across, gone, often, orange, porridge. Co więcej, coraz większa liczba osób posługująca się GA oraz większość używających odmiany kanadyjskej łączy /ɔː/ i /ɑː/, dla nich takie wyrazy jak cod, calm i cause będą miały taką samą samogłoskę /ɑː/ (cot–caught merger).
+
+Inną zasadniczą różnicą jest występowanie w odmianie amerykańskiej /æ/ tam, gdzie Brytyjczycy wymawiają /ɑː/, i tak słowa after, plant będą w RP wymawiane /ˈɑːftə/, /plɑːnt/ a w amerykańskim angielskim /ˈæftɚ/, /plænt/. Ta zmiana zwykle odbywa się w odpowiednim kontekście fonetycznym, a mianowicie, gdy następuje po niej bezdźwięczna spółgłoska szczelinowa lub też spółgłoska nosową, po której następuje inna spółgłoska.
+
+Spółgłoskę /l/ w odmianie amerykańskiej wymawia się jako ciemne l (ɫ) we wszystkich pozycjach. Nie ma jasnego l jak w RP, gdzie występuje ono w pozycji przed samogłoskami.
+
+W amerykańskim wariancie spółgłoski /t/ i /d/ w pewnych kontekstach fonetycznych brzmią jak brytyjskie odpowiedniki, w innych zaś, zwłaszcza w mowie o normalnym, szybkim tempie, stają się samogłoskami uderzeniowymi, są wymawiane poprzez szybkie pojedyncze przesunięcie języka po wale dziąsłowym – jako głoska zbliżona do /ɾ/ oznaczana też jako /t̬/ (flap). Taka spółgłoska uderzeniowa występuje w amerykańskim angielskim w następujących sytuacjach:
+
+Tego typu uderzeniowa spółgłoska może występować także w pozycji przed sylabotwórczym l, np. beetle, little, middle, model. Poza tym spółgłoski /t/ i /d/ mają tendencję, by zanikać całkowicie po spółgłoskach nosowych /m/, /n/, /ŋ/, np. twenty wymowa, wanted, dentist, understand (wymawiane niczym unnerstann).
+
+W pewnych kontekstach, gdzie w brytyjskim wariancie występuje /juː/, w amerykańskim na ogół zanika /j/, pozostawiając samo /uː/ (yod-dropping). Ma to miejsce w następujących sytuacjach:
+
+W amerykańskich akcentach istnieje również zjawisko zwane Northern Cities Shift (przesuwka miast północnych), aczkolwiek nie ogranicza się ono do tych terenów. Dotyczy ono krótkich samogłosek, przede wszystkim /æ/, które staje się bliższe /ɛ/, /ɛə/, a nawet /e/, /eə/.
+
+Angielszczyzna kanadyjska
+
+Różnice zależą od położenia geograficznego, pochodzenia i przynależności do klasy społecznej. Bliskość USA powoduje, że Kanadyjczycy otwarci są na wzorce i nowinki amerykańskie, choć istnieją również tendencje do zachowania maksymalnej możliwej odrębności. Kanadyjskie cechy wymowy zaczerpnięte z wymowy amerykańskiej to:
+
+Wpływy brytyjskie w wymowie przejawiają się w następujący sposób:
+
+Angielszczyzna australijska
+
+Istnieją trzy rodzaje akcentu australijskiego: broad, general i cultivated. Broad to kontinuum akcentów lokalnych, cultivated przypomina akcenty brytyjskie i jest ich naśladownictwem, wreszcie general to wariant pośredni między obydwoma wersjami i jest najczęściej używany. Akcent broad ma tendencje przesuwania samogłosek do pozycji frontowej, w stronę /i/, /e/ i /æ/, podczas gdy pozostałe akcenty preferują wymowę tylną.
+
+Podstawą uznania australijskiej wymowy za odrębny system jest system samogłoskowy, a szczególnie sposób, w jaki realizuje się dyftongi. System spółgłoskowy zbliżony jest do RP z niewielkimi odstępstwami.
+
+Angielszczyzna południowoafrykańska
+
+Istnieje kontinuum akcentów. Na jednym biegunie są potomkowie brytyjskich emigrantów, których akcenty są zbliżone do BBC English, na drugim zaś akcenty klasy robotniczej, często o pochodzeniu afrykanerskim. Między nimi istnieje wiele akcentów, coraz częściej słyszalnych w radio i telewizji. Oto najważniejsze cechy wymowy południowoafrykanskiej:
+
+Angielszczyzna karaibska
+
+System samogłoskowy angielszczyzny karaibskiej odbiega od wymowy RP czy wariantów amerykańskich. System samogłoskowy jest bardzo ograniczony (patrz diagram), w użyciu jest tylko 12 fonemów w miejsce dwudziestu w RP:
+
+Efektem takiego systemu jest fakt, że wiele wyrazów brzmi homofonicznie z innymi w porównaniu z angielszczyzną brytyjską lub amerykańską. Zatem den oznaczać może den lub then, /rat/ oznacza rot lub rat.
+
+Angielszczyzna irlandzka
+
+Istnieje kilka cech odróżniających angielszczyznę irlandzką od standardu RP, dotyczących długości samogłosek, zaokrąglenia warg itp.:
+
+Angielszczyzna indyjska
+
+Angielska wymowa w Indiach z przyczyn historycznych pozostawała pod wpływem Received Pronunciation i jest zróżnicowana pod względem terytorialnym.
+
+Spółgłoski
+
+Oto podstawowe różnice między standardową odmianą indyjską a RP:
+
+Samogłoski
+
+Angielszczyzna szkocka
+
+Istnieje kilka znaczących różnic odróżniających angielski mówiony w Szkocji od RP, przy czym nie ma jednorodnego szkockiego akcentu i zmiany mogą się różnić lokalnie. Oto największe różnice w stosunku do RP:
+
+Angielszczyzna walijska
+
+Wymowę walijską cechują następujące zjawiska:

@@ -1,0 +1,183 @@
+Afera Cambridge Analytica
+
+Afera Cambridge Analytica – skandal polityczny, który miał miejsce w drugiej dekadzie XXI wieku. Dane osobowe około 87 milionów użytkowników Facebooka zostały zebrane bez ich zgody i wiedzy przez brytyjską firmę konsultingową Cambridge Analytica, głównie w celu targetowania reklam politycznych. Sprawa została po raz pierwszy ujawniona w 2015 roku, a jej kulminacją były zeznania Christophera Wylie’a w 2018 roku.
+
+Dane były zbierane za pomocą stworzonej w 2013 roku przez Global Science Research aplikacji „This Is Your Digital Life”, należącej do Aleksandra Kogana. Aplikacja, poprzez zadawanie pytań, miała na celu skomponowanie profilów psychologicznych jej użytkowników oraz zbieranie danych na temat znajomych użytkowników Facebooka poprzez użycie Facebook Open Graph. Wyniki ankiety były później obliczane metodą opracowaną przez Michała Kosińskiego, wykorzystaną bez jego wiedzy i zgody.
+
+Cambridge Analytica wspierała kampanie polityczne Donalda Trumpa i Teda Cruza w 2016 roku, wykorzystując tak zebrane dane. Firma była również oskarżana o wpływanie na wyniki Brexitu, wspierając ruchy takie jak Leave.EU. Chociaż niektórzy byli pracownicy firmy twierdzili, że Cambridge Analytica miała znaczący wpływ na te kampanie, oficjalne śledztwo przeprowadzone przez brytyjskiego komisarza ds. informacji (ICO) nie potwierdziło wielu z tych oskarżeń, stwierdzając, że firma nie była zaangażowana w sposób znaczący poza podstawowymi operacjami. Wykorzystanie zebranych danych również w państwach afrykańskich, gdzie od lat występowały zamieszki spowodowane wynikami wyborów, przyniosło dotkliwe skutki – między innymi w Nigerii sam sposób promowania kandydatury Goodlucka Jonathana w 2015 roku budził wiele kontrowersji, zaś w Kenii po wybraniu Uhuru Kenyatty w 2017 roku wybuchły protesty, w których od kul policji zginęło 11 osób.
+
+Skutkiem skandalu był ruch #DeleteFacebook, który zdobył dużą popularność na Twitterze. W samych Stanach Zjednoczonych, 54% użytkowników przyjrzało się swoim ustawieniom prywatności konta na Facebooku, 42% użytkowników ograniczyło sobie dostęp do serwisu na pewien czas, zaś 26% ankietowanych usunęło aplikację ze swoich telefonów. 8% użytkowników zrezygnowało także z posiadania konta w serwisie. Na Facebooka nałożono również dwie kary finansowe – z czego pierwsza, nałożona w lipcu 2019 roku przez Federalną Komisję Handlu wynosiła 5 miliardów dolarów, a druga, nałożona przez Urząd Ochrony Danych Osobowych Wielkiej Brytanii kilka miesięcy później, wynosiła 500 tysięcy funtów.
+
+Omówienie
+
+W 2010 roku uruchomiono nowy interfejs programistyczny o nazwie Open Graph. Trzy lata później Aleksandr Kogan został zatrudniony przez Cambridge Analytica, firmę zależną od SCL Elections, żeby utworzyć aplikację nazwaną „This Is Your Digital Life”. Zaczęto również pozyskiwanie użytkowników Facebooka, którzy mieli wypełnić płatną ankietę „dla celów naukowych”. Podczas trwającego od kwietnia 2014 roku okresu przejściowego, w którym programiści mieli przenieść swoje aplikacje na nową (oraz bardziej restrykcyjną) wersję Graph API, aplikacja mogła zbierać dane nie tylko na temat samych respondentów, ale też ich znajomych. W ten sposób Cambridge Analytica zebrała dane o milionach użytkowników. Jedną z firm, która wspomogła proces rekrutacji, była Qualtrics, werbując w ten sposób około 200 tysięcy osób. Respondent za wypełnienie ankiety otrzymywał 4 dolary.
+
+Zbieranie danych osobowych przez Cambridge Analytica zostało ujawnione po raz pierwszy w grudniu 2015 roku przez Harry’ego Daviesa, dziennikarza „The Guardiana”. Według jego doniesień firma współpracowała z senatorem USA Tedem Cruzem, wykorzystując dane o milionach użytkowników Facebooka, zebranych bez ich wiedzy. Kolejne doniesienia opublikowano w listopadzie 2016 roku (McKenzie Funk) w „New York Times Sunday Review”, w grudniu 2016 roku (Hannes Grasseger oraz Mikael Krogerus) w Das Magazin, przetłumaczone później przez „Vice”, w lutym 2017 roku przez Carole Cadwalladr w „The Guardian”, oraz w marcu 2017 roku (Mattathias Schwartz) w „The Intercept”. Według PolitiFactu, w swojej kampanii prezydenckiej z 2016 roku Donald Trump wykorzystywał dane o preferencjach politycznych Amerykanów, otrzymanych od Cambridge Analytica.
+
+Nasza demokracja jest martwa, nasze prawo jest martwe, i nie jestem jedyną osobą, która wypowiada te słowa. Nasz rząd opublikował raport zawierający dokładnie te słowa. Technologia, którą wynaleźliście, była świetna. Ale teraz jest jednym wielkim miejscem zbrodni. Wy posiadacie dowody tej zbrodni. I nie wystarczy nam wszystkim powiedzieć, że się zmienicie na lepsze. Jeżeli chcecie wyrobić w nas nadzieję, że sytuacja kiedykolwiek ulegnie zmianie, musimy poznać prawdę.
+
+Informacje na temat wycieku danych zostały ostatecznie zweryfikowane w marcu 2018 roku po otrzymaniu wskazówek od Christophera Wylie – sygnalisty oraz byłego pracownika Cambridge Analytica. Od 2017 roku anonimowo dostarczał informacje redakcji „The Observera”. Autorka artykułu, Carole Cadwalladr, zachęcała go do ujawnienia się jako sygnalisty przez następny rok, pomimo sprzeciwów Cambridge Analytica, a później również Facebooka. Ona sama ujawniła również wezwania przedsądowe skierowane do redakcji „The Guardian” oraz „The Observer” w Channel 4 News i „The New York Times”. Ewentualny proces sądowy mógł kosztować redakcję od 20 do 30 tysięcy funtów. Żeby załagodzić potencjalne reperkusje, postanowiono nawiązać współpracę z amerykańskim „The New York Timesem”. Cadwalladr nie była początkowo temu przychylna, jednak zgodziła się po tym, gdy zaproponowano przedstawienie jej jako współautorki artykułu dla amerykańskiego czasopisma. Za opublikowanie serii reportaży o skandalu zarówno ona, jak i redakcja „The New York Timesa” otrzymały nagrodę Pulitzera w 2019 roku. Carole Cadwalladr wzięła także udział na konferencji TED w kwietniu 2019 roku, oskarżając dyrektorów generalnych Facebooka, Google’a oraz Twittera o „niszczenie demokracji”. Jej przemowa została potem wyróżniona w rankingu 10 najlepszych wystąpień w 2019 roku przez Chrisa Andersona, jednego z kuratorów TEDa.
+
+Redakcje „The Guardian” i „The New York Times” opublikowały artykuły tego samego dnia, tj. 17 marca 2018 roku. Facebook stracił w przeciągu zaledwie kilku dni ponad 100 miliardów dolarów wartości rynkowej, a politycy ze Stanów Zjednoczonych i Wielkiej Brytanii domagali się wyjaśnień od założyciela Facebooka, Marka Zuckerberga. Szeroka krytyka ze strony mediów sprawiła, że zeznawał przed Kongresem USA. Meghan McCain, korzystając z okazji, stwierdziła, że kampania polityczna Baracka Obamy z 2012 roku wykorzystywała techniki znane z kampanii Donalda Trumpa. Według Politifactu, mimo tego, że kampania Obamy także wykorzystywała Facebooka, to aplikacja stworzona na tę okazję zawierała informacje, jak można wesprzeć kampanię Obamy. Większość zarejestrowanych w aplikacji wyraziła zgodę na przetwarzanie danych, ponieważ użytkownicy (ale nie ich znajomi) wiedzieli, w jakich celach tak się będzie działo. Aplikacja Aleksandra Kogana takich wskazówek nie posiadała, i co więcej, była reklamowana jako quiz, z którego dane zostaną później wykorzystane przez naukowców Uniwersytetu Cambridge.
+
+Między listopadem 2017 roku a styczniem 2018 roku dokonywano prowokacji, w której dziennikarz śledczy kanału telewizyjnego Channel 4 pod przykrywką osoby zainteresowanej wpływaniem na wyniki wyborów w Sri Lance potajemnie nagrywał wypowiedzi kierowników firmy konsultingowej. Oferowali oni m.in. usługi uruchomienia fałszywych stron internetowych czy podszywania się pod inne osoby. Dyrektorzy zarówno Cambridge Analytica, jak i jej spółki macierzystej (SCL) chwalili się także, że pracowali przy organizacji ponad dwustu kampanii wyborczych, między innymi w Nigerii, Kenii, Czechach, Indiach i Argentynie. Zgodnie z wypowiedziami Nixa, Cambridge Analytica miała również oferować „zapraszanie ukraińskich dziewcząt do domu kandydata”, ponieważ te są „bardzo piękne” i „świetnie pracują”, a także nagrywanie i promowanie kampanii politycznej „w zamian za ziemię”. Kandydaci, którzy współpracowali z firmą konsultingową, byli zależni od decyzji podejmowanych przez Cambridge Analytica. W ramach śledztwa ujawniono również, że Cambridge Analytica posługiwała się specjalnie skonstruowaną usługą poczty elektronicznej, która po dwóch godzinach wysyłała żądania obustronnego usunięcia wiadomości.
+
+Po publikacji reportażu, Cambridge Analytica zaprzeczała tym doniesieniom, wydając 19 marca 2018 roku oświadczenie. Stwierdzono w nim, że artykuł opublikowany na łamach Channel 4 fałszował sposób, w jaki firma prowadziła działalność. Dziennikarzowi śledczemu powiedziano również, że firma nie zajmuje się rozpowszechnianiem fake newsów, a słowa wypowiedziane przez dyrektorów miały być traktowane jako żart. Nix przeprosił swoich pracowników za tę sytuację, obarczając winą samego siebie:
+
+Żałuję, że zgodziłem się na spotkanie, za które już przeprosiłem swoich pracowników. Powinienem był zauważyć, że potencjalny klient mógł nas podpuszczać. Mogłem z nim zerwać wszelkie relacje o wiele wcześniej.
+
+W oświadczeniu wspomniano także o ocenie ryzyka, w ramach której przeprowadzane są rozmowy kontrolne z potencjalnymi nowymi klientami. Oficjalnie miało to na celu wykluczenie wszelkich nieetycznych czy nielegalnych intencji. Dzień po publikacji oświadczenia Nix został usunięty ze swojej funkcji, a Sąd Najwyższy Zjednoczonego Królestwa wydał nakaz przeszukania biur Cambridge Analytica. W wyniku afery nowym dyrektorem generalnym został Julian Wheatland.
+
+Charakterystyka danych
+
+Liczby
+
+Redakcje „Wired”, „The New York Times”, oraz „The Observer” poinformowały, że dane dotyczyły 50 milionów użytkowników Facebooka. Chociaż Cambridge Analytica zapewniała, że liczba ta wynosiła zaledwie 30 milionów, Facebook potwierdził, że sprawa mogła dotyczyć nawet 87 milionów użytkowników, z czego znaczna większość (70,6 mln użytkowników) pochodziła ze Stanów Zjednoczonych. Podkreślono, że Kalifornia była stanem, z którego pochodziło najwięcej użytkowników dotkniętych aferą (6,7 mln użytkowników), następnie były to Teksas (5,6 mln użytkowników) i Floryda (4,3 mln użytkowników). Afera dotyczyła również danych 57 tysięcy Polaków. Aplikację zgodnie z danymi Facebooka pobrało zaledwie 270 tysięcy osób, podczas gdy jedno z anonimowych źródeł wskazało na jedynie 185 tysięcy użytkowników.
+
+Informacje
+
+Facebook rozesłał wiadomość do osób, które mogły być objęte niniejszym skandalem, twierdząc, że dane przesłane do Cambridge Analytica mogły zawierać „profil publiczny, polubienia stron, datę urodzin oraz miejsce zamieszkania”. Niektórzy użytkownicy aplikacji nadali uprawnienia również do dostępu do własnej osi czasu i wiadomości. Dane były tak dokładne, że można było utworzyć szczegółowe profile psychologiczne tych osób. Zawierały one pozycje każdego z użytkowników. Dla poszczególnych kampanii politycznych, informacje pozyskane z profili mogły sugerować, który rodzaj reklamy byłby najskuteczniejszy dla danej osoby w poszczególnym miejscu podczas wybranego wydarzenia politycznego.
+
+Użycie danych z podziałem na państwa i wydarzenia
+
+Omówienie wykorzystanej metody
+
+Metoda wykorzystana przez Cambridge Analytica została stworzona przez doktora Michała Kosińskiego, który chciał ukazać niebezpieczeństwa związane z big data. Pierwsze prace miały miejsce już w 2008 roku, gdy powstała aplikacja o nazwie MyPersonality. W toku badań stwierdzono, że automatyczne profilowanie użytkowników na podstawie samej aktywności na Facebooku może znacznie wpłynąć na ich jakość życia. Poprawne przewidzenie dalszych działań poszczególnego użytkownika mogło zostać osiągnięte w drodze analizy jedynie 300 polubień. Model zbudowany na podstawie danych 58 tysięcy wolontariuszy był w stanie rozróżnić homo- i heteroseksualistów w 88% przypadków, Afroamerykanów oraz Amerykanów rasy kaukaskiej w 95% przypadków, oraz wyborców Partii Demokratycznej i Republikańskiej w 85% przypadków. Facebook, który początkowo zagroził Kosińskiemu pozwem, ostatecznie złożył wniosek o opatentowanie niniejszej metody 10 września 2012 roku. W zbliżony sposób działanie metody opracowanej przez Kosińskiego prezentuje projekt Uniwersytetu Cambridge pod nazwą „Apply Magic Sauce”.
+
+W 2014 roku Aleksander Kogan, pracujący dla Strategic Communications Laboratories (SCL), podjął próbę kontaktu z Kosińskim, chcąc uzyskać dostęp do tej metody. Ze względu na jej bardzo dużą efektywność, Kosiński odrzucił propozycję współpracy, ponieważ firma wyrażała chęć wpływania na wyniki wyborcze. W późniejszym czasie okazało się, że SCL był zarejestrowany w krajach uznawanych za raje podatkowe oraz aktywnie działał w Afganistanie, tworząc metody manipulacji psychologicznej dla NATO. Gdy stwierdzono, że model mógł zostać skopiowany przez Kogana bez uzgodnienia warunków, Kosiński zerwał kontakt z Koganem, informując o zdarzeniu dyrekcję uniwersytetu.
+
+Polska
+
+W 2018 roku „The Guardian” doniósł o wygranej w wyborach prezydenckich Andrzeja Dudy w dużym stopniu dzięki kampanii na Facebooku. Polska prasa zinterpretowała to jako dowód na współpracę jego ekipy z Cambridge Analytica. Andrzej Duda na konferencji prasowej w Kowalewie Pomorskim zaprzeczył tym doniesieniom, twierdząc, że nie korzystał z usług zewnętrznych firm takich jak Cambridge Analytica do promocji swojej kandydatury w 2015 roku.
+
+Stany Zjednoczone
+
+Kampania Teda Cruza
+
+W 2016 roku senator Ted Cruz zatrudnił Cambridge Analytica do pomocy przy jego kampanii prezydenckiej. Federalna Komisja Wyborcza odnotowała wydatek w wysokości 5,8 mln dolarów. O ile Cambridge Analytica nie była znana w tamtym czasie, to zakłada się, że przynajmniej od tego momentu już tworzyła indywidualne profile psychologiczne. Pozyskane dane były później używane w reklamach spersonalizowanych dla poszczególnych osób, które miały na celu zachęcić do oddania głosu na Cruza.
+
+Kampania Donalda Trumpa (2016)
+
+Dla celów kampanii prezydenckiej Donalda Trumpa z 2016 roku wykorzystano zebrane dane do budowania profili psychologicznych, ustalając osobowości potencjalnych wyborców na podstawie aktywności na Facebooku. Nagłówki w reklamach zostały później dopasowywane pod te osoby na różnych platformach internetowych. Reklamy były podzielone na różne kategorie, głównie na podstawie tego, kto popierał Trumpa, a kto był niezdecydowany. Według prezesa Cambridge Analytica kluczowe było ustalenie tożsamości osób, które potencjalnie chciałyby oddać głos na swojego klienta, lub być zniechęconym do oddania głosu na przeciwnika. Popierający Trumpa otrzymywali wizualizacje ukazującego go jako zwycięzcę oraz informacje o punktach wyborczych, zaś ci niezdecydowani otrzymywali reklamy pokazujące wizerunki wpływowych osób popierających Donalda Trumpa, jak i kąśliwe uwagi w stronę jego oponentki, Hillary Clinton. Przykładowo, zebrane dane służyły do uruchomienia kampanii promocyjnej, zatytułowanej „Make America Number 1 Super PAC” atakującej Clinton za pomocą reklam oskarżających ją o korupcję w Clinton Foundation.
+
+Po wygranej Donalda Trumpa w wyborach, Joel Kaplan, konserwatywny polityk i lobbysta na zlecenie Facebooka, sprzeciwiał się blokowaniu kont publikujących fake newsy.
+
+Brittany Kaiser, jedna z byłych pracownic w Cambridge Analytica, została zapytana o to, czy istnieją niezbite dowody na użycie danych pochodzących od użytkowników Facebooka do uruchomienia kampanii wyborczych Donalda Trumpa. Odpowiedziała, że „udzielenie jednoznacznej odpowiedzi na to pytanie nie jest możliwe, ponieważ wymagałoby to dogłębnej analizy bazy danych, co może być skomplikowanym procesem”.
+
+Kenia
+
+Cambridge Analytica była aktywna w Kenii w 2013 oraz 2017 roku. Ingerencje w wybory prezydenckie w Kenii z 2017 roku zostały odnotowane zaledwie na kilka tygodni przed dniem wyborów za sprawą kampanii pod nazwą „The Real Raila”. O ile nie było wiadomym, kto był oryginalnym autorem spotu atakującego Raila Odingę, wielu kenijskich użytkowników mediów społecznościowych wskazało, że za kampanię odpowiedzialna jest najprawdopodobniej Cambridge Analytica. Skutkiem wybrania Uhuru Kenyatty na drugą kadencję w 2017 roku były demonstracje, w których od kul policji zginęło 11 osób.
+
+W marcu 2018 roku Norman Magaya z partii National Super Alliance oskarżył Cambridge Analytica oraz ówcześnie rządzącą partię Jubilee o „naruszanie woli obywateli”, wzywając do przeprowadzenia „pełnego śledztwa”. W tym samym czasie ujawniono dowody, w których Cambridge Analytica podjęła się zmiany wizerunku partii rządzącej, a także przeprowadziła dwukrotnie ankietę na 50 tysiącach Kenijczyków.
+
+Nigeria
+
+Jedna z broszur sprzed 2014 roku wydanych przez SCL Elections, spółkę matkę Cambridge Analytica, wskazywała na działania w Nigerii mające na celu osłabienie politycznej opozycji. W kwietniu 2007 roku, podczas tamtejszych wyborów prezydenckich i parlamentarnych, obserwatorzy apelowali o unieważnienie wyników i przeprowadzenie nowych wyborów w ciągu maksymalnie trzech miesięcy, uznając oficjalne wyniki za mało wiarygodne. Potwierdzono również śmierć 200 osób, w tym głosujących, policjantów, oraz kandydatów.
+
+Już w Nigerii od 15 lutego 2015 roku. Ciemno. Strasznie. I niepewnie. Szariat dla wszystkich. Jak wyglądałaby Nigeria, gdyby szariat został wprowadzony za rządów Buhariego? [...] Buhari ukara wszystkich, którzy odważą się przeciwstawić jego reżimowi, a kobiety będą musiały nosić hidżaby. Możesz to jeszcze powstrzymać.
+
+W 2015 roku firma została zatrudniona przez nigeryjskiego miliardera, który zamierzał zorganizować potajemną kampanię wartą 2 miliony dolarów, mającą na celu zapewnienie Goodluckowi Jonathanowi reelekcji. W tej kampanii zostały wykorzystane e-maile pochodzące od izraelskiej grupy Black Cube mimo protestów pracowników Cambridge Analytica, a także dokumentację medyczną Buhariego, również pozyskaną przez tę samą grupę. Jeden ze spotów wyborczych atakujących oponenta Muhammada Buhariego sugerował, że gdyby Buhari został wybrany na prezydenta, to ten wprowadziłby szariat. W ponad minutowym materiale (patrz transkrypt po prawej) zostały również wykorzystane nagrania ukazujące odcięte nogi u ludzi, zabójstwa za pomocą maczet, palenie ludzi żywcem oraz teksty sugerujące, że „muzułmanie są mordercami”.
+
+Żeby zapobiec ewentualnej powtórce wydarzeń z 2007 roku, John Kerry, ówczesny sekretarz stanu USA, odwiedził Nigerię 25 stycznia 2015 roku, aby zachęcać do przeprowadzenia wyborów w sposób pokojowy. Ostrzegł też, że osoby, które dopuszczają się aktów przemocy w trakcie wyborów, mogą napotkać trudności w uzyskaniu wizy do Stanów Zjednoczonych. Wizyta sekretarza stanu USA okazała się być wystarczającym krokiem do powstrzymania eskalacji napięć i mimo starań Cambridge Analytica, Muhammad Buhari wygrał wybory.
+
+Rzecznik prasowy firmy konsultingowej uznał powyższe oskarżenia za komentarze Christophera Wyliego, które się „okazały być fałszywymi zeznaniami”, jednak przyznał później, że takie oskarżenia są „traktowane bardzo poważnie” i „uruchomione zostało wewnętrzne dochodzenie”.
+
+Wykorzystanie usług Cambridge Analytica w trakcie brexitu
+
+Istnieją podejrzenia, że Cambridge Analytica została zatrudniona do celów konsultingowych dla ugrupowań Vote Leave, Leave.EU oraz UK Independence Party w 2016 roku, jako ruch mający na celu przekonanie ludzi do poparcia brexitu. Te podejrzenia zostały wysunięte po wycieku wewnętrznych konwersacji e-mailowych, udostępnionych parlamentowi brytyjskiemu. Brittany Kaiser stwierdziła, że zestawy danych wykorzystane przez Leave.EU zostały skomponowane przez Cambridge Analytica. Zestawy danych skomponowane z danych użytkowników Facebooka były tylko etapem początkowym. Mimo tego Arron Banks, współzałożyciel Leave.EU, zdementował te doniesienia, dodając później, że „mówiąc, że wykupione zostały usługi Cambridge Analytica, należało użyć lepszego określenia”. Oficjalne śledztwo dokonane przez Urząd Ochrony Danych Osobowych Wielkiej Brytanii wskazało, że Cambridge Analytica nie miała żadnego wpływu „poza podstawowymi operacjami”. Nie stwierdzono też żadnych „poważnych naruszeń”.
+
+Wokół Leave.EU narosły także podejrzenia, że ugrupowanie mogło funkcjonować na zlecenie rządu rosyjskiego i ze względu na niniejsze oskarżenia Banks w 2019 roku pozwał Cadwalladr. W maju 2023 roku Cadwalladr została wezwana do zapłaty kosztów procesu sądowego wynoszących ponad milion funtów oraz dodatkowych 35 tysięcy funtów z tytułu zniesławienia Banksa. W listopadzie 2023 roku prawnicy redaktorki zapowiedzieli eskalację sprawy do Europejskiego Trybunału Praw Człowieka.
+
+Reakcje
+
+Korporacje
+
+Facebook
+
+Po wygranej Donalda Trumpa 8 listopada 2016 roku w wyborach prezydenckich w Stanach Zjednoczonych zostało zwołane wewnętrzne spotkanie w Facebooku. Powstały grupy współprowadzone przez pracowników serwisu o nazwach takich jak „Firma jest skończona” czy „Zmieniamy naszą misję”, gdzie w opisie drugiej z nich jawnie twierdzono, że „misja Facebooka zawiodła ze względu na wyniki wyborów”. W grudniu 2016 roku powołano wewnętrzną komisję nazwaną „Projektem P” pod przewodnictwem Alexa Stamosa mającą na celu zbadać, jak fake newsy wpływały na lokalne społeczności. Zwrócono uwagę, że akcje dezinformacyjne prowadzone przez rządy państw stanowiły zaledwie nieznaczną część publikowanych na Facebooku nieprawdziwych informacji. Raport sporządzony przez „Projekt P” został udostępniony 17 kwietnia 2017 roku w okrojonej wersji, stanowiąc za ostrzeżenie opinii publicznej przed zagranicznymi wpływami za sprawą platform społecznościowych oraz ewentualne preludium całej afery. Wskazano w nim, że reklamy personalizowane pod preferencje użytkowników, tworzone przez petersburską organizację Internet Research Agency, mogły dotrzeć do 129 milionów Amerykanów, zaś na 3000 kampanii reklamowych promujących 120 stron wydano 100 tysięcy dolarów.
+
+W marcu 2018 roku, gdy nastąpił punkt kulminacyjny skandalu, prezes Facebooka, Mark Zuckerberg, przeprosił za sytuację powiązaną z Cambridge Analytica na antenie stacji CNN, nazywając to „błędem” i „naruszeniem zaufania”. Inni pracownicy Facebooka byli przeciwni nazywaniu tego zdarzenia wyciekiem danych, twierdząc, że osoby biorące udział w niniejszym quizie wyraziły zgodę na udostępnienie swoich danych. Celem uniknięcia podobnych sytuacji w przyszłości, Zuckerberg obiecał dokonanie reform w politykach Facebooka. 25 marca 2018 roku, założyciel Facebooka opublikował list w różnych gazetach, przepraszając w imieniu całego zespołu Facebooka. W kwietniu tego samego roku Facebook postanowił zaimplementować zasady działania według europejskiego RODO na całym świecie. Uruchomiono również program Social Science One. 25 kwietnia 2018 roku, Facebook opublikował raport o dochodach po tym, jak doniesiono o skandalu. Przychody były niższe w porównaniu z poprzednim kwartałem, ale były za to drugimi najwyższymi dochodami Facebooka, jak i najwyższymi dochodami dla pierwszego kwartału w całej historii.
+
+Amazon
+
+Amazon poinformował o zawieszeniu konta Cambridge Analytica na Amazon Web Services, po otrzymaniu masowych zgłoszeń, że Cambridge Analytica zbierała nadmiarowo dane osobowe. Pierwsze zgłoszenia wpłynęły do Amazona w 2014 roku, jednak ustosunkowano się do nich dopiero rok później. W 2018 roku podniesiono również obawy dotyczące wycieków danych ze strony samego Amazona.
+
+Inne korporacje
+
+Jeden z włoskich banków, UniCredit, wstrzymał wszelkie kampanie reklamowe na Facebooku w sierpniu 2018 roku, tłumacząc to powodami etycznymi. Playboy zrezygnował z Facebooka w świetle tej afery, usuwając oficjalne profile obserwowane przez ponad 25 milionów osób.
+
+Rządy państw
+
+Posłowie Unii Europejskiej oraz rządy Indii i Brazylii zażądały od Cambridge Analytica opublikowania raportu na temat użycia danych z wycieku w kampaniach politycznych. Wiele stanów USA miało również na wokandzie pozwy złożone przez obywateli objętych wyciekiem danych.
+
+W pierwszych dniach lipca 2018 roku Urząd Ochrony Danych Osobowych Wielkiej Brytanii ukarał Facebooka grzywną w wysokości 500 000 funtów (664 tys. dolarów), ze względu na rażące naruszenia w zabezpieczaniu danych osobowych użytkowników. Była to też najwyższa grzywna dozwolona ówczesnym prawem.
+
+Pozew sądowy z marca 2019 roku, złożony do dystryktu Kolumbia, zawierał oskarżenia na temat wiedzy o „niepoprawnym zbieraniu danych” przez Facebooka na miesiące przed grudniem 2015 roku, gdy to opublikowany został pierwszy materiał na ten temat.
+
+W lipcu 2019 roku, Federalna Komisja Handlu zagłosowała 3 do 2 na korzyść nałożenia kary finansowej na Facebooka w wysokości 5 miliardów dolarów. Była to jedna z najwyższych grzywien nałożonych przez rząd USA z tytułu jakiegokolwiek naruszenia. W zarządzeniu wspomniano również o kontynuowanych naruszeniach umowy z FTC, podpisanej w 2012 roku. Ostatecznie zadecydowano o nowej umowie, która miała być ważna przez kolejne 20 lat.
+
+Tego samego miesiąca FTC pozwała prezesa Cambridge Analytica (Aleksandra Nixa) oraz twórcę aplikacji GSRApp, Aleksandra Kogana. Obaj zgodzili się na zastosowanie się do wystosowanych żądań, takich jak usunięcie wszelkich zebranych danych, jak i natychmiastowe porzucenie badań opartych na niniejszych danych. GSRApp zebrał informacje początkowo o około 270 tysiącach jej użytkowników, a później ponad 65 milionów innych użytkowników Facebooka. Cambridge Analytica ogłosiła po tym upadłość.
+
+Facebook zgodził się również na zapłacenie grzywny w wysokości 100 milionów dolarów dla United States Securities and Exchange Commission, za „składanie wprowadzających w błąd oświadczeń dotyczących ryzyka niewłaściwego wykorzystania danych użytkowników Facebooka”.
+
+Wpływ na inwestorów i użytkowników Facebooka
+
+W zaledwie dzień po publikacji reportażu wartość akcji spadła o 7% a wartość spółki o 40 miliardów dolarów. 26 marca 2018 roku potwierdzono łączny spadek wartości akcji o 24%, co było tożsame ze 134 miliardami dolarów kapitalizacji rynkowej. 10 maja Wall Street doniósł, że Facebook zdołał odzyskać utraconą wartość akcji.
+
+Od kwietnia 2018 roku, liczba polubień, postów i udostępnień na stronie była niższa o prawie 20 procent, a cała aktywność na stronie była niższa o 10 procent. Wzrosła tylko tymczasowo latem, oraz podczas wyborów w 2018 roku w Stanach Zjednoczonych. Mimo całego zajścia liczba użytkowników wzrosła o 1,8% w ostatnim kwartale 2018 roku.
+
+Ruch #DeleteFacebook
+
+Społeczność zareagowała na ten skandal, inicjując akcję #DeleteFacebook mającą na celu zbojkotowanie Facebooka. Współzałożyciel WhatsAppa, obecnie zarządzanego przez Facebooka, był jedną z popularniejszych twarzy biorących udział w tej akcji. Hasztag został użyty prawie 400 tysięcy razy w przeciągu 30 dni po publikacji informacji o skandalu. Ruch zyskał dużą popularność na Twitterze – na tej platformie pojawiło się 93% wzmianek o akcji. Zgodnie z badaniem przeprowadzonym przez Pew Research Centre na Amerykanach, średnio 42% ankietowanych ograniczyło korzystanie z Facebooka, zaś 26% osób usunęło aplikację z telefonów. Odsetek odpowiedzi pozytywnych był największy u najmłodszej ankietowanej grupie osób (18–29 lat) – kolejno 47% i 44%. Według ankiety należącej do firmy inwestycyjnej Raymond James, zaledwie 8% badanych zaprzestało używania Facebooka całkowicie.
+
+Dodatkowy hasztag, #OwnYourData, został spopularyzowany przez Brittany Kaiser. Hasztag został użyty w kampanii mającej na celu wymuszenie na Facebooku większej przejrzystości działania całej platformy. Utworzona została również fundacja o tej samej nazwie, co hasztag, która edukowała ludzi, jak bardziej świadomie zarządzać swoimi danymi.
+
+Hakowanie świata
+
+Skandal związany z Cambridge Analytica doczekał się również publikacji w postaci filmu dokumentalnego Hakowanie świata (ang. The Great Hack) z 2019 roku. Jest to pierwszy pełnometrażowy obraz łączący różne elementy skandalu za pomocą narracji. Dokument dostarcza informacji związanych z Cambridge Analytica, Facebookiem i wyborami w USA w 2016, które doprowadziły do ogólnoświatowego skandalu.
+
+Hakowanie świata opowiada o doświadczeniach i osobistych podróżach wielu osób, które były zaangażowane w przywoływane wydarzenia na różne sposoby i poprzez różne relacje. David Carroll jest nowojorskim profesorem w dziedzinie mediów, który próbował poruszać się po systemie prawnym, aby odkryć, jakie dane o nim posiadała Cambridge Analytica. Brittany Kaiser wystąpiła jako była pracownica Cambridge Analytica, która ostatecznie stała się sygnalistką, ujawniając na łamach filmu nielegalny proceder pozyskiwania i udostępniania danych.
+
+Film Hakowanie świata jest dostępny na platformie Netflix.
+
+Zeznania świadków
+
+Komisja Sądowa Senatu Stanów Zjednoczonych wezwała świadków do złożenia zeznań na temat tego wycieku danych, oraz w bardziej ogólnym znaczeniu prywatności użytkowników. Dwa przesłuchania miały miejsce, z czego pierwsze (w dniu 10 kwietnia 2018 roku) skupiało się na roli Facebooka w niniejszym wycieku oraz prywatności w mediach społecznościowych, a drugie (w dniu 16 maja 2018 roku) dotyczyło roli Cambridge Analytica oraz wpływu na prywatność danych. W obu przesłuchaniach pytania zadawali senatorzy Chuck Grassley oraz Dianne Feinstein.
+
+Mark Zuckerberg
+
+Podczas przesłuchania w dniu 10 kwietnia 2018 roku, Zuckerberg powiedział, że jego osobistym błędem były niewystarczające decyzje co do przeciwdziałania fake newsom, zewnętrznym wpływom na wybory oraz mowie nienawiści. Udzielił również publicznych przeprosin:
+
+To był mój błąd, za który przepraszam. Uruchomiłem Facebooka, zarządzam nim, i jestem odpowiedzialny za to, co się z nim dzieje.
+
+Zeznał również, że w 2013 roku Aleksandr Kogan stworzył quiz osobowości, w którym wzięło udział 300 tysięcy osób. Aplikacja była potem w stanie wyodrębnić informacje o użytkownikach Facebooka, w tym tych należących do ich znajomych. Założyciel Facebooka dowiedział się o fakcie regularnego udostępniania danych firmie Cambridge Analytica dopiero w 2015 roku. Zażądano od Cambridge Analytica, żeby ta usunęła dane osobowe zebrane w trakcie tego procederu. „The Guardian”, „The New York Times” oraz Channel 4 donieśli w późniejszym czasie, że firma konsultingowa nie zastosowała się do niniejszego żądania.
+
+Eitan Hersh
+
+W 2015 roku Eitan Hersh opublikował dzieło pt. „Hacking the Electorate: How Campaigns Perceive Voters”. Skupiało się ono na bazach danych użytych w kampaniach politycznych między 2008 a 2014 rokiem. 6 maja 2018 roku zeznawał przed Kongresem jako ekspert w personalizowaniu zawartości dla głosujących.
+
+Hersh twierdził, że targetowanie głosujących w wykonaniu Cambridge Analytica nie miało znacznego wpływu na wybory prezydenckie z 2016 roku, ponieważ użyte techniki były podobne do tych z poprzednich kampanii politycznych. Dodał też, że wszelkie zbieżności między polubieniami na Facebooku i osobowościami były słabe, co również oznaczało, że skompilowane profile psychologiczne nie miały również żadnego wpływu.
+
+Mark Jamison
+
+Dr Mark Jamison zeznawał przed Kongresem 6 maja 2018 roku jako ekspert. Podobnie jak Eitan Hersh, Jamison twierdził, że nie było nadzwyczajnym wykorzystywanie danych o użytkownikach np. z Facebooka do profilowania głosujących. Według niego Barack Obama oraz George W. Bush również wykorzystywały podobne bazy danych, takie jak ta w wyborach z 2016 roku, do mikrotargetowania głosujących. Skrytykował również Facebooka za brak przejrzystości wobec użytkowników, ponieważ ci nie wiedzieli, jak dane na ich temat mogłyby zostać wykorzystane. Swoje zeznania zakończył tym, że gdyby rząd federalny uchwalił ustawę o przeciwdziałaniu targetowaniu użytkowników na portalach takich jak Facebook, zaszkodziłoby to użytkownikom tych platform ze względu na „zbyt dużą restrykcyjność” nałożoną na te strony, oraz „skomplikowałoby to działania prawodawcy”.
+
+Christopher Wylie
+
+Christopher Wylie, sygnalista ws. Cambridge Analytica, zeznawał 16 maja 2018 roku. Przed zdarzeniem pracował jako dyrektor działu badań w Cambridge Analytica w latach 2013 i 2014. Był świadkiem zarówno dla służb amerykańskich, jak i brytyjskich – twierdził, że postanowił zostać sygnalistą w celach „ochrony instytucji demokratycznych od negatywnych wpływów zewnętrznych, oraz zapewnienia bezpieczeństwa Amerykanów w internecie”. Według niego Cambridge Analytica była „korumpującą siłą na tym świecie”. W szczegółach podał również Kongresowi, jak Cambridge Analytica wykorzystywała dane z Facebooka do kategoryzowania poszczególnych ludzi, na podstawie ich poglądów politycznych. Sprzeciwił się również zeznaniom Eitana Hersha, który według niego „odrzucił zweryfikowaną przez ekspertów literaturę, taką jak Proceedings of the National Academy of Sciences, Psychological Science, oraz Journal of Personality and Individual Differences”, gdy ten mówił o niewielkiej sile profilowania użytkowników przez Facebooka.
+
+W 2018 roku parlament Wielkiej Brytanii zadał pytanie Aleksandrowi Nixowi, dyrektorowi SCL Group, o powiązania Cambridge Analytica z rosyjską korporacją paliwową, Łukoilem. Nix zeznał, że nie miał powiązań z żadną rosyjską organizacją, w szczególności Łukoilem, a także z samą Cambridge Analytica. W późniejszych zeznaniach złożonych przez Christophera Wylie podejrzenia o współpracy z rosyjskimi służbami, jak i Łukoilem, okazały się zasadne.
+
+Konto sygnalisty zostało później zablokowane. Według Wyliego, powód blokady okazał się być powiązany z ujawnieniem tła wyborów prezydenckich w Stanach Zjednoczonych z 2016 roku.
+
+Skutki zdarzenia
+
+20 marca 2018 roku Aleksander Nix został odwołany ze stanowiska dyrektora generalnego. Wkrótce został zastąpiony przez Juliana Wheatlanda. W maju 2018 roku Cambridge Analytica, jak i jej spółka nadrzędna, SCL Elections, ogłosiły bankructwo. Po upadku Cambridge Analytica wiele nowych korporacji zostało założonych przez byłych pracowników Cambridge Analytica, m.in. Auspex International, czy Data Propria. Ta druga deklarowała pomoc w kampanii prezydenckiej Donalda Trumpa z 2020 roku.
+
+Facebook zapowiedział również zmiany w mechanizmie Facebook Login, gdzie aplikacje chcące uzyskać dostęp do większej ilości danych niż imię i nazwisko, adres e-mail czy zdjęcie profilowe będą musiały przejść proces manualnej weryfikacji. Integracje, które nie były używane od co najmniej 3 miesięcy, były automatycznie rozłączane. Zaostrzono też wymagania do uruchamiania reklam politycznych na platformie – wszyscy reklamodawcy chcący rozpocząć niniejszą kampanię, muszą od maja 2018 roku dodawać adnotację, kto jest za nią odpowiedzialny, oraz zweryfikować swoją tożsamość. Dwa lata później pojawiła się możliwość ukrywania reklam politycznych, ale nie zamierzano ich weryfikować pod kątem rzetelności (tłumacząc to chęcią zapewnienia równego traktowania kandydatów po przeciwnych stronach kompasu politycznego), co wywołało sprzeciw ze strony pracowników Facebooka oraz prawodawców. We wrześniu 2019 roku odkryto również, że 400 deweloperów naruszało regulamin serwisu w podobnym stopniu, co Cambridge Analytica. Poskutkowało to zawieszeniem 69 tysięcy aplikacji, w tym 10 tysięcy nadużywających danych o użytkownikach Facebooka.
+
+Mozilla zapowiedziała publikację nowej wtyczki o nazwie Facebook Container, która zgodnie z założeniami miała wydzielić miejsce przeznaczone tylko dla usług Facebooka oraz utrudnić im personalizację reklam na podstawie danych z innych źródeł niż wspomniany Facebook.
+
+Google w 2020 roku zapowiedział, że personalizacja reklam na podstawie poglądów politycznych zostanie wycofana w serwisie YouTube, w wyszukiwarce oraz na zewnętrznych stronach internetowych posiadających reklamy Google. Z kolei platformy, takie jak Twitter czy TikTok, całkowicie zabroniły wyświetlania reklam politycznych.
+
+W sierpniu 2022 roku Facebook zgodził się na rozwiązanie sprawy skandalu za nieujawnioną kwotę. W grudniu 2022 roku Facebook zapłacił 725 milionów dolarów osobom odpowiedzialnym za pozew zbiorowy, złożony w wyniku długotrwałego udostępniania danych osobowych Cambridge Analytica oraz innym firmom zewnętrznym.

@@ -50,24 +50,35 @@ function loadText(text, label) {
   worker.postMessage({ cmd: 'data', text: corpus, chars: vocab.chars });
   updateParamNote();
 }
-// Przykład: lektury z lang/data/ (lista w manifest.json, bo serwer statyczny nie pokazuje zawartości folderu).
+// Przykłady: zestawy tekstów z lang/data/ (lista w manifest.json, bo serwer statyczny nie pokazuje zawartości folderu).
 // Gdy ich brak albo strona jest otwarta z dysku, zostaje krótki tekst wbudowany w data.js.
 // Pliki z Wolnych Lektur kończą się notą licencyjną po linii „-----”; to nie jest tekst utworu.
 function stripFooter(t) { const i = t.search(/\r?\n-----\r?\n[^]*$/); return (i > 0 ? t.slice(0, i) : t).replace(/^ISBN[^\n]*\n/m, ''); }
-const utwory = n => n + (n === 1 ? ' utwór' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? ' utwory' : ' utworów');
+const plural = (n, one, few, many) => n + ' ' + (n === 1 ? one : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? few : many);
+let sets = [];
+async function loadManifest() {
+  try { sets = ((await (await fetch('data/manifest.json', { cache: 'no-cache' })).json()).sets || []).filter(s => s.files && s.files.length); } catch (e) { sets = []; }
+  const sel = $('sampleSet'); sel.innerHTML = '';
+  sets.forEach(s => sel.add(new Option(s.name, s.id)));
+  sel.add(new Option('Krótki tekst Claude\'a (do pokazania uczenia na pamięć)', 'builtin'));
+}
 async function loadExample() {
-  $('useSample').disabled = true;
+  const id = $('sampleSet').value, set = sets.find(s => s.id === id);
+  if (!set) { loadText(SAMPLE_TEXT, 'przykład (Claude)'); return; }
+  $('useSample').disabled = $('sampleSet').disabled = true;
   try {
-    const man = await (await fetch('data/manifest.json', { cache: 'no-cache' })).json();
-    const list = (man.files || []).filter(f => f.file);
-    if (!list.length) throw 0;
-    $('dataNote').textContent = 'Wczytuję lektury…';
-    const texts = await Promise.all(list.map(async f => { const r = await fetch('data/' + f.file, { cache: 'force-cache' }); if (!r.ok) throw 0; return stripFooter(await r.text()); }));
-    loadText(texts.join('\n\n'), list.length === 1 ? list[0].title : (new Set(list.map(f => f.author)).size === 1 && list[0].author ? `${list[0].author}, ${utwory(list.length)}` : utwory(list.length)));
-    $('dataNote').textContent = `Przykład: ${utwory(list.length)} (${list.slice(0, 4).map(f => '„' + f.title + '”').join(', ')}${list.length > 4 ? '…' : ''}). Domena publiczna, z wolnelektury.pl. ` + $('dataNote').textContent;
+    $('dataNote').textContent = 'Wczytuję teksty…';
+    const texts = await Promise.all(set.files.map(async f => { const r = await fetch('data/' + set.dir + f.file, { cache: 'force-cache' }); if (!r.ok) throw 0; const t = await r.text(); return set.strip === 'wolnelektury' ? stripFooter(t) : t; }));
+    const n = set.files.length, unit = set.strip === 'wolnelektury' ? ['utwór', 'utwory', 'utworów'] : ['artykuł', 'artykuły', 'artykułów'];
+    loadText(texts.join('\n\n'), `${set.label}, ${plural(n, ...unit)}`);
+    const note = document.createElement('span');
+    note.append(`Przykład: ${plural(n, ...unit)} (${set.files.slice(0, 4).map(f => '„' + f.title + '”').join(', ')}${n > 4 ? '…' : ''}). ${set.note} `);
+    const a = document.createElement('a'); a.href = 'data/' + set.license; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Źródło i licencja.';
+    note.append(a, ' ' + $('dataNote').textContent);
+    $('dataNote').replaceChildren(note);
   } catch (e) {
     loadText(SAMPLE_TEXT, 'przykład (Claude)');
-  } finally { $('useSample').disabled = false; }
+  } finally { $('useSample').disabled = $('sampleSet').disabled = false; }
 }
 $('useSample').addEventListener('click', loadExample);
 $('files').addEventListener('change', async e => {
@@ -253,4 +264,4 @@ function renderCmp() {
 
 // ---------- start ----------
 renderSteps(); renderExplain(); renderHP(); renderCmp();
-loadExample();
+loadManifest().then(loadExample);

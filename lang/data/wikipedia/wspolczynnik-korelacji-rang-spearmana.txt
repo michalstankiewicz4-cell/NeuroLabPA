@@ -1,0 +1,221 @@
+Współczynnik korelacji rang Spearmana
+
+Korelacja rang Spearmana (lub: korelacja rangowa Spearmana, rho Spearmana) – jedna z nieparametrycznych miar monotonicznej zależności statystycznej między zmiennymi losowymi.
+
+Przyjmuje wartości od -1 do +1 włącznie. Skrajny wynik +1 oznacza, że wzrost jednej ze zmiennych zawsze pociąga za sobą wzrost drugiej, wynik -1 oznacza, że wzrost jednej ze zmiennych pociąga za sobą spadek drugiej, 0 to brak wykrytej zależności. W odróżnieniu od klasycznego współczynnika korelacji Pearsona, zależność ta nie musi być liniowa.
+
+Pierwotny pomysł korelowania rang był już znany wcześniej i pochodził od Bineta i Henriego, jednak współczynnik ten został solidnie opisany i rozpropagowany dopiero w 1904 przez angielskiego psychologa Charlesa Spearmana. Zauważył on, że w wielu badaniach nie da się zastosować klasycznego współczynnika korelacji lub daje on fałszywie istotne wyniki ze względu na nadmiar obserwacji odstających.
+
+Spearman zdefiniował swój współczynnik jako współczynnik korelacji Pearsona, liczony dla rang zmiennych (stąd nazwa współczynnik korelacji rang). Obecnie stosowanych jest kilka jego wersji, nieznacznie różniących się od siebie. Ich wartości są identyczne w przypadku, gdy obserwacje każdej zmiennej w próbie nie powtarzają się. Jeśli jednak nie jest to prawdą, to współczynnik korelacji dla rang opisuje jedynie wzór (2) i jego odmiany . Mimo to często używany jest też prostszy wzór (7).
+
+Zastosowanie i interpretacja
+
+Korelacja rangowa przyjmuje wartości z przedziału [-1,+1], ich interpretacja jest podobna do klasycznego współczynnika korelacji Pearsona, z zastrzeżeniem: w odróżnieniu od współczynnika Pearsona, który mierzy liniową zależność między zmiennymi, a wszelkie inne związki traktuje jako zaburzone zależności liniowej, korelacja rangowa pokazuje dowolną monotoniczną zależność (także nieliniową) .
+
+Model korelacji rangowej zawiera szerszą klasę zależności niż model klasycznego współczynnika korelacji, nie obejmuje jednak wszystkich możliwych zależności. Na przykład zależność okresowa, spotykana często w analizie szeregów czasowych, gdzie nosi nazwę sezonowości, nie jest wykrywana ani przez korelację Pearsona, ani Spearmana .
+
+Jako metoda rangowa, rho Spearmana jest w niewielkim tylko stopniu wrażliwe na obserwacje odstające, dzięki czemu szczególną użyteczność znajduje w analizie danych niskiej jakości.
+
+Współczynnik korelacji Spearmana zależy wyłącznie od uporządkowania zaobserwowanych wartości. Może zatem być stosowany do dowolnych zmiennych, których wartości można uporządkować rosnąco. Klasyczny współczynnik korelacji nie ma sensownej interpretacji dla zmiennych na skali porządkowej, gdyż uzależniony jest od różnic między wartościami zmiennych, które dla cech porządkowych nie są określone.
+
+Współczynnik korelacji Spearmana oraz testy jego istotności mogą być stosowane przy dowolnym rozkładzie porównywanych zmiennych.
+
+Korelacja rang Spearmana może być też opisana jako nachylenie (współczynnik kierunkowy) prostej najlepiej dopasowanej (w sensie najmniejszych kwadratów) do zbioru par rang . Istnieją inne, bardziej egzotyczne interpretacje, nie mają jednak znaczenia praktycznego.
+
+Zależność między zmiennymi losowymi (niezależnie od tego, jakim wskaźnikiem jest mierzona) nie musi oznaczać związku przyczynowo-skutkowego.
+
+Korelacja rang Spearmana zmiennych losowych
+
+Ta wersja ma znaczenie w statystyce teoretycznej. Wartości dowolnych miar statystycznych wyliczanych z próby wygodnie jest uważać za estymatory (przybliżenia) miar liczonych na podstawie rozkładu zmiennej losowej, z którego próba była losowana. W przypadku miar korelacji, dla zmiennych i będzie to dwuwymiarowy rozkład wektora
+
+Korelacja rang Spearmana zmiennych losowych i wyrażona jest wzorem
+
+Dla ciągłych zmiennych losowych zachodzi i wzór ten sprowadza się do
+
+Korelacja rang Spearmana z próby
+
+W praktyce współczynnik korelacji rang oblicza się dla próby statystycznej. Używane do tego wzory można uważać za estymatory (przybliżenia) korelacji rang danej wzorem (1) lub korelacji rang istniejącej w populacji statystycznej. Przybliżenia nie są jednak tym samym, co wartość przybliżana. Ich wyniki będą zatem dla odróżnienia oznaczane przez podobnie jak w literaturze.
+
+Współczynnik obliczany jest w następujący sposób:
+
+Wzory uwzględniające rangi wiązane
+
+Oryginalna propozycja Spearmana
+
+W oryginalnym ujęciu Spearmana, jego korelacja rang jest współczynnikiem korelacji Pearsona liczonym dla rang zmiennych zamiast ich surowych wartości, co jest bezpośrednim przełożeniem wzoru (1) na język rang.
+
+Wzór ten można uważać za próbkowy odpowiednik wzoru (1). Rozpisanie wzoru na korelację Pearsona prowadzi do
+
+Ten sam estymator można też zapisać w innej, równoważnej wersji jako:
+
+Rozkład porządkowych zmiennych losowych w próbie można przedstawić w formie tablicy dwudzielczej (tablicy kontyngencji), w której kolumny odpowiadają uszeregowanym wartościom jednej zmiennej (oznaczonej przez ), wiersze uszeregowanym wartościom drugiej zmiennej (oznaczonej przez ), a w komórkach tablicy znajdują się liczności
+
+Dziś estymator (2) jest standardowym wzorem używanym np. przez pakiety statystyczne SAS oraz SPSS, a także w uwzględniających rangi wiązane pracach naukowych z dziedziny statystyki. W podręcznikach statystyki oraz w pracach naukowych z innych dziedzin nadal jednak popularny jest podany dalej wzór (7), ze względu na stopień komplikacji wzorów (2a) lub (2b), utrudniający ręczne obliczenia, mimo że w obliczeniach wykonywanych na komputerze wzór (2) jest nawet prostszy w zastosowaniu.
+
+Niekiedy estymator (2)/(2a)/(2b)/(2c) nazywany jest „skorygowaną korelacją rangową”.
+
+Poprawka do wzoru na w przypadku rang wiązanych wynikająca z zastosowania wzorów (2)/(2a)/(2b)/(2c) jest obszernie dyskutowana w monografii Kendalla. Lehmann wykazuje asymptotyczną zbieżność do rozkładu normalnego, w przypadku, gdy liczba rang wiązanych jest ograniczona.
+
+Wzór dla rang wiązanych powstałych przez agregację
+
+Powtarzające się wartości zmiennych, a tym samym rangi wiązane, mogą powstawać na dwa sposoby w zależności od natury badanego zjawiska:
+
+Podczas agregacji tracona jest informacja o zróżnicowaniu obserwacji wewnątrz każdego przedziału, co sprawia, że zmienne, które przed agregacją nie miały identycznych rang, po agregacji mogą już mieć taki sam porządek. Agregacja jest zwykle zabiegiem wymuszonym warunkami badania, którego wpływ na wyniki powinien być jak najmniejszy. Przydatny byłby więc estymator, szacujący korelację rangową zmiennych przed agregacją na podstawie danych po agregacji. Taki estymator osiągałby wartości tylko przy próbie bez rang wiązanych.
+
+Kendall proponuje aby w przypadku rang wiązanych powstałych sztucznie stosować w mianowniku wariancje takie, jak gdyby rang wiązanych nie było (gdyż tak jest w hipotetycznej nieskończonej populacji, dla której korelacja rangowa jest estymowana). Uzyskany w ten sposób estymator jest wartością oczekiwaną współczynnika korelacji rang obliczonego dla tych samych zmiennych przed agregacją (przy założeniu, że każda kombinacja rang prowadząca po agregacji do obserwowanej próby jest jednakowo prawdopodobna).
+
+W ogólnym przypadku, po uwzględnieniu rang wiązanych, wariancja rang wynosi:
+
+gdzie współczynnik jest zdefiniowany tak jak wcześniej, wzorem (4).
+
+W przypadku braku rang wiązanych, wariancje są zależne tylko od w szczególności nie zależą od rozkładu zmiennych przed rangowaniem:
+
+Niezależnie od tego, czy pojawiły się rangi wiązane, czy nie, średnia rang jest zależna jedynie od liczności próby:
+
+Podstawiając powyższe równania do wzoru (2a), uzyskuje się:
+
+Ten estymator można zapisać w równoważnej postaci jako:
+
+gdzie są zdefiniowane, jak wyżej, wzorami (3), (4), (5).
+
+Dla tablic dwudzielczych estymator (6) przyjmuje postać
+
+Istnieje jeszcze inny estymator dla tablic dwudzielczych, zaproponowany przez Stuarta.
+
+Wzór nieuwzględniający rang wiązanych
+
+to różnica między rangami zmiennych i dla obserwacji
+
+W przypadku gdy nie ma rang wiązanych (połączonych), czyli wartości nie powtarzają się w obrębie próby dla żadnej ze zmiennych z osobna, wzór (7) daje te same wyniki, co każdy z podanych wcześniej estymatorów (2) i (6). Jeśli choć jedna ranga jest wiązana, każdy z nich daje inny wynik.
+
+Wzór (7) jest używany ze względu na prostotę obliczeń istotną dla kalkulacji wykonywanych bez pomocy komputera i do dziś jest popularny w podręcznikach. Estymator ten ma jednak nieoczekiwane własności w przypadku wystąpienia rang wiązanych, np.
+
+Część autorów uważa, że można ten estymator stosować tylko przy braku rang wiązanych, w przeciwnym wypadku jego stosowanie jest błędem. Inni autorzy stosują go także wówczas. Niektórzy uważają, że wzór można stosować, jeśli rang wiązanych jest nie więcej niż jedna czwarta ogółu i nie występują rangi wiązane z więcej niż dwóch obserwacji. Pakiety statystyczne SAS oraz SPSS używają podanego wcześniej bardziej ogólnego wzoru (2).
+
+Niekiedy wzór (7) nazywany jest „nieskorygowaną korelacją rangową” w odróżnieniu od „skorygowanej korelacji rangowej” (2). Jest to związane z postacią wzoru (2b), który przypomina wzór (7) z dodaną „korektą na rangi wiązane”.
+
+Własności
+
+W przypadku wystąpienia rang wiązanych część z tych własności nie jest spełniona dla niektórych estymatorów. Dla estymatora (7) nie są prawdziwe własności (9) i (10), a estymator (6)/(6a)/(6b) nie osiąga wartości
+
+Matematyczne własności rho Spearmana mają związek z tożsamością Czebyszewa oraz twierdzeniem o ciągach jednomonotonicznych.
+
+Przykład
+
+We wzorach (7), (2b) i (6a) wykonywane są pośrednie obliczenia:
+
+(jest jedna ranga wiązana, mają ją trzy obserwacje),
+
+(jest jedna ranga wiązana, mają ją dwie obserwacje).
+
+Testowanie istotności statystycznej
+
+Aby przetestować istotność statystyczną korelacji rangowej, wykorzystuje się fakt, iż przy założeniu hipotezy zerowej o niezależności zmiennych losowych i oraz niezależności od siebie par rozkład statystyki
+
+korelacji rangowej dąży wraz ze wzrostem liczebności próby do rozkładu Studenta o stopniach swobody, gdzie jest licznością próby. Po obliczeniu tej statystyki korzysta się z tablic rozkładu Studenta lub komputera w celu obliczenia poziomu istotności
+
+Rozkład ten jest wyprowadzany przy założeniu braku rang wiązanych, jednak Kendall twierdzi, że w przypadku istnienia rang wiązanych poprawka do testu nie jest konieczna.
+
+Inni autorzy z kolei zalecają stosowanie poprawki na ciągłość (przez dodanie lub odjęcie ).
+
+Dla liczebności próby dążącej do nieskończoności, rozkład rho Spearmana dąży do rozkładu normalnego o wartości oczekiwanej równej prawdziwej wartości w populacji i wariancji stąd używana jest też inna statystyka:
+
+której rozkład przy założeniu hipotezy zerowej dąży wraz ze wzrostem liczności próby do standardowego rozkładu normalnego
+
+Część autorów sugeruje stosowanie poprawki na ciągłość, która jednak nie daje znaczącego wzrostu dokładności przybliżenia.
+
+Postulowano również stosowanie średniej arytmetycznej statystyki opartej na rozkładzie i normalnym.
+
+Dla małych prób wszystkie te wzory są niedokładne (statystyka oparta na rozkładzie jest zazwyczaj nieco lepsza niż statystyka ), ale można sprawdzić komputerowo wszystkie permutacje rang lub skorzystać z tablic. Często stosuje się przy tym inną statystykę (nazywaną czasem Hotellinga-Pabst): Należy przy tym zauważyć, że między tymi statystykami zachodzi związek liniowy, a więc ich stosowanie prowadzi do identycznych wyników. Dokładne tablice rozkładu dla wielkości populacji do 25 można znaleźć w pracy.
+
+(co prowadzi do dwustronnego obszaru krytycznego) albo
+
+(co prowadzi do jednostronnego obszaru krytycznego).
+
+Dla omawianego powyżej przykładu, dwustronnego obszaru krytycznego i wyliczeń według trzech estymatorów otrzymuje się następujące wartości:
+
+W tabeli podano wartość wyliczoną za pomocą przybliżenia rozkładem Studenta, z rozkładu normalnego i wreszcie dokładnie – z tablic. Dla tak małej próby przybliżenie rozkładem Studenta daje różnice rzędu 0,05, co może mieć znaczenie przy określaniu istotności statystycznej. Przybliżenie rozkładem normalnym jest w tym wypadku mniej dokładne. Dla małych prób konieczne jest więc stosowanie tablic lub symulacji komputerowych. Przy liczebności próby dążącej do nieskończoności różnica zmniejsza się i coraz bardziej uzasadnione jest stosowanie rozkładu Studenta, ewentualnie rozkładu normalnego, co jednak z reguły da nieco większy od Studenta błąd wyznaczania istotności.
+
+Znacznie dokładniejsze wyniki przynosi stosowanie przybliżenia opartego na krzywych Pearsona II typu, metodzie opisanej przez Oldsa. Najdokładniejsze wyniki przynosi przybliżenie oparte na skorygowanym przy pomocy szeregu Edgewortha rozkładzie normalnym. Implementację tego przybliżenia jako funkcję w programie Mathematica można znaleźć w pracy. Tam też dokonano porównania różnych metod aproksymacji statystyki Spearmana.
+
+Istnieją też stabelaryzowane rozkłady korelacji rangowej dla innych założeń, np. Odpowiednie tabele podaje praca Fritza i Henze’a.
+
+Związki z innymi współczynnikami i metodami statystycznymi
+
+Współczynnik korelacji Pearsona
+
+Współczynniki te określają innego rodzaju zależność między zmiennymi (Pearson – zależność liniową, Spearman – dowolną monotoniczną), czasem jednak korelacja rang jest używana jako odporna wersja klasycznego współczynnika korelacji Pearsona. W takiej roli widział ją zresztą sam Spearman.
+
+Jest to uzasadnione w przypadku zakładanej liniowej zależności między zmiennymi w warunkach zanieczyszczenia próby obserwacjami odstającymi. Korelacja rangowa jest bowiem znacznie bardziej odporna na obserwacje odstające, które potrafią skrajnie zaburzyć wynik zwykłego współczynnika korelacji Pearsona. Wartości tych dwóch współczynników nie są jednak wtedy równe – korelacja rangowa daje na ogół (nie zawsze) wyniki nieco bliższe zeru.
+
+W szczególności dla dwuwymiarowego rozkładu normalnego zachodzi:
+
+Zależność ta jest ścisła przy braku rang wiązanych i nieskończonej populacji. Dla skończonej próby zależność między estymatorami Spearmana i Pearsona różni się od tego wyidealizowanego przypadku. Wartość oczekiwana wynosi wtedy dla każdego z podanych estymatorów:
+
+Współczynnik korelacji rang Spearmana jest więc estymatorem obciążonym (także asymptotycznie) i niezgodnym współczynnika korelacji Pearsona. Naturalnie na tej samej zasadzie współczynnik korelacji Pearsona będzie obciążonym, niezgodnym i nieefektywnym estymatorem korelacji rangowej Spearmana.
+
+Rho Spearmana jest też przy założeniu rozkładu dwuwymiarowego normalnego mniej efektywne niż współczynnik korelacji Pearsona liczony klasycznym wzorem, bez rangowania. Dla dwuwymiarowego rozkładu normalnego błąd standardowy korelacji Pearsona liczonej za pomocą wzoru:
+
+(gdzie to dowolny z estymatorów rho Spearmana), jest ok. 1,88 raza większy od błędu korelacji liczonej za pomocą klasycznego wzoru bez rangowania:
+
+Jednak, gdy obserwacje nie spełniają założenia o normalności rozkładu, szczególnie gdy pojawiają się obserwacje odstające, wzór (11) często daje lepsze oszacowanie korelacji liniowej. Jeszcze dokładniejszy jest współczynnik tau Kendalla.
+
+Współczynnik korelacji Pearsona nie zakłada żadnej postaci rozkładu porównywanych zmiennych, jednak wzory na jego istotność statystyczną zakładają już dwuwymiarowy rozkład normalny. W wielu przypadkach warunek ten nie jest spełniony i nie da się łatwo sprawdzić, czy wyniki korelacji Pearsona są przejawem rzeczywistej zależności. Istotność współczynnika korelacji rangowej daje się zawsze określić, gdyż rozkład rang nie zależy od rozkładu porównywanych zmiennych, o ile nie ma rang wiązanych, a nawet wtedy testy istotności nie są znacząco zaburzone.
+
+Inne miary korelacji rangowej
+
+Korelacja rangowa to szersze pojęcie niż korelacja rang Spearmana. Korelacja to ogólnie w statystyce zależność zmiennych losowych. Miary tej zależności wyliczane na bazie rang zwane są miarami korelacji rangowej.
+
+Wymienione poniżej miary nie są jednak uznawane za estymatory korelacji rang Spearmana – są odrębnymi współczynnikami o odrębnej interpretacji. Istnieją też inne, nie wymienione tutaj, współczynniki korelacji rangowej.
+
+Miara Spearmana (ang. Spearman’s footrule) to współczynnik zaproponowany w tej samej pracy, co rho Spearmana, liczony podobnie jak we wzorze (7), jednak z wartością bezwzględną w miejsce kwadratu i z wynikającą z tego inną normalizacją:
+
+Jak pokazał Pearson, współczynnik ten nie ma dobrych własności statystycznych, w szczególności choć osiąga +1, nie osiąga nigdy wartości -1, z wyjątkiem przypadku .
+
+Inną miarą korelacji rangowej dwóch zmiennych jest tzw. tau Kendalla. Między tymi wartościami zachodzą nierówności:
+
+Można też pokazać, że jeśli przedstawić łączny rozkład dwuwymiarowy zmiennych i w postaci unormowanej do jedności macierzy prawdopodobieństwa o elementach wówczas obydwie te wielkości dają się przedstawić za pomocą średnich ważonych z minorów stopnia drugiego . W tym ujęciu rho Spearmana jest ważonym współczynnikiem tau Kendalla.
+
+Kendall i Stuart pokazali, że dla niezależnych zmiennych korelacja między tau i rho wynosi co najmniej 0,98 i dąży do 1 dla (Wspólny rozkład tau Kendalla i rho Spearmana w swojej monografii podaje Kendall.) Nie oznacza to jednak, że ich wyniki są proporcjonalne dla zmiennych zależnych, a dla takich właśnie na ogół liczy się korelację.
+
+Uogólnienia rho Spearmana
+
+Rho Spearmana jest znormalizowaną i przeskalowaną do przedziału miarą chi kwadrat Friedmana dla dwóch zmiennych. Jeśli wartość chi kwadrat Friedmana wynosi to
+
+Kolejnym uogólnieniem rho Spearmana na przypadek wielu zmiennych jest test L Page'a. Korelację rangową można stosować jako metodę sprawdzania, czy zmienna ma ten sam porządek rang co zmienna Test L Page’a podaje z jakim prawdopodobieństwem ciąg zmiennych ma pewne zadane ustawienie. Jego wynik można też podać w formie współczynnika z zakresu który dla sprowadza się do korelacji rang Spearmana.
+
+Analiza odpowiedniości oparta na rho Spearmana
+
+Klasyczna analiza odpowiedniości (inna nazwa: analiza korespondencji) jest metodą statystyczną, która wszystkim możliwym wartościom dwóch zmiennych nominalnych przyporządkowuje takie liczby (tzw. skory), aby przy pewnych założeniach maksymalizować współczynnik korelacji Pearsona między tymi zmiennymi.
+
+Istnieje odpowiednik klasycznej analizy odpowiedniości, zwany gradacyjną analizą odpowiedniości (ang. Grade Correspondence Analysis; GCA), który maksymalizuje rho Spearmana lub tau Kendalla.
+
+Krytyka
+
+Te same własności rho Spearmana, które zwolennicy metod rangowych uważają za zalety, przeciwnicy mają za wady. Sam Spearman, który traktował swój współczynnik wyłącznie jako odporne na obserwacje odstające przybliżenie korelacji Pearsona, uważał za wadę fakt, że mierzy ona także zależność nieliniową.
+
+Twórca klasycznego współczynnika korelacji, Karl Pearson, krytykował niezależność od rozkładu korelacji rang:
+
+Żadne dwie korelacje rangowe nie są w najmniejszym stopniu rzetelne czy porównywalne, dopóki nie założymy, że rozkłady są tego samego typu (…) wynikającego z hipotezy rozkładu normalnego (…) Dr Spearman zasugerował, że szeregi rang powinny być typem korelowanym, lecz nie uznał tej korelacji rangowej za odskocznię (…) umożliwiającą osiągnięcie prawdziwej korelacji.
+
+Przy okazji tej krytyki pierwszy raz w historii użyto określenia „korelacja rangowa”.
+
+Historia
+
+Pomysł korelowania rang był już znany przed Spearmanem i pochodził od Bineta i Henriego. Redakcja czasopisma Biometrika w przypisie pracy Studenta zaznaczyła, że „ich wywód był bardzo niejasny i chyba nie zauważyli, że korelacja zmiennych różni się od korelacji rang”.
+
+Współczynnik został solidnie opisany, zbadany i rozpropagowany dopiero w 1904 przez angielskiego psychologa Charlesa Spearmana. Praca Spearmana była opisem różnych metod korelacji dla psychologów, m.in. korelacji Pearsona dla rang (choć Spearman nie zapisał swojej metody w postaci wzoru). Autor zauważył też, że w wielu badaniach nie da się zastosować klasycznego współczynnika korelacji Pearsona lub daje on nieistotne albo fałszywie istotne wyniki ze względu na nadmiar obserwacji odstających, natomiast problemy te znikają po rangowaniu. Nadal traktował jednak korelację rang jedynie jako poszerzenie możliwości współczynnika korelacji Pearsona, choć znał różnice między nimi.
+
+Koncepcja rang wiązanych nie była jeszcze znana w początkach XX wieku – została ona wprowadzona później przez Pearsona . Wówczas znany był już wzór (7), wyprowadzony naturalnie przy założeniu braku rang wiązanych. Student (William Sealy Gosset) w pracy z 1921 zauważył, że wzór (7) nie zgadza się z definicją Spearmana w przypadku rang wiązanych (sprowadzającą się wówczas do wzoru (2)) i podał wzór (2b), wyprowadził też wzór na wariancję korelacji rangowej.
+
+W 1948 Maurice Kendall napisał monografię Rank Correlation Methods, w której szczegółowo zbadał własności rho Spearmana i związki z własnym współczynnikiem tau Kendalla.
+
+Nacisk Spearmana na budowę stabilnych metod statystycznych, niezależnych od konkretnych parametrów rozkładu, został uogólniony w filozofii nauki do tzw. zasady Spearmana (ang. Spearman’s Principle):
+
+Załóżmy, że wybieramy między dwoma modelami, z których obydwa pasują do posiadanych danych. Załóżmy, że dane te doprowadziły nas do przypuszczenia, że pewne odpowiedzialne za nie zjawiska podporządkowują się pewnym zależnościom. Załóżmy, że obydwa rywalizujące ze sobą modele odzwierciedlają te zależności. Zasada Spearmana mówi, że jeżeli pierwszy z modeli generuje te zależności bez względu na wartości przyporządkowywane do jego „wolnych parametrów”, a drugi tylko dla konkretnych wartości swoich wolnych parametrów, przy czym nie ma innych przesłanek wyboru, to powinniśmy przedkładać pierwszy model nad drugi.
+
+Podejście to dało początek całej nowej dziedzinie statystyki, zwanej statystyką odpornościową (ang. robust statistics), zajmującej się budową metod statystycznych odpornych na obserwacje odstające.
+
+Oznaczenia
+
+W literaturze spotyka się różne oznaczenia korelacji rang Spearmana:

@@ -1,220 +1,409 @@
 {
- "source": "wolnelektury.pl (domena publiczna); każdy plik zawiera oryginalną notę licencyjną",
- "files": [
+ "sets": [
   {
-   "file": "grabinski-ksiega-ognia-bialy-wyrak.txt",
-   "title": "Biały wyrak",
-   "author": "Stefan Grabiński"
+   "id": "grabinski",
+   "name": "Proza grozy: Stefan Grabiński",
+   "label": "Grabiński",
+   "dir": "grabinski/",
+   "license": "grabinski/LICENCJA.txt",
+   "note": "Domena publiczna, z wolnelektury.pl.",
+   "strip": "wolnelektury",
+   "files": [
+    {
+     "file": "grabinski-ksiega-ognia-bialy-wyrak.txt",
+     "title": "Biały wyrak",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-bledny-pociag.txt",
+     "title": "Błędny pociąg",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-czad.txt",
+     "title": "Czad",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-czerwona-magda.txt",
+     "title": "Czerwona Magda",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-demon-ruchu.txt",
+     "title": "Demon ruchu",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-dziedzina.txt",
+     "title": "Dziedzina",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-dziwna-stacja.txt",
+     "title": "Dziwna stacja",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-falszywy-alarm.txt",
+     "title": "Fałszywy alarm",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-gebrowie.txt",
+     "title": "Gebrowie",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-glucha-przestrzen.txt",
+     "title": "Głucha przestrzeń",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-klatwa.txt",
+     "title": "Klątwa",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-niesamowita-opowiesc-kochanka-szamoty.txt",
+     "title": "Kochanka Szamoty",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-maszynista-grot.txt",
+     "title": "Maszynista Grot",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-muzeum-dusz-czysccowych.txt",
+     "title": "Muzeum dusz czyśćcowych",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-niesamowita-opowiesc-na-tropie.txt",
+     "title": "Na tropie",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-namietnosc.txt",
+     "title": "Namiętność",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-nietykalny.txt",
+     "title": "Nietykalny",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-pirotechnik.txt",
+     "title": "Pirotechnik",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-na-wzgorzu-roz-po-stycznej.txt",
+     "title": "Po stycznej",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-podzwonne.txt",
+     "title": "Podzwonne",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-z-wyjatkow-w-pomrokach-wiary.txt",
+     "title": "Pomsta ziemi",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-pozarowisko.txt",
+     "title": "Pożarowisko",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-problemat-czelawy.txt",
+     "title": "Problemat Czelawy",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-namietnosc-projekcje.txt",
+     "title": "Projekcje",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-niesamowita-opowiesc-przed-droga-daleka.txt",
+     "title": "Przed drogą daleką",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-przypadek.txt",
+     "title": "Przypadek",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-puszczyk.txt",
+     "title": "Puszczyk",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-plomienne-gody.txt",
+     "title": "Płomienne gody",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-saturnin-sektor.txt",
+     "title": "Saturnin Sektor",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-smoluch.txt",
+     "title": "Smoluch",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-niesamowita-opowiesc-spojrzenie.txt",
+     "title": "Spojrzenie",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-sygnaly.txt",
+     "title": "Sygnały",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-szalona-zagroda.txt",
+     "title": "Szalona zagroda",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-szary-pokoj.txt",
+     "title": "Szary pokój",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ultima-thule.txt",
+     "title": "Ultima Thule",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-niesamowita-opowiesc-w-domu-sary.txt",
+     "title": "W domu Sary",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-na-wzgorzu-roz-w-willi-nad-morzem.txt",
+     "title": "W willi nad morzem",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-wampir.txt",
+     "title": "Wampir",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-zemsta-zywiolakow.txt",
+     "title": "Zemsta żywiołaków",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-na-wzgorzu-roz-zez.txt",
+     "title": "Zez",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-ksiega-ognia-zielone-swiatki.txt",
+     "title": "Zielone Świątki",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-slepy-tor.txt",
+     "title": "Ślepy tor",
+     "author": "Stefan Grabiński"
+    },
+    {
+     "file": "grabinski-swiadek-materna.txt",
+     "title": "Świadek Materna",
+     "author": "Stefan Grabiński"
+    }
+   ]
   },
   {
-   "file": "grabinski-bledny-pociag.txt",
-   "title": "Błędny pociąg",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-czad.txt",
-   "title": "Czad",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-czerwona-magda.txt",
-   "title": "Czerwona Magda",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-demon-ruchu.txt",
-   "title": "Demon ruchu",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-dziedzina.txt",
-   "title": "Dziedzina",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-dziwna-stacja.txt",
-   "title": "Dziwna stacja",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-falszywy-alarm.txt",
-   "title": "Fałszywy alarm",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-gebrowie.txt",
-   "title": "Gebrowie",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-glucha-przestrzen.txt",
-   "title": "Głucha przestrzeń",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-klatwa.txt",
-   "title": "Klątwa",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-niesamowita-opowiesc-kochanka-szamoty.txt",
-   "title": "Kochanka Szamoty",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-maszynista-grot.txt",
-   "title": "Maszynista Grot",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-muzeum-dusz-czysccowych.txt",
-   "title": "Muzeum dusz czyśćcowych",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-niesamowita-opowiesc-na-tropie.txt",
-   "title": "Na tropie",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-namietnosc.txt",
-   "title": "Namiętność",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-nietykalny.txt",
-   "title": "Nietykalny",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-pirotechnik.txt",
-   "title": "Pirotechnik",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-na-wzgorzu-roz-po-stycznej.txt",
-   "title": "Po stycznej",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-podzwonne.txt",
-   "title": "Podzwonne",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary.txt",
-   "title": "Pomsta ziemi",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-pozarowisko.txt",
-   "title": "Pożarowisko",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-problemat-czelawy.txt",
-   "title": "Problemat Czelawy",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-namietnosc-projekcje.txt",
-   "title": "Projekcje",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-niesamowita-opowiesc-przed-droga-daleka.txt",
-   "title": "Przed drogą daleką",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-przypadek.txt",
-   "title": "Przypadek",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-puszczyk.txt",
-   "title": "Puszczyk",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-plomienne-gody.txt",
-   "title": "Płomienne gody",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-saturnin-sektor.txt",
-   "title": "Saturnin Sektor",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-smoluch.txt",
-   "title": "Smoluch",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-niesamowita-opowiesc-spojrzenie.txt",
-   "title": "Spojrzenie",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-sygnaly.txt",
-   "title": "Sygnały",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-szalona-zagroda.txt",
-   "title": "Szalona zagroda",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-szary-pokoj.txt",
-   "title": "Szary pokój",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ultima-thule.txt",
-   "title": "Ultima Thule",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-niesamowita-opowiesc-w-domu-sary.txt",
-   "title": "W domu Sary",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-na-wzgorzu-roz-w-willi-nad-morzem.txt",
-   "title": "W willi nad morzem",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-z-wyjatkow-w-pomrokach-wiary-wampir.txt",
-   "title": "Wampir",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-zemsta-zywiolakow.txt",
-   "title": "Zemsta żywiołaków",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-na-wzgorzu-roz-zez.txt",
-   "title": "Zez",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-ksiega-ognia-zielone-swiatki.txt",
-   "title": "Zielone Świątki",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-slepy-tor.txt",
-   "title": "Ślepy tor",
-   "author": "Stefan Grabiński"
-  },
-  {
-   "file": "grabinski-swiadek-materna.txt",
-   "title": "Świadek Materna",
-   "author": "Stefan Grabiński"
+   "id": "wikipedia",
+   "name": "Encyklopedia: polska Wikipedia",
+   "label": "Wikipedia",
+   "dir": "wikipedia/",
+   "license": "wikipedia/LICENCJA.txt",
+   "note": "CC BY-SA 4.0, autorzy Wikipedii.",
+   "strip": null,
+   "files": [
+    {
+     "file": "afera-cambridge-analytica.txt",
+     "title": "Afera Cambridge Analytica"
+    },
+    {
+     "file": "algorytm-earleya.txt",
+     "title": "Algorytm Earleya"
+    },
+    {
+     "file": "bitwa-pod-radzyminem-1920.txt",
+     "title": "Bitwa pod Radzyminem (1920)"
+    },
+    {
+     "file": "cerkiew-opieki-matki-bozej-w-slawatyczach.txt",
+     "title": "Cerkiew Opieki Matki Bożej w Sławatyczach"
+    },
+    {
+     "file": "copan.txt",
+     "title": "Copán"
+    },
+    {
+     "file": "efekt-dopplera.txt",
+     "title": "Efekt Dopplera"
+    },
+    {
+     "file": "efekt-potwierdzenia.txt",
+     "title": "Efekt potwierdzenia"
+    },
+    {
+     "file": "fonologia-i-fonetyka-jezyka-angielskiego.txt",
+     "title": "Fonologia i fonetyka języka angielskiego"
+    },
+    {
+     "file": "glowny-szlak-karpacki.txt",
+     "title": "Główny Szlak Karpacki"
+    },
+    {
+     "file": "historia-gryfic.txt",
+     "title": "Historia Gryfic"
+    },
+    {
+     "file": "historia-oswiaty-w-trzebiatowie.txt",
+     "title": "Historia oświaty w Trzebiatowie"
+    },
+    {
+     "file": "huragan-na-kubie-1910.txt",
+     "title": "Huragan na Kubie (1910)"
+    },
+    {
+     "file": "ida-film.txt",
+     "title": "Ida (film)"
+    },
+    {
+     "file": "kerygmat.txt",
+     "title": "Kerygmat"
+    },
+    {
+     "file": "kumak-dalekowschodni.txt",
+     "title": "Kumak dalekowschodni"
+    },
+    {
+     "file": "kuropaty.txt",
+     "title": "Kuropaty"
+    },
+    {
+     "file": "kurpie-biale.txt",
+     "title": "Kurpie Białe"
+    },
+    {
+     "file": "max-rothmann.txt",
+     "title": "Max Rothmann"
+    },
+    {
+     "file": "mirrors-edge.txt",
+     "title": "Mirror’s Edge"
+    },
+    {
+     "file": "modraszek-telejus.txt",
+     "title": "Modraszek telejus"
+    },
+    {
+     "file": "oledrzy.txt",
+     "title": "Olędrzy"
+    },
+    {
+     "file": "pacyfikacja-michniowa.txt",
+     "title": "Pacyfikacja Michniowa"
+    },
+    {
+     "file": "pas-kuipera.txt",
+     "title": "Pas Kuipera"
+    },
+    {
+     "file": "piotr-fijas.txt",
+     "title": "Piotr Fijas"
+    },
+    {
+     "file": "pomian-herb-szlachecki.txt",
+     "title": "Pomian (herb szlachecki)"
+    },
+    {
+     "file": "prawo-hardyego-weinberga.txt",
+     "title": "Prawo Hardy’ego-Weinberga"
+    },
+    {
+     "file": "rosja-w-konkursie-piosenki-eurowizji.txt",
+     "title": "Rosja w Konkursie Piosenki Eurowizji"
+    },
+    {
+     "file": "stanislaw-moskal-19352019.txt",
+     "title": "Stanisław Moskal (1935–2019)"
+    },
+    {
+     "file": "szczetki.txt",
+     "title": "Szczętki"
+    },
+    {
+     "file": "tablice-pamiatkowe-tchorka-w-warszawie.txt",
+     "title": "Tablice pamiątkowe Tchorka w Warszawie"
+    },
+    {
+     "file": "tkacz-ptak.txt",
+     "title": "Tkacz (ptak)"
+    },
+    {
+     "file": "ulica-aleksandrowska-w-lodzi.txt",
+     "title": "Ulica Aleksandrowska w Łodzi"
+    },
+    {
+     "file": "vader.txt",
+     "title": "Vader"
+    },
+    {
+     "file": "weronika-rosati.txt",
+     "title": "Weronika Rosati"
+    },
+    {
+     "file": "william-hawkins-kupiec.txt",
+     "title": "William Hawkins (kupiec)"
+    },
+    {
+     "file": "wojskowosc-w-polsce-sredniowiecznej.txt",
+     "title": "Wojskowość w Polsce średniowiecznej"
+    },
+    {
+     "file": "wolanie-o-prawa-kobiety.txt",
+     "title": "Wołanie o prawa kobiety"
+    },
+    {
+     "file": "wspolczynnik-korelacji-rang-spearmana.txt",
+     "title": "Współczynnik korelacji rang Spearmana"
+    },
+    {
+     "file": "wydawnictwo-polskie-r-wegnera.txt",
+     "title": "Wydawnictwo Polskie R. Wegnera"
+    },
+    {
+     "file": "zamach-stanu-w-hondurasie-2009.txt",
+     "title": "Zamach stanu w Hondurasie (2009)"
+    },
+    {
+     "file": "zamek-w-minsku.txt",
+     "title": "Zamek w Mińsku"
+    },
+    {
+     "file": "zolw-szylkretowy.txt",
+     "title": "Żółw szylkretowy"
+    }
+   ]
   }
  ]
 }

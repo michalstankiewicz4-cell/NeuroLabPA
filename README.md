@@ -46,7 +46,7 @@ lang/js/engine.js     silnik: tensory, autograd, Adam, PCA
 lang/js/data.js       przykładowy tekst, słownik liter
 lang/js/worker.js     trening w tle (Web Worker): bigram, sieć z oknem, próbkowanie
 lang/js/lang.js       strona: dane, wykres, wizualizacje, porównanie
-lang/data/            lektury przykładowe (manifest.json + pliki TXT, opis w README)
+lang/data/            zestawy przykładowe: grabinski/, wikipedia/ (manifest.json, opis i licencje w README)
 ```
 
 Uwaga: Web Worker nie działa z pliku otwartego bezpośrednio (`file://`), laboratorium trzeba uruchomić przez serwer lub GitHub Pages.

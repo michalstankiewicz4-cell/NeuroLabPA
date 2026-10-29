@@ -1,0 +1,171 @@
+Efekt Dopplera
+
+Efekt Dopplera – zjawisko fizyczne występujące dla fal, polegające na powstawaniu różnicy częstotliwości fali wysyłanej przez jej źródło oraz częstotliwości fali rejestrowanej przez obserwatora, który porusza się względem tego źródła. Dla fal rozprzestrzeniających się w ośrodku, takich jak na przykład fale dźwiękowe, wielkość efektu zależy od prędkości obserwatora oraz źródła względem ośrodka, w którym te fale się rozchodzą. W przypadku fal propagujących bez udziału ośrodka materialnego, jak na przykład światło (w ogólności fale elektromagnetyczne) w próżni, znaczenie ma jedynie różnica prędkości źródła oraz obserwatora.
+
+Historia
+
+Christian Andreas Doppler jako pierwszy w 1842 r. w swojej publikacji opisał zaobserwowany efekt polegający na zmianie koloru światła pod wpływem ruchu w układzie gwiazd podwójnych. Naukowe badanie efektu po raz pierwszy przeprowadził Christoph Hendrik Diederik Buys Ballot w 1845 r. Poprosił on grupę muzyków (trębaczy), aby wsiedli do pociągu i grali jeden ton. Słuchał go i zaobserwował, że dźwięk instrumentów jest wyższy, gdy pociąg zbliża się do niego. Gdy źródło muzyki się oddala, jego ton staje się niższy. Zmiana wysokości dźwięku była dokładnie taka, jak obliczył uprzednio Doppler. Niezależnie od niego podobny efekt został w 1848 r. zaobserwowany przez Armanda Fizeau dla fal elektromagnetycznych.
+
+Johannes Stark, badając promieniowanie kanalikowe, odkrył, że emitowane przez nie światło podlega efektowi Dopplera, za badania te uzyskał w 1919 roku Nagrodę Nobla w dziedzinie fizyki.
+
+Wstęp
+
+W układzie odniesienia U, w którym znajdują się źródło fali i obserwator, źródło nieruchome względem tego układu, emitujące falę o stałej częstotliwości, wytwarza fale o jednakowej długości we wszystkich kierunkach propagacji. Jeżeli natomiast źródło porusza się względem układu U, długość fali staje się zależna od kierunku propagacji. W rezultacie obserwator spoczywający w układzie U może rejestrować częstotliwość różniącą się od częstotliwości emitowanej. Wielkość tej różnicy zależy od prędkości źródła względem układu U oraz od kąta między kierunkiem propagacji fali a kierunkiem ruchu źródła. Różnica między częstotliwością emitowaną a odbieraną nazywana jest przesunięciem Dopplera lub częstotliwością Dopplera.
+
+Zmiany częstotliwości wywołane efektem Dopplera są opisywane przez nieco inne zależności w przypadku fal mechanicznych (np. fal dźwiękowych), niż w przypadku fal elektromagnetycznych (np. światła, fal radiowych).
+
+Efekt Dopplera dla fal mechanicznych
+
+Gdy źródło fali wysyła kolejne drgania z taką samą częstotliwością i porusza się, odległość między kolejnymi grzbietami jest zależna od kierunku rozchodzenia się fali. Źródło przybliża się do zaburzeń, które wysłało, w kierunku zgodnym z kierunkiem ruchu źródła, a oddala się od fali przemieszczającej się w kierunku przeciwnym. Tak więc w kierunku ruchu źródła kolejne grzbiety falowe są emitowane w mniejszej odległości, niż gdyby źródło spoczywało. Nieruchomy obserwator odbiera to jako zmianę częstotliwości fali, ale odległości między nimi zależą od położenia obserwatora względem kierunku ruchu źródła.
+
+Podobnie jeśli obserwator zbliża się do źródła, to wprawdzie odległości między grzbietami i ich prędkość propagacji są takie same w każdym kierunku, ale obserwator spotyka grzbiety fal częściej, co powoduje wrażenie większej częstości fal.
+
+Jeżeli źródło lub obserwator poruszają się w innym kierunku niż prosta łącząca je, efekt wywołują składowe prędkości źródła i obserwatora równoległe do prostej łączącej źródło z obserwatorem.
+
+Fala mechaniczna emitowana przez ruchome źródło
+
+Poruszające się źródło pomiędzy wysłaniem dwóch kolejnych grzbietów fali, czyli w czasie równym jednemu okresowi fali, przebywa drogę:
+
+emitując kolejny grzbiet w miejscu przesuniętym względem miejsca emisji poprzedniego grzbietu o i o tyle zmniejsza się długość fali odbieranej przez obserwatora, w kierunku którego porusza się źródło:
+
+co prowadzi do wzoru na częstotliwość fali odbieranej:
+
+Efekt Dopplera zapisuje się, określając prędkość ruchu źródła w odniesieniu do prędkości fali w ośrodku, przyjmując oznaczenie:
+
+Fala mechaniczna – przemieszczający się obserwator
+
+W przypadku spoczywającego źródła odległości między kolejnymi grzbietami fali są niezależne od kierunku, ale zmienia się częstość ich spotykania przez poruszającego się obserwatora: jeśli obserwator zbliża (oddala) się do (od) źródła, to napotyka więcej (mniej) grzbietów niż w przypadku, w którym sam spoczywa. Jeśli obserwator zbliża się do źródła, to względna prędkość obserwatora i fali jest równa wobec tego czas między obserwacjami kolejnych grzbietów jest równy:
+
+W powyższych wzorach prędkość obserwatora ma wartość dodatnią, gdy obserwator porusza się ku źródłu. Przy przeciwnym zwrocie ruchu prędkość ta ma wartość ujemną.
+
+Gdy prędkość źródła fali lub obserwatora są porównywalne z prędkością fali w ośrodku, między innymi z powodu nieliniowości siły kierującej do wychylenia, powyższe wzory muszą być zmodyfikowane, a przy przekroczeniu prędkości fali tracą sens.
+
+Uogólnienie
+
+Z połączenia powyższych wzorów wynika wzór opisujący zjawisko, gdy zarówno źródło, jak i obserwator poruszają się wzdłuż prostej łączącej źródło z obserwatorem:
+
+Prędkości źródła i obserwatora są określane względem ośrodka. Górne znaki prędkości we wzorach oznaczają przypadek, gdy są one skierowane ku sobie, a dolne dotyczą sytuacji, w których mają odwrotne zwroty.
+
+Przybliżenie obowiązuje, gdy prędkość źródła jest znacznie mniejsza od prędkości fali w ośrodku. Wynika z niego, że zmiana częstotliwości jest proporcjonalna do prędkości obserwatora względem źródła .
+
+Równoważny wzór, łatwiejszy do zapamiętania:
+
+Ogólny wzór uwzględniający kierunki ruchu źródła i obserwatora względem ośrodka, w którym rozchodzi się fala:
+
+przy czym wymienione kąty są zawarte między odcinkiem łączącym źródło z obserwatorem a wektorem prędkości źródła lub obserwatora.
+
+Kształt fal w zależności od prędkości źródła
+
+Na każdej z poniższych ilustracji źródło dźwięku wytwarza fale o stałej częstotliwości. Emitowane fale oddalają się od miejsca emisji ze stałą prędkością, tworząc okręgi o środku w miejscu, gdzie znajdowało się źródło w momencie emisji.
+
+Efekt Dopplera dla światła
+
+Światło (fala elektromagnetyczna), rozchodząc się w próżni, porusza się z taką samą prędkością względem każdego obserwatora, a nie jak fala mechaniczna z prędkością określoną względem ośrodka, w którym się rozchodzi. Efekt zmiany częstotliwości dla światła nazywany jest relatywistycznym efektem Dopplera. Jeżeli źródło i odbiornik fali poruszają się względem siebie, to występuje dylatacja czasu wynikająca ze szczególnej teorii względności, która modyfikuje poprzednio uzyskany wzór o czynnik Lorentza. W wyniku tego jeżeli źródło i nadajnik poruszają się wzdłuż jednej prostej i oddalają się od siebie, to odbiornik rejestruje falę o częstotliwości:
+
+Dla prędkości ruchu źródła względem obserwatora znacznie mniejszych od prędkości światła powyższą zależność można opisać z dobrym przybliżeniem wzorami:
+
+Występowanie wyrazu z β² zostało wykazane doświadczalnie w 1938 r. przez H.E. Ivesa i G.R. Stilwella przy użyciu wiązki atomów wodoru.
+
+co odpowiada zależnościom z nierelatywistycznego efektu Dopplera.
+
+Relatywistyczny efekt Dopplera dla światła można również wyprowadzić z niezmienniczości Lorentza kwadratu czteropędu.
+
+Poprzeczny efekt Dopplera
+
+Relatywistyczny efekt Dopplera z uwzględnieniem różnych kierunków ruchu opisuje wzór:
+
+gdzie jest kątem między kierunkiem ruchu źródła a prostą łączącą źródło z odbiornikiem.
+
+Gdy źródło porusza się prostopadle do prostej łączącej odbiornik ze źródłem ( = 90°), nie zmienia swej odległości od odbiornika, pomimo tego odbiornik odbiera falę o częstotliwości innej niż nadawana:
+
+Zjawisko to nosi nazwę poprzecznego efektu Dopplera.
+
+Rotacyjny efekt Dopplera
+
+Istnieje także efekt Dopplera opisujący zmianę momentu pędu fotonów przy przejściu przez obracający się ośrodek. Może on być wykorzystywany do badania turbulencji, oraz pomiaru szybkości obrotu obiektów astronomicznych. Efekt ten ma stosunkowo łatwo obserwowalną składową liniową, oraz składową nieliniową, przewidzianą teoretycznie w 1968 roku przez Nicolaasa Bloembergena a potwierdzoną doświadczalnie dopiero w 2016 roku.
+
+Zastosowania
+
+Konsekwencje efektu
+
+Efekt zachodzi zawsze, a przy dużych prędkościach musi być uwzględniony przy strojeniu odbiornika fal oraz przy analizie transmitowanych sygnałów i danych. Zjawisko to szczególnie ma znaczenie przy komunikacji między sondami kosmicznymi. Szczególną sytuacją była transmisja między sondą Cassini a wysłanym przez nią próbnikiem Huygens, który wylądował na powierzchni Tytana i przesyłał dane do sondy, a sonda – na Ziemię. Już w trakcie lotu podczas testu zauważono, że transmisja sondy z próbnikiem zachodzi, ale przesyłane dane są fałszywe. Okazało się, że uwzględniono efekt Dopplera w odbiorniku sygnału, ale nie uwzględniono go w przesyłanych danych. Korekcja oprogramowania uratowała projekt badawczy.
+
+Określanie prędkości ruchu
+
+Efekt Dopplera jest wykorzystywany do określania prędkości przybliżania się lub oddalania źródła fali. Prędkość źródła fali można określić na podstawie wzoru dla ruchomego źródła. Dla prędkości znacznie mniejszej od prędkości światła zarówno dla fal mechanicznych, jak i dla światła wynosi ona:
+
+Zjawisko wykorzystuje się głównie do określania prędkości ruchu ciała odbijającego falę. Wówczas traktując to ciało jako element odbierający, a następnie wysyłający falę, prędkość określa wzór:
+
+Jeżeli badany obiekt porusza się pod kątem do kierunku fali, to prędkość określa wzór:
+
+W przypadku pomiaru ruchu substancji nieodbijającej fal stosuje się „zasiewanie”, polegające na dodawaniu do substancji drobin odbijających fale. Urządzenia tego typu generują falę o dokładnie określonej częstotliwości i odbierają falę odbitą. W układzie odbiorczym dokonuje się zmieszania drgań fali wysyłanej i odbitej, wydzielając drgania o małej częstotliwości, których częstotliwość jest równa różnicy częstotliwości fali wysyłanej i odbieranej.
+
+Dźwięk jadącej sąsiednią ulicą miasta (nie wprost na obserwatora) karetki najpierw jest wysoki, kiedy ta jest daleko, po czym obniża się stopniowo w miarę jazdy karetki. Efekt ten powstaje na skutek zmiany składowej radialnej prędkości karetki. Nie cały wektor prędkości wnosi wkład do efektu Dopplera, znaczenie ma tylko składowa radialna (przybliżanie/oddalanie się karetki). Przy stałej prędkości karetki, składowa radialna prędkości zmienia się zależnie od kąta między kierunkiem jazdy karetki a kierunkiem łączącym karetkę z obserwatorem.
+
+Określanie prędkości pojazdów
+
+Zdalny pomiar prędkości pojazdów wykonuje się głównie przez radarowe i laserowe urządzenia wykorzystujące efekt Dopplera. Gdy pomiar radarem policyjnym dokonywany jest pod kątem do kierunku jazdy samochodu, to przyrząd wskazuje mniejszą prędkość od rzeczywistej prędkości pojazdu. Przy pomiarze prędkości radarami stacjonarnymi, mierzącymi wiązką nierównoległą do kierunku ruchu pojazdów, wprowadza się korektę wskazań urządzenia.
+
+Przepływomierze
+
+Szczególnym przykładem zastosowania efektu Dopplera do pomiaru prędkości ruchu jest przepływomierz ultradźwiękowy.
+
+Laserowy wibrometr dopplerowski
+
+W laserowym dopplerowskim wibrometrze wykorzystuje zmianę długości fali świetlnej odbitej od drgającego obiektu, a poprzez analizę fali określa się parametry drgań badanego układu.
+
+Określanie położenia
+
+Gdy 4 października 1957 roku Związek Radziecki umieścił na orbicie okołoziemskiej pierwszego sztucznego satelitę ziemi Sputnik 1, amerykańscy fizycy William Guier i George Weiffenbach zauważyli, że są w stanie określić położenie satelity na orbicie na podstawie przesunięcia Dopplera sygnałów odbieranych z satelity. Frank McClure, prezes centrum badań APL, zasugerował wówczas, że jeśli pozycja satelity jest znana i przewidywalna, to przesunięcia Dopplera mogłoby być wykorzystane do lokalizacji odbiornika na ziemi. Na tej idei skonstruowano pierwszy system nawigacji satelitarnej Transit, używany przez okręty marynarki wojennej Stanów Zjednoczonych. Satelita nadawał sygnał o stałej częstotliwości i znaczniki czasu. Położenie określano na podstawie zmian częstotliwości odbieranej przez odbiornik na okręcie. Wyznaczenie położenia wymagało skomplikowanych obliczeń, które wykonywał komputer.
+
+Określanie położenia źródła fal
+
+Efekt Dopplera wykorzystuje się także do lokalizacji źródła fal elektromagnetycznych. W metodzie tej lokalizator porusza się, zmieniając kierunek ruchu. Na podstawie zmiany częstotliwości odbieranej fali wywołanej efektem Dopplera określa się położenie źródła fali. Metoda ta jest obecnie testowana w celu zastosowania do poszukiwania rozbitków na morzu.
+
+Kompensacja efektu Dopplera u nietoperzy
+
+Gdy nietoperz zbliża się do celu, echo wytwarzanego przez niego dźwięku echolokacyjnego ma większą częstotliwość, niż dźwięk wysyłany przez nieruchomego nietoperza. Dwie grupy echolokujących nietoperzy z rodzin podkowcowatych i straszaków, które posługują się stałą częstotliwością echolokacji, wykształciły szczególny mechanizm kompensacji efektu Dopplera: obniżają częstotliwość wysyłanego dźwięku, tak by powracający dźwięk miał częstotliwość odpowiadającą maksimum czułości ich ucha. Efekt został odkryty przez Hansa Schnitzlera w 1968 roku.
+
+Radar dopplerowski
+
+Na efekcie Dopplera opiera się zasada działania radaru dopplerowskiego. Gdy fale radiowe odbijają się od ruchomego obiektu, ich częstotliwość postrzegana przez nieruchomego obserwatora jest zależna od prędkości ruchu.
+
+Meteorologiczne radary dopplerowskie stosowane są do wykrywania ruchu chmur i powietrza, dostarczając dane do obserwacji i prognozowania pogody. Dzięki takim pomiarom można wcześniej ostrzec ludność zagrożoną przez gwałtowne zjawiska atmosferyczne, takie jak burze, fronty atmosferyczne i tornada. Wyniki działań radarów meteorologicznych są dostępne powszechnie w Internecie, np. na stronie Radareu.cz.
+
+Diagnostyka medyczna
+
+W obrazowych badaniach diagnostycznych cenną informacją jest nie tylko kształt anatomicznych struktur, lecz także kierunek i prędkość poruszania się tkanek. Ruch takich płynów ustrojowych jak krew można obserwować, mierząc zmiany częstotliwości oraz fazy fal dźwiękowych odbitych od płynącej cieczy.
+
+Udoskonaleniem konwencjonalnych aparatów ultrasonograficznych było wprowadzenie ultrasonografii dopplerowskiej. Jeżeli głowica ultradźwiękowa potrafi rejestrować nie tylko opóźnienie echa wysyłanego dźwięku, lecz również jego częstotliwość, wtedy na obrazie diagnostycznym można umownymi kolorami zobrazować ruch organu lub płynu ustrojowego.
+
+W badaniach dopplerowskich USG stosuje się technikę wiązki ciągłej w której aparat generuje ciągle wiązkę fal, oraz impulsową, w której aparat generuje impulsy odpowiadające połówce okresu fali, po której następuje przerwa w czasie której odbierana jest analizowana fala.
+
+Przykładem może być echokardiografia. Dla kardiochirurgów bardzo ważne jest określenie nie tylko struktury anatomicznej serca, ale również prędkości i kierunku ruchu krwi przepływającej w tej biologicznej pompie. Obserwacja bijącego serca płodu umożliwia wykrycie wad rozwojowych jeszcze w łonie matki.
+
+Efekt Dopplera wykorzystywany jest także w metodzie laserowo-dopplerowskiego pomiaru ukrwienia skóry, która pozwala przez nieinwazyjny pomiar stopnia ukrwienia tkanek skóry właściwej ocenić przepływy w tętnicach i żyłach przy diagnozowaniu wielu schorzeń.
+
+Astronomia
+
+Efekt Dopplera zachodzący dla światła gwiazd i innych obiektów astronomicznych ma znaczące zastosowanie w spektroskopii astronomicznej. Światło gwiazdy charakteryzują linie widmowe, zależne od znajdujących się w nich atomów. Zmianę częstotliwości lub długości fali określa się przez porównanie położenia charakterystycznych linii widmowych w widmie gwiazdy z obrazem tych linii otrzymanym w laboratorium na Ziemi. Jeżeli gwiazda oddala się (ucieka) od obserwatora, to wszystkie jej linie widmowe będą przesunięte w kierunku czerwieni (większych długości fali).
+
+Gdy na początku XX w. astronomowie zaczęli badać widma innych galaktyk, okazało się, że większość z nich ma linie widmowe przesunięte ku czerwieni. Oznacza to, że obiekty te oddalają się od nas. Na dodatek, im dalej galaktyka się znajduje, tym szybciej oddala się od Ziemi, a jej światło jest bardziej przesunięte w kierunku większych długości fali (bardziej „poczerwienione” w paśmie widzialnym). Pomiary te doprowadziły do sformułowania prawa Hubble’a oraz teorii rozszerzającego się wszechświata. Wyjątkiem jest przesunięcie dopplerowskie linii widmowych Galaktyki Andromedy, które wskazuje, że zbliża się ona do nas. Przewiduje się, że za około 3,75 mld lat rozpocznie się zderzenie Galaktyki Andromedy z Drogą Mleczną.
+
+Jeżeli gwiazda tworzy związany grawitacyjnie układ z innym obiektem, oba ciała obiegają wspólny środek masy. Na podstawie tych ruchów można wnioskować o ich względnych masach. Pomiary zmian przesunięcia linii widmowych niektórych gwiazd wykazały, że okrążają je planety. W ten sposób astronomowie odkryli setki dużych planet poza Układem Słonecznym. Analizując zmianę w czasie rozkładu przesunięć Dopplera w widmie gwiazdy z planetą, można określić prędkość obrotu planety, co wykonywano np. przy użyciu teleskopu kosmicznego Chandra.
+
+Radarowe urządzenia z analizą efektu Dopplera były instalowane na sondach kosmicznych i służyły do badania ruchów atmosfery ciał niebieskich w Układzie Słonecznym. Jednym z nich był Doppler Wind Experiment w sondzie Cassini-Huygens badający wiatr na Tytanie.
+
+Poszerzenie linii spektralnych
+
+Efekt Dopplera jest jednym z czynników wywołujących poszerzenie linii spektralnych. Ponieważ cząsteczki, atomy lub jony tworzące emitujący lub absorbujący gaz poruszają się z różnymi prędkościami w różnych kierunkach, fale docierające do obserwatora mają nieznacznie przesunięte częstotliwości w stosunku do fal emitowanych przez źródło złożone z nieruchomych cząstek. Rozkład prędkości cząstek gazu (w stanie równowagi termodynamicznej jest to rozkład Maxwella) zależy od temperatury, dlatego im wyższa temperatura ośrodka emitującego światło, tym większe jest poszerzenie linii widmowych.
+
+Chłodzenie i pułapkowanie atomów
+
+Temperatura jest zależna od prędkości atomów. Jedną z metod uzyskiwania bardzo niskich temperatur jest chłodzenie dopplerowskie. Gaz atomów oświetlany jest promieniowaniem laserowym o energii nieco mniejszej niż energia wzbudzenia atomów, gdyby atomy były nieruchome nie ulegałyby wzbudzeniu, ale atomy poruszające się przeciwnie do kierunku ruchu światła w wyniku efektu Dopplera pochłaniają kwanty światła, atom ulega wzbudzeniu, jednocześnie zmniejszając swą prędkość. Atom, emitując foton, pozbywa się energii wzbudzenia, nieco większej od pochłoniętej. Kierunek emisji jest przypadkowy, dlatego atom zwiększa swą prędkość w przypadkowym kierunku. Wielokrotne pochłanianie i emitowanie światła prowadzi do zmniejszenia prędkości w stronę źródła światła. Oświetlenie gazu sześcioma wiązkami zmniejsza prędkość atomów we wszystkich kierunkach. Proces ten nazywa się chłodzeniem dopplerowskim. By zachodziło pochłanianie kwantów światła o energii mniejszej niż energia wzbudzenia, atomy muszą poruszać się z odpowiednią prędkością, dlatego chłodzenie to działa tylko do pewnej temperatury, np. dla rubidu do 0,143 mK.
+
+Wyżej wymieniona metoda może zmniejszyć prędkość atomów, ale nie zapewnia ich zatrzymania w zadanym obszarze. By uwięzić atomy w zadanym obszarze, umieszcza się je w zmiennym przestrzennie polu magnetycznym. Pole magnetyczne rozszczepia poziomy energetyczne. Odpowiednie dobranie częstotliwości fali lasera umożliwia oddziaływanie światła tylko w wybranych obszarach, co zapewnia pułapkowanie atomów.
+
+W odpowiednio niskiej temperaturze atomy przyjmują stan zwany kondensatem Bosego-Einsteina.
+
+Kalendarium odkryć
+
+Kalendarium odkryć związanych z efektem Dopplera:

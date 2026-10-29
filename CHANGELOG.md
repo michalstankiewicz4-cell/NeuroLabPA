@@ -3,6 +3,17 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.19.0
+- Laboratorium języka: lista **Przykład** z trzema tekstami do wyboru:
+  - „Proza grozy: Stefan Grabiński”: 43 nowele, ok. 1,1 mln znaków, domena publiczna;
+  - „Encyklopedia: polska Wikipedia”: 42 „Artykuły na medal” z różnych dziedzin, ok. 1,16 mln znaków, CC BY-SA 4.0;
+  - krótki tekst Claude'a do pokazania uczenia na pamięć.
+- Każdy zestaw ma swój folder i `LICENCJA.txt`. Przy Wikipedii są tam: autorzy (link do historii edycji), dokładna wersja każdego artykułu i opis zmian (zostały tylko akapity i nagłówki).
+- Pierwsze porównanie, sieć z oknem (okno 8, embedding 16, 128 neuronów) kontra bigram:
+  - Grabiński: błąd sprawdzający 2,12 wobec 2,52;
+  - Wikipedia: 2,28 wobec 2,62.
+  Wikipedia ma 262 różne znaki (grecki, cyrylica, symbole), Grabiński 114, więc warstwa wyjściowa jest większa i nauka wolniejsza.
+
 ## 0.18.2
 - Laboratorium języka: przykład to teraz 43 nowele i opowiadania Stefana Grabińskiego z Wolnych Lektur (domena publiczna, ok. 1,1 mln znaków). Źródło, licencja i lista utworów: `lang/data/LICENCJA.txt`; oryginalne noty licencyjne zostają w plikach.
 - Na tym tekście sieć z oknem wyraźnie wygrywa z bigramem (błąd sprawdzający 2,12 wobec 2,52; waha się między 8 literami zamiast 12) i nie uczy się na pamięć.

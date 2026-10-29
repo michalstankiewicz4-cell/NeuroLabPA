@@ -64,3 +64,5 @@ footer{margin-top:8px}
 .metrics .overfit{border-color:#d0605e}
 .metrics .overfit dt{color:#d0605e}
 .metrics .overfit dd{font-family:var(--body);font-size:14px;line-height:1.45}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dataactions select{max-width:min(320px,100%)}
