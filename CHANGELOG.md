@@ -3,6 +3,28 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.20.0
+- Laboratorium języka, **krok 3: sieć rekurencyjna** do wyboru w dwóch wersjach: zwykła RNN (Elman 1990) i GRU z bramkami (2014).
+  - Nauka na kawałkach tekstu z obciętą propagacją wstecz i przycinaniem gradientu.
+  - Sprawdzanie czyta tekst ciągiem: pierwsze 40 liter rozgrzewa pamięć.
+- Nowe wizualizacje kroku 3:
+  - **Neurony pamięci:** stan wybranego neuronu pod każdą literą tekstu. Strona sama znajduje neurony, które pokrywają się z cechami tekstu: litera czy odstęp, pozycja w słowie, samogłoska, cudzysłów, nawias.
+  - **Zasięg pamięci:** jaka część sygnału uczącego dociera do pamięci sprzed 1–59 liter, w skali logarytmicznej, z porównaniem zakończonych nauk. W zwykłej RNN sygnał zanika wykładniczo, w GRU zostaje.
+  - Mapa liter jak w kroku 2.
+- Silnik:
+  - nowe operacje: dodawanie, odejmowanie i mnożenie po elementach, sigmoida, wycinanie i sklejanie wierszy i kolumn;
+  - komórki `rnnCell` i `gruCell`;
+  - obcinanie gradientu w Adam;
+  - gradienty sprawdzone numerycznie.
+- **Najlepsza wersja sieci (wczesne zatrzymanie)** dla kroków 2 i 3. Strona zapamiętuje wagi z momentu najniższego błędu sprawdzającego. Gdy pod koniec błąd wyraźnie wzrośnie, wraca do nich i to zgłasza. Najlepszy punkt jest zaznaczony na wykresie.
+- **Zapisz model / Wczytaj model** (plik JSON z wagami, słownikiem liter i nazwą tekstu). Wczytany model z tym samym słownikiem jest sprawdzany na bieżącym tekście i trafia do tabeli. Model z innym słownikiem działa tylko do generowania.
+- Wynik na Grabińskim (błąd sprawdzający):
+  - GRU (pamięć 64, 2000 kroków): 2,08;
+  - zwykła RNN: 2,15;
+  - sieć z oknem (3000 kroków): 2,22;
+  - bigram: 2,52.
+  GRU przy tym ustawieniu uczy się ok. 5 minut.
+
 ## 0.19.0
 - Laboratorium języka: lista **Przykład** z trzema tekstami do wyboru:
   - „Proza grozy: Stefan Grabiński”: 43 nowele, ok. 1,1 mln znaków, domena publiczna;

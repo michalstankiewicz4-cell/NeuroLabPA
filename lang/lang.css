@@ -66,3 +66,15 @@ footer{margin-top:8px}
 .metrics .overfit dd{font-family:var(--body);font-size:14px;line-height:1.45}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .dataactions select{max-width:min(320px,100%)}
+.modelio{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+.modelio button,.modelio label{font-family:var(--display);font-size:14px;letter-spacing:.04em;padding:8px 12px;color:var(--fg)}
+.modelio button:disabled{opacity:.45;cursor:default}
+.viztabs{display:flex;flex-wrap:wrap;gap:6px}
+.viztabs button{font-size:14px;padding:6px 12px;background:transparent;color:var(--muted);border:1px solid var(--line);box-shadow:none}
+.viztabs button[aria-pressed="true"]{background:var(--rot);color:var(--bg);border-color:var(--rot)}
+.vizctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:14px}
+.vizctl .chip{font-family:var(--body);font-size:13px;letter-spacing:0;padding:5px 10px;background:var(--panel);color:var(--fg);border:1px solid var(--line);box-shadow:none}
+.vizctl .chip[aria-pressed="true"]{border-color:var(--rot);color:var(--rot)}
+.vizctl .nav{font-size:14px;padding:5px 10px;box-shadow:none}
+.vizctl output{font-family:var(--mono);min-width:9ch;text-align:center}
+.notice{margin:0;padding:10px 14px;border:1px solid var(--rot);background:var(--panel);max-width:80ch}

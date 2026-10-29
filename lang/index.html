@@ -43,6 +43,10 @@
       <button id="train" type="button">Ucz</button>
       <button id="stop" class="ghost" type="button" disabled>Stop</button>
       <span class="note" id="paramNote"></span>
+      <span class="modelio">
+        <button id="saveModel" class="ghost" type="button" disabled>Zapisz model</button>
+        <label class="ghost filebtn" for="loadModel">Wczytaj model<input id="loadModel" type="file" accept=".json,application/json"></label>
+      </span>
     </div>
   </section>
 
@@ -64,6 +68,8 @@
     </div>
     <p class="note">Temperatura: niska = sieć wybiera najpewniejsze litery (bezpiecznie, ale powtarzalnie), wysoka = odważniej (ciekawiej, ale więcej błędów).</p>
     <h3 id="vizTitle">Co sieć wie o literach</h3>
+    <div class="viztabs" id="vizTabs" role="group" aria-label="Widok" hidden></div>
+    <div class="vizctl" id="vizCtl" hidden></div>
     <div class="vizbox"><canvas id="viz" width="640" height="420" aria-label="Wizualizacja wiedzy sieci"></canvas></div>
     <p class="note" id="vizNote"></p>
   </section>

@@ -37,14 +37,14 @@ Sieć neuronowa nie jest nigdzie zapisywana: przy każdym otwarciu uczy się od 
 
 ## Laboratorium języka
 
-Osobna strona `lang/` (link w nagłówku): sieć uczy się polskiego od zera, na Twoich plikach .txt, na własnym silniku napisanym w JS (bez bibliotek). Konstrukcje idą w kolejności historycznej, każda naprawia słabość poprzedniej: bigram → sieć z oknem i embeddingami → sieć rekurencyjna → transformer (dwie ostatnie w przygotowaniu). Wszystkie mierzone tą samą miarą (błąd na tekście sprawdzającym, bity na znak), więc różnice widać w tabeli porównania.
+Osobna strona `lang/` (link w nagłówku): sieć uczy się polskiego od zera, na Twoich plikach .txt, na własnym silniku napisanym w JS (bez bibliotek). Konstrukcje idą w kolejności historycznej, każda naprawia słabość poprzedniej: bigram → sieć z oknem i embeddingami → sieć rekurencyjna (zwykła RNN i GRU) → transformer (w przygotowaniu). Wszystkie mierzone tą samą miarą (błąd na tekście sprawdzającym, bity na znak), więc różnice widać w tabeli porównania.
 
 ```
 lang/index.html       strona laboratorium
 lang/lang.css         układ (kolory i czcionki z css/style.css)
-lang/js/engine.js     silnik: tensory, autograd, Adam, PCA
+lang/js/engine.js     silnik: tensory, autograd, komórki RNN i GRU, Adam z obcinaniem gradientu, PCA
 lang/js/data.js       przykładowy tekst, słownik liter
-lang/js/worker.js     trening w tle (Web Worker): bigram, sieć z oknem, próbkowanie
+lang/js/worker.js     trening w tle (Web Worker): bigram, sieć z oknem, RNN/GRU, najlepsza wersja, zapis/wczytanie modelu
 lang/js/lang.js       strona: dane, wykres, wizualizacje, porównanie
 lang/data/            zestawy przykładowe: grabinski/, wikipedia/ (manifest.json, opis i licencje w README)
 ```

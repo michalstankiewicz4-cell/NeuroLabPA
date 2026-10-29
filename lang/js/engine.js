@@ -63,6 +63,50 @@ function tanh(a) {
   return out;
 }
 
+function sigmoid(a) {
+  const O = new Float32Array(a.size);
+  for (let i = 0; i < O.length; i++) O[i] = 1 / (1 + Math.exp(-a.d[i]));
+  const out = new T(O, a.s, [a], () => { for (let i = 0; i < O.length; i++) a.g[i] += O[i] * (1 - O[i]) * out.g[i]; });
+  return out;
+}
+
+// Działania po elementach na tensorach tego samego kształtu (potrzebne bramkom GRU).
+function add(a, b) {
+  const O = new Float32Array(a.size); for (let i = 0; i < O.length; i++) O[i] = a.d[i] + b.d[i];
+  const out = new T(O, a.s, [a, b], () => { for (let i = 0; i < O.length; i++) { a.g[i] += out.g[i]; b.g[i] += out.g[i]; } });
+  return out;
+}
+function sub(a, b) {
+  const O = new Float32Array(a.size); for (let i = 0; i < O.length; i++) O[i] = a.d[i] - b.d[i];
+  const out = new T(O, a.s, [a, b], () => { for (let i = 0; i < O.length; i++) { a.g[i] += out.g[i]; b.g[i] -= out.g[i]; } });
+  return out;
+}
+function mul(a, b) {
+  const O = new Float32Array(a.size); for (let i = 0; i < O.length; i++) O[i] = a.d[i] * b.d[i];
+  const out = new T(O, a.s, [a, b], () => { for (let i = 0; i < O.length; i++) { a.g[i] += out.g[i] * b.d[i]; b.g[i] += out.g[i] * a.d[i]; } });
+  return out;
+}
+
+// Wycinki i sklejanie: wiersze [start, start+n) albo kolumny [c0, c1) macierzy [n,m].
+function sliceRows(a, start, n) {
+  const m = a.s[1], out = new T(a.d.slice(start * m, (start + n) * m), [n, m], [a], () => {
+    for (let i = 0; i < n * m; i++) a.g[start * m + i] += out.g[i];
+  });
+  return out;
+}
+function sliceCols(a, c0, c1) {
+  const [n, m] = a.s, w = c1 - c0, O = new Float32Array(n * w);
+  for (let i = 0; i < n; i++) O.set(a.d.subarray(i * m + c0, i * m + c1), i * w);
+  const out = new T(O, [n, w], [a], () => { for (let i = 0; i < n; i++) for (let j = 0; j < w; j++) a.g[i * m + c0 + j] += out.g[i * w + j]; });
+  return out;
+}
+function concatRows(list) {
+  const m = list[0].s[1], n = list.reduce((s, t) => s + t.s[0], 0), O = new Float32Array(n * m);
+  let off = 0; for (const t of list) { O.set(t.d, off); off += t.size; }
+  const out = new T(O, [n, m], list, () => { let o = 0; for (const t of list) { for (let i = 0; i < t.size; i++) t.g[i] += out.g[o + i]; o += t.size; } });
+  return out;
+}
+
 // Wybiera wiersze macierzy E według indeksów: tak litery zamieniają się w wektory (embeddingi).
 function gather(E, idx) {
   const d = E.s[1], L = idx.length, O = new Float32Array(L * d);
@@ -99,6 +143,24 @@ function crossEntropy(logits, targets) {
   return out;
 }
 
+// ---------- komórki sieci rekurencyjnych: jeden krok czytania (jedna litera) ----------
+// xw: wkład bieżącej litery (embedding × W + bias), h: pamięć po poprzedniej literze, U: wagi pamięci.
+
+// Zwykła RNN (Elman 1990): nowa pamięć = tanh(litera + stara pamięć × U).
+function rnnCell(xw, h, U) { return tanh(add(xw, matmul(h, U))); }
+
+// GRU (Cho i in. 2014). Dwie bramki z wartościami 0..1:
+//   r („reset”): ile starej pamięci użyć przy liczeniu kandydata n,
+//   z („update”): ile starej pamięci zostawić bez zmian. Gdy z≈1, pamięć przechodzi dalej nietknięta,
+//   więc gradient też przechodzi bez osłabiania; stąd dłuższa pamięć niż w zwykłej RNN.
+function gruCell(xw, h, U, bhn) {
+  const H = h.s[1], hu = matmul(h, U);
+  const r = sigmoid(add(sliceCols(xw, 0, H), sliceCols(hu, 0, H)));
+  const z = sigmoid(add(sliceCols(xw, H, 2 * H), sliceCols(hu, H, 2 * H)));
+  const n = tanh(add(sliceCols(xw, 2 * H, 3 * H), mul(r, addBias(sliceCols(hu, 2 * H, 3 * H), bhn))));
+  return add(n, mul(z, sub(h, n)));          // = (1−z)·n + z·h
+}
+
 // Przejście wstecz: kolejność topologiczna, potem reguła łańcuchowa od wyniku do parametrów.
 function backward(root) {
   const order = [], seen = new Set();
@@ -116,6 +178,14 @@ class Adam {
     params.forEach(p => { p.g = new Float32Array(p.size); });
   }
   zeroGrad() { this.params.forEach(p => p.g.fill(0)); }
+  // Obcinanie gradientu: gdy jego długość (norma) przekracza `max`, skalujemy go w dół.
+  // W sieciach rekurencyjnych gradient potrafi nagle urosnąć tysiące razy („eksplodujący gradient”).
+  clip(max) {
+    let s = 0; this.params.forEach(p => { for (let i = 0; i < p.size; i++) s += p.g[i] * p.g[i]; });
+    const norm = Math.sqrt(s);
+    if (norm > max) { const k = max / norm; this.params.forEach(p => { for (let i = 0; i < p.size; i++) p.g[i] *= k; }); }
+    return norm;
+  }
   step() {
     this.t++;
     const { b1, b2, eps, lr } = this, c1 = 1 - Math.pow(b1, this.t), c2 = 1 - Math.pow(b2, this.t);
@@ -151,4 +221,4 @@ function pca2(M, rows, cols) {
   return pts;
 }
 
-if (typeof module !== 'undefined') module.exports = { T, param, zeros, matmul, addBias, tanh, gather, view, crossEntropy, backward, Adam, pca2 };
+if (typeof module !== 'undefined') module.exports = { T, param, zeros, matmul, addBias, tanh, sigmoid, add, sub, mul, sliceRows, sliceCols, concatRows, rnnCell, gruCell, gather, view, crossEntropy, backward, Adam, pca2 };
