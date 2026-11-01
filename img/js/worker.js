@@ -360,7 +360,62 @@ function buildDiff(hp) {
     }
     return toPix(x, -1, 1);
   };
+  // Rysowanie z kilkoma podpowiedziami naraz (Liu i in. 2022, „composable diffusion”): dla każdego obrazka
+  // lista kategorii z wagą dla każdego piksela. W każdym kroku sieć zgaduje rysunek osobno dla każdej kategorii
+  // i bez kategorii, a my składamy: bez kategorii + siła × Σ waga · (z kategorią − bez kategorii).
+  // Mieszanie: te same wagi w całym obrazku. Obszary: waga zależy od miejsca (góra kot, dół drzewo).
+  m.sampleW = (items, guide, onFrame, seed) => {
+    const { ab, beta, T: TT } = m.sch, B = items.length, K = items[0].conds.length, R = B * (K + 1);
+    const gs = items.map(() => seed != null ? seededGauss(seed) : randn);       // ten sam szum dla każdego obrazka: widać samą zmianę podpowiedzi
+    let x = new Float32Array(B * S2); for (let b = 0; b < B; b++) for (let i = 0; i < S2; i++) x[b * S2 + i] = gs[b]();
+    const cls = []; items.forEach(it => { it.conds.forEach(c => cls.push(c.c)); cls.push(-1); });
+    for (let t = TT; t >= 1; t--) {
+      const xx = new Float32Array(R * S2);
+      for (let b = 0; b < B; b++) for (let k = 0; k <= K; k++) xx.set(x.subarray(b * S2, (b + 1) * S2), (b * (K + 1) + k) * S2);
+      const e = m.eps(xx, Array(R).fill(t), cls).d, nx = new Float32Array(B * S2), at = 1 - beta[t], abt = ab[t], abp = ab[t - 1];
+      for (let b = 0; b < B; b++) for (let i = 0; i < S2; i++) {
+        const u = e[(b * (K + 1) + K) * S2 + i]; let acc = 0;
+        items[b].conds.forEach((c, k) => { acc += c.w[i] * (e[(b * (K + 1) + k) * S2 + i] - u); });
+        const x0 = Math.max(-1, Math.min(1, u + guide * acc)), xi = x[b * S2 + i];
+        const mean = Math.sqrt(abp) * beta[t] / (1 - abt) * x0 + Math.sqrt(at) * (1 - abp) / (1 - abt) * xi;
+        nx[b * S2 + i] = mean + (t > 1 ? Math.sqrt(beta[t] * (1 - abp) / (1 - abt)) * gs[b]() : 0);
+      }
+      x = nx;
+      if (onFrame && (t % Math.max(1, TT / 10 | 0) === 0 || t === 1)) onFrame(TT - t + 1, x);
+    }
+    return toPix(x, -1, 1);
+  };
   return m;
+}
+// Losowanie z ziarnem: ten sam początek daje ten sam ciąg liczb (do porównań „przy tym samym szumie”).
+function seededGauss(seed) {
+  let s = (seed >>> 0) || 1;
+  const u = () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return (s + .5) / 4294967296; };
+  return () => Math.sqrt(-2 * Math.log(u())) * Math.cos(2 * Math.PI * u());
+}
+// Wyobraźnia: mieszanie dwóch kategorii (VAE, GAN, dyfuzja) i obszary malowane pędzlem (dyfuzja).
+function softHot(c1, c2, a) { const o = new Float32Array(cats.length); o[c1] += 1 - a; o[c2] += a; return o; }
+function blurMask(mask) {   // łagodna granica obszarów: 3×3 średnia, żeby szew się zszył
+  const o = new Float32Array(S2);
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { let s = 0, n = 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const yy = y + dy, xx = x + dx; if (yy >= 0 && yy < 16 && xx >= 0 && xx < 16) { s += mask[yy * 16 + xx]; n++; } } o[y * 16 + x] = s / n; }
+  return o;
+}
+function imagine(q, onFrame) {
+  const md = models[q.kind]; if (!md) throw new Error('Najpierw naucz tę sieć.');
+  const seed = q.seed || (1 + randInt(1e9)), steps = [0, 1 / 6, 2 / 6, .5, 4 / 6, 5 / 6, 1], C = cats.length;
+  if (md.kind === 'vae' || md.kind === 'gan') {
+    const Z = md.kind === 'vae' ? md.hp.z : md.hp.noise, g = seededGauss(seed), z = Float32Array.from({ length: Z }, g);
+    const run = list => { const n = list.length, zz = new Float32Array(n * Z), ch = new Float32Array(n * C); list.forEach((a, i) => { zz.set(z, i * Z); ch.set(softHot(q.c1, q.c2, a), i * C); });
+      const Zt = new T(zz, [n, Z]), Ct = new T(ch, [n, C]); return md.kind === 'vae' ? toPix(sigArr(md.decode(Zt, Ct).d)) : toPix(md.gen(Zt, Ct).d); };
+    return { main: run([q.a])[0], strip: run(steps), seed };
+  }
+  const uni = a => [{ c: q.c1, w: new Float32Array(S2).fill(1 - a) }, { c: q.c2, w: new Float32Array(S2).fill(a) }];
+  if (q.mask) {
+    const w2 = blurMask(q.mask), w1 = w2.map(v => 1 - v);
+    return { main: md.sampleW([{ conds: [{ c: q.c1, w: w1 }, { c: q.c2, w: w2 }] }], q.guide, onFrame, seed)[0], seed, region: true };
+  }
+  const main = md.sampleW([{ conds: uni(q.a) }], q.guide, onFrame, seed)[0];
+  return { main, strip: md.sampleW(steps.map(a => ({ conds: uni(a) })), q.guide, null, seed), seed };
 }
 function trainDiff(hp) {
   const m = buildDiff(hp), opt = new Adam(m.params, hp.lr), vs = vsSet(), vb = realBatch(vs, vs.map((_, i) => i), 2, -1);
@@ -442,6 +497,7 @@ self.onmessage = e => {
       else trainAR(m.hp);
     }
     else if (m.cmd === 'stop') { if (running) running.stop = true; }
+    else if (m.cmd === 'imagine') { const r = imagine(m, (k, x) => post({ type: 'imgFrame', id: m.id, img: toPix(x, -1, 1)[0] })); post({ type: 'imagined', id: m.id, ...r }); }
     else if (m.cmd === 'latent') { const md = models.vae; if (!md) throw new Error('Najpierw naucz VAE.'); post({ type: 'latent', c: m.c, n: 8, imgs: latentMap(md, m.c) }); }
     else if (m.cmd === 'gputest') gpuSelfTest().then(r => post({ type: 'gputest', ok: true, ...r }), err => post({ type: 'gputest', ok: false, msg: String(err.message || err) }));
     else if (m.cmd === 'generate') {

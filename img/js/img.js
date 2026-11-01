@@ -345,7 +345,7 @@ function resetLearn() {
   $('tempBox').hidden = !BITS(cur); $('guideBox').hidden = cur !== 'diff';
   $('legT').textContent = cur === 'gan' ? 'błąd generatora' : cur === 'vae' ? 'błąd na piksel, rysunki treningowe' : cur === 'diff' ? 'błąd zgadywania rysunku (trening)' : 'błąd na rysunkach treningowych';
   $('legV').textContent = cur === 'gan' ? 'błąd krytyka' : cur === 'diff' ? 'błąd zgadywania rysunku (sprawdzające)' : cur === 'vae' ? 'błąd na piksel, rysunki sprawdzające' : 'błąd na rysunkach sprawdzających';
-  renderInner();
+  renderInner(); renderImagine(); mixLabel();
 }
 $('train').addEventListener('click', () => {
   if (!ready) return;
@@ -372,7 +372,7 @@ worker.onmessage = e => {
     if (!m.ok) { const h = HP.ar.find(x => x.id === 'device'); h.val = 'wasm'; if ($('hp-device')) $('hp-device').value = 'wasm'; }
     gpuNote(); return;
   }
-  if (m.type === 'error') { showErr(m.msg); training = false; $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = !have.has(cur); return; }
+  if (m.type === 'error') { showErr(m.msg); training = false; $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = !have.has(cur); if (have.has(cur)) { $('imGo').disabled = $('regGo').disabled = false; } return; }
   if (m.type === 'gen') {
     if (m.id !== genId) return;
     const cx = $('draw').getContext('2d'), img = m.imgs[0];
@@ -382,6 +382,8 @@ worker.onmessage = e => {
     return;
   }
   if (m.type === 'latent') { drawGrid(m.imgs, m.n); return; }
+  if (m.type === 'imgFrame') { if (m.id === imId) drawBig(m.img); return; }
+  if (m.type === 'imagined') { if (m.id === imId) showImagined(m); return; }
   if (m.type !== 'progress' && m.type !== 'done') return;
   if (m.kind !== cur) return;
   if (m.train != null) series.train.push([m.step, m.train]);
@@ -395,7 +397,7 @@ worker.onmessage = e => {
   if (m.type === 'done') {
     training = false; have.add(m.kind); $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = false;
     runs.push({ kind: m.kind, label: LABEL(m.kind, hpValues(m.kind)), params: m.params, val: m.val, stats: m.stats, ms: m.ms, device: m.device });
-    renderCmp(); renderInner();
+    renderCmp(); renderInner(); renderImagine();
   }
 };
 function renderMetrics(m) {
@@ -461,6 +463,57 @@ function drawFrames(fr) {
   const cx = cv.getContext('2d'); cx.fillStyle = '#1b1b22'; cx.fillRect(0, 0, cv.width, cv.height);
   fr.forEach((imgs, f) => imgs.forEach((p, r) => drawImg(cx, p, f * cell + 1, r * cell + 1, sc))); cv.style.width = Math.min(nf * cell * 2, 900) + 'px';
 }
+
+// ---------- wyobraźnia: mieszanie kategorii i obszary ----------
+const mask = new Uint8Array(N); let imId = 0;
+function renderImagine() {
+  const on = (cur === 'vae' || cur === 'gan' || cur === 'diff');
+  $('imagineBox').hidden = !on; if (!on) return;
+  $('regionBox').hidden = cur !== 'diff';
+  const ok = have.has(cur); $('imGo').disabled = $('regGo').disabled = !ok;
+  if ($('imA').options.length !== catData.length) {
+    ['imA', 'imB'].forEach((id, k) => { $(id).innerHTML = ''; catData.forEach((c, i) => $(id).add(new Option(c.name, i))); });
+    $('imA').value = String(catData.findIndex(c => c.quickdraw === 'tree')); $('imB').value = String(catData.findIndex(c => c.quickdraw === 'cat'));
+  }
+  drawMask();
+}
+function mixLabel() { const a = +$('imMix').value, nA = catData[+$('imA').value]?.name, nB = catData[+$('imB').value]?.name; $('imMixOut').textContent = `${Math.round((1 - a) * 100)}% ${nA || 'A'} + ${Math.round(a * 100)}% ${nB || 'B'}`; }
+['imMix', 'imA', 'imB'].forEach(id => $(id).addEventListener('input', () => { mixLabel(); drawMask(); }));
+function imagine(useMask) {
+  $('imGo').disabled = $('regGo').disabled = true;
+  const cx = $('imMain').getContext('2d'); cx.fillStyle = '#2a2a33'; cx.fillRect(0, 0, 192, 192);
+  worker.postMessage({ cmd: 'imagine', kind: cur, c1: +$('imA').value, c2: +$('imB').value, a: +$('imMix').value, guide: +$('guide').value, mask: useMask ? Array.from(mask) : null, id: ++imId });
+}
+$('imGo').addEventListener('click', () => imagine(false));
+$('regGo').addEventListener('click', () => { if (!mask.some(v => v)) { showErr('Zaznacz na siatce obszar kategorii B (albo wybierz gotowy układ).'); return; } $('err').hidden = true; imagine(true); });
+function drawBig(img) { const cx = $('imMain').getContext('2d'); drawImg(cx, img, 0, 0, 12); }
+function showImagined(m) {
+  drawBig(m.main); $('imGo').disabled = $('regGo').disabled = false;
+  if (m.strip) {
+    const box = $('imStrip'); box.innerHTML = '';
+    const lab = [0, 17, 33, 50, 67, 83, 100], nA = catData[+$('imA').value].name, nB = catData[+$('imB').value].name;
+    m.strip.forEach((p, i) => { const d = document.createElement('div'), cv = document.createElement('canvas'), sp = document.createElement('span'); d.className = 'samp'; cv.width = cv.height = S; drawImg(cv.getContext('2d'), p, 0, 0, 1); sp.textContent = i === 0 ? nA : i === 6 ? nB : `${lab[i]}% ${nB}`; d.append(cv, sp); box.appendChild(d); });
+  }
+  $('imNote').textContent = m.region ? `Jedna postać złożona z obszarów: ${catData[+$('imB').value].name} tam, gdzie malowałeś, ${catData[+$('imA').value].name} w reszcie. Kliknij jeszcze raz: inny szum, inna wersja.` : 'Sieć nigdy nie widziała takich rysunków: składa je z tego, co wie o dwóch kategoriach. Pasek pokazuje przemianę od 100% A do 100% B przy tym samym losowym szumie, więc zmienia się tylko podpowiedź.' + (cur !== 'diff' ? ' W VAE i GAN-ie mieszamy samą kategorię na wejściu sieci; w dyfuzji mieszamy odpowiedzi sieci w każdym kroku odszumiania.' : '');
+}
+// maska 16×16: malowanie przeciąganiem; pierwsze kliknięcie decyduje, czy malujemy, czy wymazujemy
+function drawMask() {
+  const cv = $('mask'), cx = cv.getContext('2d'), c = 12;
+  cx.fillStyle = 'rgba(156,172,112,.18)'; cx.fillRect(0, 0, 192, 192);
+  for (let i = 0; i < N; i++) if (mask[i]) { cx.fillStyle = 'rgba(127,166,216,.75)'; cx.fillRect((i % S) * c, Math.floor(i / S) * c, c, c); }
+  cx.strokeStyle = 'rgba(255,255,255,.08)'; cx.lineWidth = 1; for (let k = 0; k <= 16; k++) { cx.beginPath(); cx.moveTo(k * c + .5, 0); cx.lineTo(k * c + .5, 192); cx.stroke(); cx.beginPath(); cx.moveTo(0, k * c + .5); cx.lineTo(192, k * c + .5); cx.stroke(); }
+  cx.font = '11px system-ui'; cx.fillStyle = '#e8e8ee'; cx.fillText('A: ' + (catData[+$('imA').value]?.name || ''), 4, 188); cx.textAlign = 'right'; cx.fillText('B: ' + (catData[+$('imB').value]?.name || ''), 188, 12); cx.textAlign = 'left';
+}
+let painting = null;
+const cellAt = e => { const r = $('mask').getBoundingClientRect(), x = Math.floor((e.clientX - r.left) / r.width * 16), y = Math.floor((e.clientY - r.top) / r.height * 16); return x >= 0 && x < 16 && y >= 0 && y < 16 ? y * 16 + x : -1; };
+$('mask').addEventListener('pointerdown', e => { const k = cellAt(e); if (k < 0) return; painting = mask[k] ? 0 : 1; mask[k] = painting; $('mask').setPointerCapture(e.pointerId); drawMask(); });
+$('mask').addEventListener('pointermove', e => { if (painting == null) return; const k = cellAt(e); if (k >= 0 && mask[k] !== painting) { mask[k] = painting; drawMask(); } });
+['pointerup', 'pointercancel'].forEach(ev => $('mask').addEventListener(ev, () => { painting = null; }));
+[['B na górze', (x, y) => y < 7], ['B na dole', (x, y) => y >= 9], ['B z lewej', (x, y) => x < 8], ['B z prawej', (x, y) => x >= 8], ['B w środku', (x, y) => x >= 4 && x < 12 && y >= 4 && y < 12], ['odwróć', null], ['wyczyść', () => false]].forEach(([nm, f]) => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = nm;
+  b.addEventListener('click', () => { for (let i = 0; i < N; i++) mask[i] = f ? (f(i % 16, i >> 4) ? 1 : 0) : 1 - mask[i]; drawMask(); });
+  $('maskPresets').appendChild(b);
+});
 
 // ---------- wykres ----------
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();

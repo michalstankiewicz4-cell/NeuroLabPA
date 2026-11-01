@@ -17,7 +17,8 @@ Plany z rozmów projektowych, w kolejności, w jakiej najpewniej je zrobimy.
 - Dyfuzja i VAE na karcie graficznej.
 - Kolorowy zbiór (256 kolorów) z zombie z SDF Walkers, ze sterowaniem cechami (np. kolor koszuli).
 - Opis zdaniem zamiast numeru kategorii: koder tekstu z laboratorium języka.
-- Dokańczanie rysunku: zaczynasz kreską, sieć dokańcza resztę.
+- Dokańczanie rysunku (inpainting): zaczynasz kreską albo zaznaczasz miejsce, sieć dokańcza resztę.
+- „Zgadnij, co narysowałem”: rozpoznawanie rysunku. Sieć generatywna jako klasyfikator (który kategorii najbardziej pasuje rysunek) i osobny mały klasyfikator do porównania.
 
 ## Laboratorium języka: następne
 - **Własne rozmowy w kroku 5:** wgranie pliku albo dopisanie przykładów w polu tekstowym (np. imię i charakter sieci).

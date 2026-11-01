@@ -80,6 +80,30 @@
       <canvas id="att" class="pix" width="384" height="192" aria-label="Mapa uwagi na obrazku"></canvas>
       <p class="note" id="attNote">Po nauce kroku 2 zobaczysz tu, na które wcześniejsze piksele patrzy sieć, zgadując wybrany piksel.</p>
     </div>
+    <div class="imagine" id="imagineBox" hidden>
+      <h3>Wyobraźnia: rzeczy, których nie było w danych</h3>
+      <div class="gen imgen">
+        <label for="imA">Kategoria A<select id="imA"></select></label>
+        <label for="imB">Kategoria B<select id="imB"></select></label>
+        <label for="imMix">Mieszanie <output id="imMixOut">50% A + 50% B</output><input id="imMix" type="range" min="0" max="1" step="0.05" value="0.5"></label>
+        <button id="imGo" class="ghost" type="button">Narysuj mieszankę</button>
+      </div>
+      <div class="imrow">
+        <canvas id="imMain" class="pix" width="192" height="192" aria-label="Wymyślony rysunek"></canvas>
+        <div><div class="imstrip" id="imStrip"></div><p class="note" id="imNote">Sieć nigdy nie widziała takich rysunków: składa je z tego, co wie o dwóch kategoriach. Pasek pokazuje przemianę od 100% A do 100% B przy tym samym losowym szumie, więc zmienia się tylko podpowiedź.</p></div>
+      </div>
+      <div class="region" id="regionBox" hidden>
+        <h4>Obszary: gdzie ma być kategoria B</h4>
+        <div class="imrow">
+          <canvas id="mask" width="192" height="192" aria-label="Maska obszarów: kliknij i przeciągnij, aby malować obszar kategorii B"></canvas>
+          <div class="regctl">
+            <div class="vizctl" id="maskPresets"></div>
+            <button id="regGo" class="ghost" type="button">Narysuj z obszarami</button>
+            <p class="note">Maluj myszką po siatce: zaznaczone pola to kategoria B, reszta to A. W każdym kroku odszumiania sieć zgaduje rysunek osobno jako A i jako B, a my bierzemy z każdej odpowiedzi jej obszar. Granica sama się zszywa, bo kroków jest wiele. Spróbuj: A = drzewo, B = kot, B na górze.</p>
+          </div>
+        </div>
+      </div>
+    </div>
     <h3 id="innerTitle" hidden></h3>
     <div class="vizctl" id="innerCtl" hidden></div>
     <div class="innerrow" id="innerRow" hidden><canvas id="inner" class="pix" width="288" height="288" aria-label="Podgląd wnętrza sieci"></canvas><p class="note" id="innerNote"></p></div>

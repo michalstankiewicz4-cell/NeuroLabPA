@@ -48,3 +48,12 @@
 .innerrow canvas{image-rendering:pixelated;border:1px solid var(--line);background:var(--panel);max-width:100%}
 .innerrow .note{max-width:52ch;margin:0}
 .samples h4{flex-basis:100%;margin:6px 0 0;font-family:var(--display);font-weight:500;color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.imagine{display:grid;gap:12px}
+.imrow{display:flex;flex-wrap:wrap;gap:16px;align-items:start}
+#imMain,#mask{width:192px;height:192px;image-rendering:pixelated;border:1px solid var(--line);background:var(--panel)}
+#mask{cursor:crosshair;touch-action:none}
+.imstrip{display:flex;flex-wrap:wrap;gap:8px}
+.imstrip .samp canvas{width:72px;height:72px}
+.region h4{margin:4px 0 8px;font-family:var(--display);font-weight:500;color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.regctl{display:grid;gap:10px;max-width:52ch}
+.regctl .note{margin:0}

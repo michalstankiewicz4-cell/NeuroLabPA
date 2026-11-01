@@ -3,6 +3,13 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.26.0
+- Laboratorium obrazów: sekcja **„Wyobraźnia”**, czyli rzeczy, których nie było w danych.
+  - **Mieszanie dwóch kategorii** (VAE, GAN, dyfuzja): suwak A ↔ B i pasek 7 rysunków od 100% A do 100% B przy tym samym szumie. W VAE i GAN-ie mieszana jest kategoria na wejściu sieci, w dyfuzji odpowiedzi sieci w każdym kroku odszumiania (composable diffusion, Liu i in. 2022).
+  - **Obszary** (dyfuzja): malowanie pędzlem po siatce 16×16, gdzie ma być kategoria B. Gotowe układy (B na górze, na dole, z lewej, z prawej, w środku, odwróć, wyczyść). Granica jest wygładzana, żeby szew się zszył.
+  - Przykład „drzewo z głową kota” (A = drzewo, B = kot na górze): `docs/img/img-lab-wyobraznia.png`.
+- Rysowanie z ziarnem losowania (ten sam szum), żeby porównywać same zmiany podpowiedzi.
+
 ## 0.25.0
 - Laboratorium obrazów, **kroki 3–5**, wszystkie sterowane kategorią, na warstwach gęstych (MLP), z grafem w obu widokach:
   - **VAE**: koder do kilku liczb z, dekoder z powrotem, błąd odtworzenia + KL. Nowe rysunki z losowego z, pary oryginał → odtworzenie, **mapa przestrzeni ukrytej** (siatka 8 × 8 rysunków dla dwóch liczb z). 4000 kroków to ok. 40 s.
