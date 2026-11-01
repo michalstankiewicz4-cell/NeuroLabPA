@@ -147,7 +147,7 @@ function weightViz(m) {
   return { tok: ti.map(t => t < LV ? `odcień ${t}` : cats[t - LV]), emb: sub(P[0], d, ti, di), blocks, wo: sub(P[2 + L * 12 + 2], LV, di, [...Array(LV).keys()]) };
 }
 function extrasAR(m) {
-  const t0 = now(), cls = cats.map((_, i) => i).slice(0, 6), imgs = generate(m, cls, 1);
+  const t0 = now(), cls = cats.map((_, i) => i), imgs = generate(m, cls, .8);
   return { samples: imgs.map(a => Array.from(a)), sampleClasses: cls, attn: attnProbe(m), genMs: now() - t0, wviz: weightViz(m) };
 }
 

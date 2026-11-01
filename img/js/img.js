@@ -15,7 +15,7 @@ const STEPS = [
     what: 'Obrazek czytamy jak tekst: wiersz po wierszu, 256 pikseli. Na początek wstawiamy numer kategorii. Transformer, ten sam co w laboratorium języka, na każdej pozycji patrzy na kategorię i wszystkie wcześniejsze piksele i zgaduje odcień następnego.',
     why: 'Usuwa wadę statystyki: każdy piksel zależy od już narysowanych, więc kreska może się ciągnąć, a oczy pasują do głowy. Tak działał ImageGPT (OpenAI, 2020). Uwaga sama odkrywa dwa wymiary: piksel bezpośrednio nad nim jest 16 pozycji wcześniej, a sieć uczy się tam patrzeć.',
     lim: 'Rysuje po kolei, więc wygenerowanie obrazka to 256 kroków. Przy większych obrazkach to bardzo wolne. Błąd na początku rysunku ciągnie się do końca, bo nie da się wrócić i poprawić. Dlatego dziś do obrazków używa się głównie dyfuzji.',
-    more: 'Pozycje to 256 wyuczonych wektorów, po jednym na piksel. Sieć nie dostaje podpowiedzi, że obrazek ma 16 kolumn: musi to odkryć sama. Kategoria to po prostu jeszcze jeden „wyraz” w słowniku wejścia (16 odcieni + 12 kategorii).' },
+    more: 'Ile uczyć: po 1000 krokach sieć umie głównie ciągnąć kreskę w poziomie, od ok. 3000 kroków pojawiają się kształty (drzewo, gwiazda), po 5000–6000 rozpoznawalne domy, ryby i księżyce. Na procesorze 3000 kroków to ok. 12–15 minut, na karcie graficznej zwykle kilka razy krócej. Pozycje to 256 wyuczonych wektorów, po jednym na piksel. Sieć nie dostaje podpowiedzi, że obrazek ma 16 kolumn: musi to odkryć sama. Kategoria to po prostu jeszcze jeden „wyraz” w słowniku wejścia (16 odcieni + 12 kategorii).' },
   { kind: 'vae', name: '3 · Autoenkoder (VAE)', sub: 'wkrótce', ready: false },
   { kind: 'gan', name: '4 · GAN', sub: 'wkrótce', ready: false },
   { kind: 'diff', name: '5 · Dyfuzja', sub: 'wkrótce', ready: false },
@@ -25,7 +25,7 @@ const HP = {
     { id: 'layers', label: 'Warstwy', hint: 'bloków uwagi', opts: [1, 2, 3, 4], val: 2 },
     { id: 'dim', label: 'Szerokość', hint: 'liczb na piksel', opts: [32, 48, 64], val: 48 },
     { id: 'heads', label: 'Głowy', hint: 'uwagi na warstwę', opts: [2, 4], val: 4 },
-    { id: 'steps', label: 'Kroki nauki', hint: 'po 8 rysunków', opts: [300, 1000, 2000, 4000], val: 1000 },
+    { id: 'steps', label: 'Kroki nauki', hint: 'po 8 rysunków', opts: [1000, 3000, 6000, 12000], val: 3000 },
     { id: 'lr', label: 'Tempo nauki', hint: 'wielkość kroku', opts: [.001, .003], val: .003 },
     { id: 'device', label: 'Liczy', hint: 'jak liczyć', opts: [['wasm', 'procesor, WASM SIMD'], ['cpu', 'procesor, zwykły JS'], ['gpu', 'karta graficzna (GPU)']], val: 'wasm' },
   ],
@@ -341,7 +341,7 @@ function renderSamples(m) {
   m.samples.forEach((pix, i) => add(pix, catData[cls[i]].name));
   $('sampNote').textContent = m.kind === 'stats'
     ? 'Najpierw średni obrazek każdej kategorii (oczekiwany odcień w każdym miejscu), potem po jednym losowym rysunku. Średnie przypominają kategorie, ale losowe rysunki to szum: piksele nie wiedzą o sobie nawzajem.'
-    : `Rysunki z ostatniego sprawdzenia, temperatura 1 (${m.genMs ? `rysowanie ${fmt(m.genMs / 1000, 1)} s` : ''}). Pokazanych jest 6 kategorii; resztę narysujesz przyciskiem „Rysuj”.`;
+    : `Po jednym rysunku z każdej kategorii z ostatniego sprawdzenia, temperatura 0,8${m.genMs ? ` (rysowanie wszystkich: ${fmt(m.genMs / 1000, 1)} s)` : ''}. Pierwsze kształty pojawiają się zwykle po ok. 3000 krokach.`;
 }
 
 // ---------- wykres ----------
