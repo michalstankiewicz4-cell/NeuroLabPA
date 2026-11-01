@@ -1,0 +1,81 @@
+{
+ "source": "Quick, Draw! (Google), CC BY 4.0",
+ "size": 16,
+ "levels": 16,
+ "cols": 50,
+ "per": 2000,
+ "categories": [
+  {
+   "file": "cat.png",
+   "name": "kot",
+   "quickdraw": "cat",
+   "count": 2000
+  },
+  {
+   "file": "house.png",
+   "name": "dom",
+   "quickdraw": "house",
+   "count": 2000
+  },
+  {
+   "file": "tree.png",
+   "name": "drzewo",
+   "quickdraw": "tree",
+   "count": 2000
+  },
+  {
+   "file": "fish.png",
+   "name": "ryba",
+   "quickdraw": "fish",
+   "count": 2000
+  },
+  {
+   "file": "car.png",
+   "name": "samochód",
+   "quickdraw": "car",
+   "count": 2000
+  },
+  {
+   "file": "sun.png",
+   "name": "słońce",
+   "quickdraw": "sun",
+   "count": 2000
+  },
+  {
+   "file": "flower.png",
+   "name": "kwiat",
+   "quickdraw": "flower",
+   "count": 2000
+  },
+  {
+   "file": "bicycle.png",
+   "name": "rower",
+   "quickdraw": "bicycle",
+   "count": 2000
+  },
+  {
+   "file": "apple.png",
+   "name": "jabłko",
+   "quickdraw": "apple",
+   "count": 2000
+  },
+  {
+   "file": "star.png",
+   "name": "gwiazda",
+   "quickdraw": "star",
+   "count": 2000
+  },
+  {
+   "file": "skull.png",
+   "name": "czaszka",
+   "quickdraw": "skull",
+   "count": 2000
+  },
+  {
+   "file": "moon.png",
+   "name": "księżyc",
+   "quickdraw": "moon",
+   "count": 2000
+  }
+ ]
+}

@@ -216,6 +216,7 @@ function gelu(a) {
 // na wagi sumujące się do 1 i bierze ważoną sumę wartości. Wagi zostają w out.att do pokazania.
 function causalAttention(qkv, B, T, nh) {
   const d = qkv.s[1] / 3, hd = d / nh, sc = 1 / Math.sqrt(hd), Qd = qkv.d;
+  if (WASM_ON && hd % 4 === 0) return attWasm(qkv, B, T, nh, d, sc);
   const O = new Float32Array(B * T * d), A = new Float32Array(B * nh * T * T);
   for (let b = 0; b < B; b++) for (let h = 0; h < nh; h++) {
     const ab = (b * nh + h) * T * T;
@@ -251,6 +252,42 @@ function causalAttention(qkv, B, T, nh) {
         }
       }
     }
+  });
+  out.att = A;
+  return out;
+}
+
+
+// Uwaga w WASM SIMD: iloczyny Q·K, sumy ważone wartości i ich gradienty liczy moduł (rzędu T²·hd),
+// softmax i jego pochodną JS (rzędu T², a WASM nie ma funkcji wykładniczej).
+function wasmF32(floats) {
+  const mem = WASM.mem, need = floats * 4 + 64;
+  if (mem.buffer.byteLength < need) mem.grow(Math.ceil((need - mem.buffer.byteLength) / 65536));
+  return new Float32Array(mem.buffer);
+}
+function attWasm(qkv, B, T, nh, d, sc) {
+  const nq = B * T * 3 * d, na = B * nh * T * T, no = B * T * d, a = nq, o = nq + na;
+  let F = wasmF32(nq + na + no); F.set(qkv.d, 0);
+  WASM.attScores(0, a * 4, B, T, d, nh, sc);
+  for (let r = 0; r < B * nh * T; r++) {                // softmax wiersza r (pozycja i = r mod T), tylko j ≤ i
+    const i = r % T, base = a + r * T; let mx = -Infinity;
+    for (let j = 0; j <= i; j++) if (F[base + j] > mx) mx = F[base + j];
+    let sum = 0; for (let j = 0; j <= i; j++) { const e = Math.exp(F[base + j] - mx); F[base + j] = e; sum += e; }
+    for (let j = 0; j <= i; j++) F[base + j] /= sum;
+  }
+  WASM.attOut(0, a * 4, o * 4, B, T, d, nh);
+  const O = F.slice(o, o + no), A = F.slice(a, a + na);
+  const out = new T_(O, [B * T, d], [qkv], () => {
+    const go = nq + na, sp = go + no, g = sp + na;
+    F = wasmF32(g + nq); F.set(qkv.d, 0); F.set(A, a); F.set(out.g, go); F.set(qkv.g, g);
+    WASM.attBackP(0, a * 4, go * 4, sp * 4, g * 4, B, T, d, nh);
+    for (let r = 0; r < B * nh * T; r++) {              // dS = A ⊙ (dP − Σ dP·A) · skala
+      const i = r % T, ab = a + r * T, sb = sp + r * T; let dot = 0;
+      for (let j = 0; j <= i; j++) dot += F[sb + j] * F[ab + j];
+      for (let j = 0; j <= i; j++) F[sb + j] = F[ab + j] * (F[sb + j] - dot) * sc;
+    }
+    WASM.attBackQK(0, sp * 4, g * 4, B, T, d, nh);
+    qkv.g.set(F.subarray(g, g + nq));
   });
   out.att = A;
   return out;

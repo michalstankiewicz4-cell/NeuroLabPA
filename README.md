@@ -55,6 +55,19 @@ lang/data/            zestawy przykładowe: grabinski/, wikipedia/ (manifest.jso
 
 Uwaga: Web Worker nie działa z pliku otwartego bezpośrednio (`file://`), laboratorium trzeba uruchomić przez serwer lub GitHub Pages.
 
+## Laboratorium obrazów
+
+Osobna strona `img/`: sieć uczy się rysować od zera, na rysunkach 16×16 w 16 odcieniach z 12 kategorii (Quick, Draw!, CC BY 4.0). Ten sam silnik co w `lang/`. Kategoria to jeszcze jedna liczba na początku ciągu: sieć nie zna słów, uczy się tylko, jakie kształty idą za którym numerem. Na stronie jest graf modelu w dwóch widokach: bloki z kształtami danych i parametrami albo neurony z połączeniami w kolorze prawdziwych wag.
+
+```
+img/index.html          strona laboratorium
+img/img.css             układ (reszta z css/style.css i lang/lang.css)
+img/js/img.js           strona: dane z PNG, graf modelu, nauka, rysowanie, mapa uwagi
+img/js/worker.js        trening w tle: statystyka pikseli, transformer piksel po pikselu (CPU/GPU), rysowanie z pamięcią kluczy (KV cache)
+img/data/               rysunki do nauki: jeden PNG na kategorię (siatka 16×16), manifest.json, LICENCJA.txt
+img/tools/build_quickdraw.py  robi img/data/ z Quick, Draw! (pobiera tylko pierwsze 2000 rysunków każdej kategorii)
+```
+
 ## Struktura
 
 ```

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Laboratorium obrazów</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../lang/lang.css">
+<link rel="stylesheet" href="img.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="crumb"><a href="../">← SDF Walkers</a> · <a href="../lang/">Laboratorium języka</a></p>
+    <h1>Laboratorium obrazów</h1>
+    <p>Własna sieć uczy się rysować od zera: obrazki 16×16 w 16 odcieniach, z 12 kategorii. Konstrukcje w kolejności, w jakiej powstawały, ten sam silnik co w laboratorium języka. Obrazek to dla sieci po prostu ciąg 256 liczb, a kategoria to jeszcze jedna liczba na początku: sieć nie zna słów, uczy się tylko, jakie kształty idą za którym numerem.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="h-data">
+    <h2 id="h-data"><span class="num">1</span> Rysunki do nauki</h2>
+    <dl class="stats" id="dataStats"></dl>
+    <div class="gallery" id="gallery"></div>
+    <details class="hint">
+      <summary>Pliki źródłowe w folderze <code>img/data/</code></summary>
+      <div id="files"></div>
+    </details>
+    <p class="err" id="dataErr" hidden></p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-model">
+    <h2 id="h-model"><span class="num">2</span> Konstrukcja</h2>
+    <div class="steps" role="tablist" aria-label="Konstrukcja sieci" id="steps"></div>
+    <div class="explain" id="explain"></div>
+    <div class="hp" id="hp"></div>
+    <h3>Graf modelu</h3>
+    <div class="viztabs" id="graphTabs" role="group" aria-label="Widok grafu"></div>
+    <div class="graphrow">
+      <div class="graphbox"><svg id="graph" role="img" aria-label="Graf modelu: warstwy, kształty danych i parametry"></svg></div>
+      <div class="graphside">
+        <div class="graphinfo" id="graphInfo"></div>
+        <div class="tablebox"><table id="ptable"><thead><tr><th>Warstwa</th><th>Kształt wag</th><th>Parametry</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="train" type="button" disabled>Ucz</button>
+      <button id="stop" class="ghost" type="button" disabled>Stop</button>
+      <span class="note" id="paramNote"></span>
+    </div>
+    <p class="notice" id="gpuNote" hidden></p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-learn">
+    <h2 id="h-learn"><span class="num">3</span> Nauka</h2>
+    <div class="learn">
+      <div class="chartbox">
+        <canvas id="chart" width="640" height="260" aria-label="Wykres błędu w trakcie nauki"></canvas>
+        <div class="legend"><span class="lt">błąd na rysunkach treningowych</span><span class="lv">błąd na rysunkach sprawdzających</span></div>
+      </div>
+      <dl class="metrics" id="metrics"></dl>
+    </div>
+    <h3 id="sampTitle">Co rysuje sieć</h3>
+    <div class="samples" id="samples"></div>
+    <p class="note" id="sampNote"></p>
+    <h3>Rysuj</h3>
+    <div class="gen">
+      <label for="genCat">Kategoria<select id="genCat"></select></label>
+      <label for="temp">Temperatura <output id="tempOut">1,0</output><input id="temp" type="range" min="0.3" max="1.5" step="0.1" value="1"></label>
+      <button id="gen" class="ghost" type="button" disabled>Rysuj</button>
+    </div>
+    <div class="drawrow">
+      <canvas id="draw" class="pix" width="192" height="192" aria-label="Rysowany obrazek"></canvas>
+      <p class="note" id="drawNote">Sieć rysuje piksel po pikselu, wiersz po wierszu od lewego górnego rogu. Na każdym kroku widzi tylko kategorię i to, co już narysowała.</p>
+    </div>
+    <h3 id="attTitle">Uwaga</h3>
+    <div class="vizctl" id="attCtl"></div>
+    <div class="attrow">
+      <canvas id="att" class="pix" width="384" height="192" aria-label="Mapa uwagi na obrazku"></canvas>
+      <p class="note" id="attNote">Po nauce kroku 2 zobaczysz tu, na które wcześniejsze piksele patrzy sieć, zgadując wybrany piksel.</p>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-cmp">
+    <h2 id="h-cmp"><span class="num">4</span> Porównanie</h2>
+    <div class="tablebox"><table id="cmp"><thead><tr><th>Konstrukcja</th><th>Parametry</th><th>Krok nauki</th><th>Bity na piksel</th><th>Waha się między</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">Bity na piksel: ile informacji sieć „traci” na każdym pikselu. Bez żadnej wiedzy to 4 bity (16 równie prawdopodobnych odcieni). Mniej znaczy lepiej.</p>
+    <p class="err" id="err" hidden></p>
+  </section>
+  <footer class="note">Laboratorium obrazów · część NeuroLabPA · rysunki: Quick, Draw! (Google), CC BY 4.0, <a href="data/LICENCJA.txt">szczegóły</a></footer>
+</div>
+<script src="js/img.js"></script>
+</body>
+</html>

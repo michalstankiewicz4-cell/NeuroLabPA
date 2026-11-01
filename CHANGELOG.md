@@ -3,6 +3,22 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.24.0
+- **Laboratorium obrazów** (`img/`): sieć uczy się rysować od zera.
+  - Dane: 12 kategorii po 2000 rysunków 16×16 w 16 odcieniach, z Quick, Draw! (CC BY 4.0).
+  - Pliki do nauki leżą w `img/data/` jako obrazki PNG (siatka rysunków, jeden plik na kategorię), razem z `manifest.json` i `LICENCJA.txt`. Robi je `img/tools/build_quickdraw.py`, który pobiera tylko początek każdego pliku źródłowego.
+- **Graf modelu** w dwóch widokach:
+  - „Bloki i kształty”: każda warstwa z kształtem danych na wyjściu i liczbą parametrów, blok powtarzany × L, połączenia omijające, opis po kliknięciu, tabela parametrów z paskami;
+  - „Neurony i połączenia”: kolumny kółek warstwa po warstwie (szerokie warstwy jako próbka), linie w kolorze prawdziwych wag.
+- Krok 1, **statystyka pikseli**: średni obrazek każdej kategorii i rysunki z niezależnie losowanych pikseli (1,74 bita na piksel).
+- Krok 2, **piksel po pikselu** (transformer jak ImageGPT): numer kategorii jako pierwszy „wyraz”, 256 pozycji.
+  - Rysowanie na żywo i mapa uwagi na rysunku: klikasz piksel i widzisz, na które wcześniejsze piksele patrzy sieć.
+  - Liczy na procesorze (WASM SIMD albo JS) albo na karcie graficznej, z testem zgodności CPU/GPU przy pierwszym wyborze.
+  - Po 1000 krokach: 1,49 bita na piksel.
+- **Rysowanie z pamięcią kluczy i wartości (KV cache)**: każdy piksel liczony raz. 15× szybciej niż przeliczanie całego obrazka przy każdym pikselu, ten sam wynik (różnica rozkładów 1e-5).
+- **Uwaga w WebAssembly SIMD** (wspólny silnik, także w laboratorium języka). Iloczyny Q·K, sumy wartości i ich gradienty liczy moduł WASM, softmax JS. Wyniki zgodne z JS do 2e-7. Krok nauki obrazków 626 → 315 ms.
+- Linki między stronami: SDF Walkers ↔ Laboratorium języka ↔ Laboratorium obrazów.
+
 ## 0.23.0
 - Laboratorium języka: **tokeny BPE** (`lang/js/bpe.js`).
   - Przełącznik „Jednostka”: litery albo tokeny BPE z 256, 512 lub 1024 sklejeniami.

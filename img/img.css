@@ -1,0 +1,47 @@
+/* Laboratorium obrazów: układ tej strony (reszta z ../css/style.css i ../lang/lang.css). */
+.crumb a + a, .crumb a{margin-right:2px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px 18px}
+.gcat{display:grid;gap:4px}
+.gcat b{font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:.04em}
+.gcat b small{font-family:var(--body);color:var(--muted);font-size:12px;margin-left:6px;letter-spacing:0}
+.gcat canvas{width:100%;height:auto;image-rendering:pixelated}
+#files ul{margin:8px 0 0;padding-left:18px;columns:2;color:var(--muted)}
+#files code{font-family:var(--mono);font-size:13px}
+.graphrow{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.graphrow{grid-template-columns:1fr}}
+.graphbox{background:var(--panel);border:1px solid var(--line);padding:10px;overflow-x:auto}
+.graphbox svg{display:block;width:100%;height:auto;min-width:420px}
+.graphbox .node{cursor:pointer}
+.graphbox .node rect{fill:var(--bg);stroke:var(--line);stroke-width:1.2}
+.graphbox .node.sel rect,.graphbox .node:hover rect{stroke:var(--rot);stroke-width:2}
+.graphbox .node.io rect{fill:rgba(156,172,112,.14)}
+.graphbox .node text{fill:var(--fg);font-family:var(--body);font-size:13px}
+.graphbox .node text.p{fill:var(--muted);font-size:11px}
+.graphbox .edge{stroke:var(--muted);stroke-width:1.2;fill:none}
+.graphbox .shape{fill:#7fa6d8;font-family:var(--mono);font-size:11px}
+.graphbox .frame{fill:none;stroke:var(--rot);stroke-dasharray:5 4;stroke-width:1.2}
+.graphbox .frametxt{fill:var(--rot);font-family:var(--display);font-size:13px}
+.graphbox .res{stroke:#c9a86a;stroke-width:1.2;fill:none;stroke-dasharray:3 3}
+.graphside{display:grid;gap:12px}
+.graphinfo{background:var(--panel);border:1px solid var(--line);padding:12px 14px;min-height:5em}
+.graphinfo h4{margin:0 0 6px;font-family:var(--display);font-weight:500;color:var(--rot);letter-spacing:.04em}
+.graphinfo p{margin:0 0 6px;max-width:60ch}
+.graphinfo code{font-family:var(--mono);font-size:13px}
+#ptable td:last-child,#ptable th:last-child{text-align:right}
+#ptable tr.sum td{font-weight:700;border-top:2px solid var(--line)}
+#ptable .bar{display:inline-block;height:6px;background:var(--rot);margin-left:8px;vertical-align:middle;opacity:.7}
+.samples{display:flex;flex-wrap:wrap;gap:12px}
+.samp{display:grid;gap:4px;justify-items:center;font-size:12px;color:var(--muted)}
+.samp canvas{width:96px;height:96px;image-rendering:pixelated;border:1px solid var(--line)}
+.drawrow,.attrow{display:flex;flex-wrap:wrap;gap:16px;align-items:start}
+.drawrow canvas,.attrow canvas{image-rendering:pixelated;border:1px solid var(--line);background:var(--panel)}
+#draw{width:192px;height:192px}
+#att{width:384px;height:192px;cursor:crosshair;max-width:100%}
+.drawrow .note,.attrow .note{max-width:52ch;margin:0}
+.gen select{font:inherit}
+#ptable{min-width:0;font-size:13px}
+#ptable td,#ptable th{padding:6px 10px}
+.graphrow.wide{grid-template-columns:1fr}
+.graphrow.wide .graphside{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:900px){.graphrow.wide .graphside{grid-template-columns:1fr}}
+.graphrow.wide svg{min-width:760px}

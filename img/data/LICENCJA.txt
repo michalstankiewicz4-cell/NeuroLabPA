@@ -1,0 +1,32 @@
+RYSUNKI DO NAUKI LABORATORIUM OBRAZÓW: ŹRÓDŁO I LICENCJA
+========================================================
+
+Źródło: Quick, Draw! Dataset (Google LLC)
+https://github.com/googlecreativelab/quickdraw-dataset
+Rysunki narysowali uczestnicy gry Quick, Draw! (https://quickdraw.withgoogle.com).
+
+LICENCJA
+--------
+Zbiór Quick, Draw! jest udostępniony na licencji Creative Commons Uznanie autorstwa 4.0
+(CC BY 4.0): https://creativecommons.org/licenses/by/4.0/deed.pl
+Pliki PNG w tym folderze są utworem zależnym i również są na licencji CC BY 4.0.
+
+ZMIANY WOBEC ORYGINAŁU
+----------------------
+Z każdej z 12 kategorii wzięto pierwsze 2000 rysunków z plików „numpy_bitmap”
+(rysunki 28×28 w skali szarości). Każdy rysunek:
+- pomniejszono do 16×16 (średnia z obszaru),
+- wzmocniono kreski (×1,6, bo pomniejszenie je rozjaśnia),
+- sprowadzono do 16 odcieni (0 = tło, 15 = kreska),
+- odwrócono kolory przy zapisie (ciemna kreska na jasnym tle).
+Rysunki ułożono w siatkę po 50 w wierszu, jeden plik PNG na kategorię.
+Robi to skrypt img/tools/build_quickdraw.py (pobrano 1 listopada 2026).
+
+KATEGORIE
+---------
+kot (cat), dom (house), drzewo (tree), ryba (fish), samochód (car), słońce (sun),
+kwiat (flower), rower (bicycle), jabłko (apple), gwiazda (star), czaszka (skull),
+księżyc (moon)
+
+Kod NeuroLabPA nie jest objęty tą informacją; dotyczy ona wyłącznie plików
+w folderze img/data/.
