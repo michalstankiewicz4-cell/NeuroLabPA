@@ -183,6 +183,204 @@ function trainAR(hp) {
   setTimeout(tick, 0);
 }
 
+
+// ======================================================================================
+// Kroki 3–5: VAE, GAN, dyfuzja. Rysunek to 256 liczb ciągłych (odcień / 15), kategoria to „jedynka
+// na swojej pozycji” (one-hot) doklejona do wejścia. Zwykłe warstwy gęste (MLP): przy 16×16 wystarczą.
+// ======================================================================================
+function dense(nIn, nOut, sc) { return { W: param([nIn, nOut], sc != null ? sc : Math.sqrt(2 / nIn)), b: zeros([nOut]) }; }
+const lin = (x, L) => addBias(matmul(x, L.W), L.b);
+const lparams = Ls => Ls.flatMap(L => [L.W, L.b]);
+function onehot(cl, C) { const o = new Float32Array(cl.length * C); cl.forEach((c, i) => { if (c >= 0) o[i * C + c] = 1; }); return new T(o, [cl.length, C]); }
+function realBatch(set, idxs, sc = 1, sh = 0) {
+  const x = new Float32Array(idxs.length * S2), cl = idxs.map(k => set[k].c);
+  idxs.forEach((k, b) => { const p = set[k].p; for (let i = 0; i < S2; i++) x[b * S2 + i] = p[i] / (LV - 1) * sc + sh; });
+  return { x, cl };
+}
+const rnd = B => Array.from({ length: B }, () => randInt(train.length));
+function gauss(n) { const o = new Float32Array(n); for (let i = 0; i < n; i++) o[i] = randn(); return o; }
+const toPix = (arr, lo = 0, hi = 1) => Array.from({ length: arr.length / S2 }, (_, b) => Array.from(arr.subarray(b * S2, (b + 1) * S2), v => Math.max(0, Math.min(LV - 1, Math.round((v - lo) / (hi - lo) * (LV - 1))))));
+function sigArr(a) { return a.map(v => 1 / (1 + Math.exp(-v))); }
+
+// Wspólna pętla dla kroków 3–5: krok nauki, sprawdzanie, podglądy, najlepsza wersja.
+function genLoop(kind, m, hp, fns) {
+  try { setBackend(hp.device === 'cpu' ? 'js' : 'wasm'); } catch (e) { setBackend('js'); }
+  const job = { stop: false }, dev = hp.device === 'cpu' ? 'JS' : 'WASM SIMD';
+  running = job; models[kind] = m;
+  let step = 0, ema = {}, lastVal = fns.val ? fns.val() : null, best = lastVal != null ? { val: lastVal, step: 0, w: m.params.map(p => p.d.slice()) } : null, tVal = now(), tEx = now(), ms = null;
+  const base = () => ({ kind, step, train: ema.main, val: lastVal, params: m.count, bestStep: best ? best.step : null, ms, device: dev, stats: { ...ema } });
+  post({ type: 'progress', ...base(), ...fns.extras(), wviz: fns.wviz && fns.wviz() });
+  const tick = () => {
+    if (job.stop || step >= hp.steps) return finish();
+    const t0 = now(), s0 = step;
+    while (now() - t0 < 80 && step < hp.steps) {
+      const r = fns.step(step); step++;
+      for (const k in r) ema[k] = ema[k] == null ? r[k] : ema[k] * .97 + r[k] * .03;
+    }
+    ms = (now() - t0) / (step - s0);
+    const msg = { type: 'progress', ...base() };
+    if (fns.val && now() - tVal > 1500) { tVal = now(); lastVal = fns.val(); if (lastVal < best.val - 1e-4) best = { val: lastVal, step, w: m.params.map(p => p.d.slice()) }; Object.assign(msg, base()); }
+    if (now() - tEx > 6000) { tEx = now(); Object.assign(msg, fns.extras(), { wviz: fns.wviz && fns.wviz() }); }
+    post(msg); setTimeout(tick, 0);
+  };
+  const finish = () => {
+    let restored = false;
+    if (fns.val) { let v = fns.val(); if (v > best.val + .002 * Math.abs(best.val)) { m.params.forEach((p, i) => p.d.set(best.w[i])); v = best.val; restored = true; } lastVal = v; }
+    running = null;
+    post({ type: 'done', ...base(), restored, ...fns.extras(), wviz: fns.wviz && fns.wviz() });
+  };
+  setTimeout(tick, 0);
+}
+const vsSet = () => valSet(48);
+const wsub = (W, cols, rows, cs) => rows.map(r => cs.map(c => W[r * cols + c]));
+
+// ---------- krok 3: autoenkoder wariacyjny (VAE, Kingma i Welling 2013) ----------
+// Koder ściska rysunek (i kategorię) do kilku liczb z: średniej mu i rozrzutu. Dekoder z samego z i kategorii
+// odtwarza rysunek. Błąd = jak źle odtworzył + jak daleko rozkład z odbiega od zwykłego rozkładu normalnego.
+// Dzięki temu drugiemu składnikowi każdy punkt przestrzeni z daje sensowny rysunek: losujemy z i rysujemy.
+function buildVAE(hp) {
+  const C = cats.length, H = hp.hidden, Z = hp.z;
+  const e1 = dense(S2 + C, H), em = dense(H, Z, .01), ev = dense(H, Z, .01), d1 = dense(Z + C, H), d2 = dense(H, S2, .01);
+  const m = { kind: 'vae', hp, params: lparams([e1, em, ev, d1, d2]), L: { e1, em, ev, d1, d2 } };
+  m.count = m.params.reduce((a, p) => a + p.size, 0);
+  m.encode = (x, ch) => { const h = tanh(lin(concatCols(x, ch), e1)); return { mu: lin(h, em), lv: lin(h, ev) }; };
+  m.decode = (z, ch) => lin(tanh(lin(concatCols(z, ch), d1)), d2);
+  m.loss = ({ x, cl }, eps) => {
+    const B = cl.length, X = new T(x, [B, S2]), ch = onehot(cl, C), { mu, lv } = m.encode(X, ch);
+    const z = add(mu, mul(expScale(lv, .5), new T(eps || gauss(B * Z), [B, Z])));
+    const rec = bceLogits(m.decode(z, ch), x), kl = klNormal(mu, lv);
+    return { total: add(rec, scale(kl, hp.beta)), rec: rec.d[0], kl: kl.d[0] };
+  };
+  m.sample = cl => toPix(sigArr(m.decode(new T(gauss(cl.length * Z), [cl.length, Z]), onehot(cl, C)).d));
+  return m;
+}
+function trainVAE(hp) {
+  const m = buildVAE(hp), opt = new Adam(m.params, hp.lr), vs = vsSet(), vb = realBatch(vs, vs.map((_, i) => i)), veps = gauss(vs.length * hp.z), C = cats.length;
+  genLoop('vae', m, hp, {
+    step: () => { const r = m.loss(realBatch(train, rnd(hp.batch))); opt.zeroGrad(); backward(r.total); opt.clip(5); opt.step(); return { main: r.total.d[0] / S2, rec: r.rec / S2, kl: r.kl }; },
+    val: () => { const r = m.loss(vb, veps); return r.total.d[0] / S2; },
+    extras: () => {
+      const cl = cats.map((_, i) => i), ri = vs.slice(0, 8), rb = realBatch(ri, ri.map((_, i) => i)), { mu } = m.encode(new T(rb.x, [8, S2]), onehot(rb.cl, C));
+      return { samples: m.sample(cl), recon: { real: toPix(rb.x), rec: toPix(sigArr(m.decode(mu, onehot(rb.cl, C)).d)) } };
+    },
+    wviz: () => vizMLP([['rysunek + kategoria', S2 + C], ['ukryta', hp.hidden], ['z (przestrzeń ukryta)', hp.z], ['ukryta', hp.hidden], ['rysunek', S2]], [m.L.e1.W, m.L.em.W, m.L.d1.W, m.L.d2.W]),
+  });
+}
+// Mapa przestrzeni ukrytej: siatka rysunków dla z1, z2 od −2,5 do 2,5 (pozostałe wymiary 0), jedna kategoria.
+function latentMap(m, c, n = 8) {
+  const Z = m.hp.z, z = new Float32Array(n * n * Z);
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { z[(i * n + j) * Z] = -2.5 + 5 * j / (n - 1); if (Z > 1) z[(i * n + j) * Z + 1] = -2.5 + 5 * i / (n - 1); }
+  return toPix(sigArr(m.decode(new T(z, [n * n, Z]), onehot(Array(n * n).fill(c), cats.length)).d));
+}
+
+// ---------- krok 4: GAN (Goodfellow i in. 2014) ----------
+// Dwie sieci grają przeciwko sobie. Generator z losowego szumu (i kategorii) robi rysunek. Krytyk (dyskryminator)
+// dostaje rysunek prawdziwy albo podrobiony i ocenia, czy jest prawdziwy. Krytyk uczy się odróżniać,
+// generator uczy się oszukiwać krytyka. Nikt nie mówi generatorowi, jak ma wyglądać rysunek.
+function buildGAN(hp) {
+  const C = cats.length, H = hp.hidden, Z = hp.noise;
+  const g1 = dense(Z + C, H), g2 = dense(H, H), g3 = dense(H, S2, .02), k1 = dense(S2 + C, H), k2 = dense(H, H >> 1), k3 = dense(H >> 1, 1, .02);
+  const Ec = param([C, H >> 1], .1);                      // projekcja: wektor każdej kategorii, porównywany z cechami rysunku
+  const m = { kind: 'gan', hp, G: lparams([g1, g2, g3]), D: [...lparams([k1, k2, k3]), Ec], L: { g1, g2, g3, k1, k2, k3 } };
+  m.params = [...m.G, ...m.D]; m.count = m.params.reduce((a, p) => a + p.size, 0);
+  m.gen = (z, ch) => sigmoid(lin(gelu(lin(gelu(lin(concatCols(z, ch), g1)), g2)), g3));
+  // ocena krytyka = ogólna „prawdziwość” cech h + zgodność h z wektorem kategorii (dyskryminator projekcyjny, Miyato 2018)
+  m.crit = (x, ch, cl) => { const h = gelu(lin(gelu(lin(concatCols(x, ch), k1)), k2)); return add(lin(h, k3), matmul(mul(h, gather(Ec, Int32Array.from(cl))), new T(new Float32Array(H >> 1).fill(1), [H >> 1, 1]))); };
+  m.fixed = gauss(cats.length * Z);                       // ten sam szum przez całą naukę: widać, jak zmienia się ten sam rysunek
+  m.sample = (cl, z) => toPix(m.gen(new T(z || gauss(cl.length * Z), [cl.length, Z]), onehot(cl, C)).d);
+  return m;
+}
+// Jeden krok gry: najpierw krytyk (prawdziwe → „prawdziwy”, podrobione → „podróbka”), potem generator
+// (chce, żeby krytyk uznał jego podróbki za prawdziwe). Dwie sztuczki stabilizujące: lekki szum na wejściu
+// krytyka, malejący w trakcie nauki (trudniej mu „wygrać” zbyt szybko), i etykieta 0,9 zamiast 1 dla prawdziwych.
+function ganStep(m, oG, oD, hp, frac) {
+  const C = cats.length, Z = hp.noise, B = hp.batch, sig = .25 * Math.max(0, 1 - frac / .8);
+  const noisy = a => { const o = new Float32Array(a.length); for (let i = 0; i < a.length; i++) o[i] = a[i] + sig * randn(); return o; };
+  const ones = new Float32Array(B).fill(.9), zer = new Float32Array(B), one1 = new Float32Array(B).fill(1);
+  const { x, cl } = realBatch(train, rnd(B)), ch = onehot(cl, C);
+  const fake = m.gen(new T(gauss(B * Z), [B, Z]), ch), fakeD = new T(noisy(fake.d), fake.s);   // kopia bez gradientu do generatora
+  const dr = m.crit(new T(noisy(x), [B, S2]), ch, cl), df = m.crit(fakeD, ch, cl), lD = add(bceLogits(dr, ones), bceLogits(df, zer));
+  oD.zeroGrad(); backward(lD); oD.step();
+  const cl2 = rnd(B).map(k => train[k].c), ch2 = onehot(cl2, C), fk = m.gen(new T(gauss(B * Z), [B, Z]), ch2);
+  const dg = m.crit(sig ? add(fk, new T(gauss(B * S2).map(v => v * sig), fk.s)) : fk, ch2, cl2), lG = bceLogits(dg, one1);
+  oG.zeroGrad(); backward(lG); oG.step();
+  const mean = a => a.reduce((s, v) => s + 1 / (1 + Math.exp(-v)), 0) / a.length;
+  return { main: lG.d[0], d: lD.d[0], pr: mean(dr.d), pf: mean(df.d) };
+}
+function trainGAN(hp) {
+  const m = buildGAN(hp), C = cats.length, Z = hp.noise, oG = new Adam(m.G, hp.lr, .5), oD = new Adam(m.D, hp.lr * .5, .5);
+  genLoop('gan', m, hp, {
+    step: s => ganStep(m, oG, oD, hp, s / hp.steps),
+    extras: () => ({ samples: m.sample(cats.map((_, i) => i), m.fixed) }),
+    wviz: () => vizMLP([['szum + kategoria', Z + C], ['ukryta', hp.hidden], ['ukryta', hp.hidden], ['rysunek', S2]], [m.L.g1.W, m.L.g2.W, m.L.g3.W]),
+  });
+}
+
+// ---------- krok 5: dyfuzja (Ho i in. 2020, DDPM) ----------
+// Nauka: do rysunku dodajemy losową ilość szumu (krok t z T) i każemy sieci zgadnąć czysty rysunek spod szumu.
+// (Oryginalny DDPM zgaduje sam szum; to ta sama metoda, inna parametryzacja, łatwiejsza dla małej sieci.)
+// Rysowanie: startujemy z czystego szumu i T razy robimy mały krok w stronę zgadniętego rysunku.
+// Kategorię czasem (10%) ukrywamy, więc sieć umie też rysować „bez podpowiedzi”. Przy rysowaniu mieszamy obie
+// odpowiedzi: im większa siła podpowiedzi (guidance), tym wyraźniej rysunek pasuje do kategorii.
+function schedule(T) {
+  const s = .008, f = t => Math.cos(((t / T) + s) / (1 + s) * Math.PI / 2) ** 2, ab = [1], beta = [0];
+  for (let t = 1; t <= T; t++) { ab.push(f(t) / f(0)); beta.push(Math.min(.999, 1 - ab[t] / ab[t - 1])); }
+  return { ab, beta, T };
+}
+function tEmb(ts, dim = 32) { const o = new Float32Array(ts.length * dim); ts.forEach((t, i) => { for (let k = 0; k < dim / 2; k++) { const f = t * Math.exp(-Math.log(1000) * k / (dim / 2)); o[i * dim + k] = Math.sin(f); o[i * dim + dim / 2 + k] = Math.cos(f); } }); return o; }
+function buildDiff(hp) {
+  const C = cats.length, H = hp.hidden, CE = 32;
+  const cemb = param([C + 1, CE], .3), l1 = dense(S2 + 32 + CE, H), l2 = dense(H, H), l3 = dense(H, H), l4 = dense(H, S2, .01);
+  const m = { kind: 'diff', hp, params: [cemb, ...lparams([l1, l2, l3, l4])], L: { l1, l2, l3, l4 }, sch: schedule(hp.T) };
+  m.count = m.params.reduce((a, p) => a + p.size, 0);
+  m.eps = (xt, ts, cl) => {   // przewidywany czysty rysunek dla x_t w kroku t i kategorii (C = „bez kategorii”)
+    const B = ts.length, inp = concatCols(concatCols(new T(xt, [B, S2]), new T(tEmb(ts), [B, 32])), gather(cemb, Int32Array.from(cl, c => c < 0 ? C : c)));
+    return lin(gelu(lin(gelu(lin(gelu(lin(inp, l1)), l2)), l3)), l4);
+  };
+  m.loss = ({ x, cl }, ts, noise, drop = .1) => {
+    const B = cl.length, { ab } = m.sch, xt = new Float32Array(B * S2);
+    for (let b = 0; b < B; b++) { const a = Math.sqrt(ab[ts[b]]), s = Math.sqrt(1 - ab[ts[b]]); for (let i = 0; i < S2; i++) xt[b * S2 + i] = a * x[b * S2 + i] + s * noise[b * S2 + i]; }
+    return mse(m.eps(xt, ts, cl.map(c => Math.random() < drop ? -1 : c)), x);
+  };
+  // rysowanie: T kroków odszumiania; frames: stan rysunku co kilka kroków (do animacji)
+  m.sample = (cl, guide, onFrame) => {
+    const { ab, beta, T: TT } = m.sch, B = cl.length; let x = gauss(B * S2);
+    for (let t = TT; t >= 1; t--) {
+      const ts = Array(2 * B).fill(t), xx = new Float32Array(2 * B * S2); xx.set(x); xx.set(x, B * S2);
+      const e = m.eps(xx, ts, [...cl, ...cl.map(() => -1)]).d, nx = new Float32Array(B * S2);
+      const at = 1 - beta[t], abt = ab[t], abp = ab[t - 1];
+      for (let i = 0; i < B * S2; i++) {
+        const eu = e[B * S2 + i];
+        let x0 = eu + guide * (e[i] - eu); x0 = Math.max(-1, Math.min(1, x0));            // podpowiedź: od „bez kategorii” w stronę „z kategorią”
+        const mean = Math.sqrt(abp) * beta[t] / (1 - abt) * x0 + Math.sqrt(at) * (1 - abp) / (1 - abt) * x[i];
+        nx[i] = mean + (t > 1 ? Math.sqrt(beta[t] * (1 - abp) / (1 - abt)) * randn() : 0);
+      }
+      x = nx;
+      if (onFrame && (t % Math.max(1, TT / 10 | 0) === 0 || t === 1)) onFrame(TT - t + 1, x);
+    }
+    return toPix(x, -1, 1);
+  };
+  return m;
+}
+function trainDiff(hp) {
+  const m = buildDiff(hp), opt = new Adam(m.params, hp.lr), vs = vsSet(), vb = realBatch(vs, vs.map((_, i) => i), 2, -1);
+  const vt = vs.map((_, i) => 1 + (i * 37) % hp.T), vn = gauss(vs.length * S2);
+  genLoop('diff', m, hp, {
+    step: () => { const b = realBatch(train, rnd(hp.batch), 2, -1), ts = b.cl.map(() => 1 + randInt(hp.T)), l = m.loss(b, ts, gauss(hp.batch * S2)); opt.zeroGrad(); backward(l); opt.clip(1); opt.step(); return { main: l.d[0] }; },
+    val: () => m.loss(vb, vt, vn, 0).d[0],
+    extras: () => {
+      const frames = [], cl = cats.map((_, i) => i), samples = m.sample(cl, 2, (k, x) => { if (frames.length < 11) frames.push(toPix(x.subarray(0, S2 * 4), -1, 1)); });
+      return { samples, frames };
+    },
+    wviz: () => vizMLP([['zaszumiony rysunek + krok t + kategoria', S2 + 64], ['ukryta', hp.hidden], ['ukryta', hp.hidden], ['ukryta', hp.hidden], ['przewidziany szum', S2]], [m.L.l1.W, m.L.l2.W, m.L.l3.W, m.L.l4.W]),
+  });
+}
+// Próbka wag do widoku neuronów: 12 lub 16 kółek na kolumnę.
+function vizMLP(cols, Ws) {
+  const idx = cols.map(([, n], i) => spread(n, i === 0 || i === cols.length - 1 ? 12 : 16));
+  return { cols: cols.map(([label, n], i) => ({ label, n, show: idx[i].length })), mats: Ws.map((W, i) => wsub(W.d, cols[i + 1][1], idx[i], idx[i + 1])) };
+}
+
 // ---------- krok 2 na karcie graficznej ----------
 let gpuEng = null;
 // Zgodność: ten sam start i te same rysunki, jeden krok nauki na CPU i na GPU.
@@ -237,14 +435,20 @@ self.onmessage = e => {
     else if (m.cmd === 'train') {
       if (running) running.stop = true;
       if (m.kind === 'stats') trainStats();
+      else if (m.kind === 'vae') trainVAE(m.hp);
+      else if (m.kind === 'gan') trainGAN(m.hp);
+      else if (m.kind === 'diff') trainDiff(m.hp);
       else if (m.hp.device === 'gpu') trainARGPU(m.hp).catch(err => { running = null; post({ type: 'error', msg: 'GPU: ' + (err.message || err) }); });
       else trainAR(m.hp);
     }
     else if (m.cmd === 'stop') { if (running) running.stop = true; }
+    else if (m.cmd === 'latent') { const md = models.vae; if (!md) throw new Error('Najpierw naucz VAE.'); post({ type: 'latent', c: m.c, n: 8, imgs: latentMap(md, m.c) }); }
     else if (m.cmd === 'gputest') gpuSelfTest().then(r => post({ type: 'gputest', ok: true, ...r }), err => post({ type: 'gputest', ok: false, msg: String(err.message || err) }));
     else if (m.cmd === 'generate') {
       const md = models[m.kind]; if (!md) throw new Error('Najpierw naucz model.');
       if (md.kind === 'stats') post({ type: 'gen', id: m.id, done: true, n: S2, imgs: m.classes.map(c => Array.from(md.sample(c, m.temp))) });
+      else if (md.kind === 'vae' || md.kind === 'gan') post({ type: 'gen', id: m.id, done: true, n: S2, imgs: md.sample(m.classes) });
+      else if (md.kind === 'diff') { const out = md.sample(m.classes, m.guide, (k, x) => post({ type: 'gen', id: m.id, n: S2, noisy: true, imgs: toPix(x, -1, 1) })); post({ type: 'gen', id: m.id, done: true, n: S2, imgs: out }); }
       else { const out = generate(md, m.classes, m.temp, (n, o) => post({ type: 'gen', id: m.id, n, imgs: o.map(a => Array.from(a)) })); post({ type: 'gen', id: m.id, done: true, n: S2, imgs: out.map(a => Array.from(a)) }); }
     }
   } catch (err) { post({ type: 'error', msg: String(err && err.message || err) }); }

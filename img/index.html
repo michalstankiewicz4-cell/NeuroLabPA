@@ -56,7 +56,7 @@
     <div class="learn">
       <div class="chartbox">
         <canvas id="chart" width="640" height="260" aria-label="Wykres błędu w trakcie nauki"></canvas>
-        <div class="legend"><span class="lt">błąd na rysunkach treningowych</span><span class="lv">błąd na rysunkach sprawdzających</span></div>
+        <div class="legend"><span class="lt" id="legT">błąd na rysunkach treningowych</span><span class="lv" id="legV">błąd na rysunkach sprawdzających</span></div>
       </div>
       <dl class="metrics" id="metrics"></dl>
     </div>
@@ -66,7 +66,8 @@
     <h3>Rysuj</h3>
     <div class="gen">
       <label for="genCat">Kategoria<select id="genCat"></select></label>
-      <label for="temp">Temperatura <output id="tempOut">0,8</output><input id="temp" type="range" min="0.3" max="1.5" step="0.1" value="0.8"></label>
+      <label for="temp" id="tempBox">Temperatura <output id="tempOut">0,8</output><input id="temp" type="range" min="0.3" max="1.5" step="0.1" value="0.8"></label>
+      <label for="guide" id="guideBox" hidden>Siła podpowiedzi <output id="guideOut">2,0</output><input id="guide" type="range" min="0" max="5" step="0.5" value="2"></label>
       <button id="gen" class="ghost" type="button" disabled>Rysuj</button>
     </div>
     <div class="drawrow">
@@ -79,12 +80,15 @@
       <canvas id="att" class="pix" width="384" height="192" aria-label="Mapa uwagi na obrazku"></canvas>
       <p class="note" id="attNote">Po nauce kroku 2 zobaczysz tu, na które wcześniejsze piksele patrzy sieć, zgadując wybrany piksel.</p>
     </div>
+    <h3 id="innerTitle" hidden></h3>
+    <div class="vizctl" id="innerCtl" hidden></div>
+    <div class="innerrow" id="innerRow" hidden><canvas id="inner" class="pix" width="288" height="288" aria-label="Podgląd wnętrza sieci"></canvas><p class="note" id="innerNote"></p></div>
   </section>
 
   <section class="panel" aria-labelledby="h-cmp">
     <h2 id="h-cmp"><span class="num">4</span> Porównanie</h2>
-    <div class="tablebox"><table id="cmp"><thead><tr><th>Konstrukcja</th><th>Parametry</th><th>Krok nauki</th><th>Bity na piksel</th><th>Waha się między</th></tr></thead><tbody></tbody></table></div>
-    <p class="note">Bity na piksel: ile informacji sieć „traci” na każdym pikselu. Bez żadnej wiedzy to 4 bity (16 równie prawdopodobnych odcieni). Mniej znaczy lepiej.</p>
+    <div class="tablebox"><table id="cmp"><thead><tr><th>Konstrukcja</th><th>Parametry</th><th>Krok nauki</th><th>Bity na piksel</th><th>Inna miara</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">Bity na piksel: ile informacji sieć „traci” na każdym pikselu. Bez żadnej wiedzy to 4 bity (16 równie prawdopodobnych odcieni). Mniej znaczy lepiej. Mają sens tylko dla kroków 1–2, które podają prawdopodobieństwo każdego odcienia. VAE, GAN i dyfuzja mierzą co innego, więc porównuje się je przede wszystkim, patrząc na rysunki.</p>
     <p class="err" id="err" hidden></p>
   </section>
   <footer class="note">Laboratorium obrazów · część NeuroLabPA · rysunki: Quick, Draw! (Google), CC BY 4.0, <a href="data/LICENCJA.txt">szczegóły</a></footer>

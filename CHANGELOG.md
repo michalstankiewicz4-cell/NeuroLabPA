@@ -3,6 +3,14 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.25.0
+- Laboratorium obrazów, **kroki 3–5**, wszystkie sterowane kategorią, na warstwach gęstych (MLP), z grafem w obu widokach:
+  - **VAE**: koder do kilku liczb z, dekoder z powrotem, błąd odtworzenia + KL. Nowe rysunki z losowego z, pary oryginał → odtworzenie, **mapa przestrzeni ukrytej** (siatka 8 × 8 rysunków dla dwóch liczb z). 4000 kroków to ok. 40 s.
+  - **GAN**: generator i krytyk. Stabilizacja: szum na wejściu krytyka malejący w trakcie nauki, etykieta 0,9, wolniejszy krytyk, Adam β1 = 0,5, **dyskryminator projekcyjny** (bez niego generator rysował to samo dla każdej kategorii). Stały szum podglądu, żeby widać było zmianę tego samego rysunku. Metryki: ile „prawdziwości” krytyk daje prawdziwym i podrobionym rysunkom.
+  - **Dyfuzja**: kosinusowy harmonogram szumu, sieć zgaduje czysty rysunek spod szumu (z przewidywaniem samego szumu rysunki zostawały zaszumione), 10% nauki bez kategorii i **siła podpowiedzi** (classifier-free guidance) jako suwak przy rysowaniu. Animacja odszumiania i pasek **„Odszumianie krok po kroku”**. Najlepsze rysunki ze wszystkich kroków: 4000 kroków to ok. 4 min.
+- Silnik: `concatCols`, `expScale`, `scale`, `bceLogits`, `klNormal`, `mse`, sprawdzone numerycznie.
+- Tabela porównania: bity na piksel tylko dla kroków 1–2, dla pozostałych własna miara.
+
 ## 0.24.1
 - Laboratorium obrazów: domyślnie 3000 kroków (do wyboru 1000–12 000) i temperatura 0,8. Podgląd w trakcie nauki rysuje wszystkie 12 kategorii.
 - Pomiar postępu na procesorze (2×48, 4 głowy, temperatura 0,8): 1000 kroków 1,47 bita na piksel (kreski w poziomie), 3000 kroków 1,26 (drzewo, gwiazda), 6000 kroków 1,16 (dom, ryba, księżyc, gwiazda). Rysunki z kolejnych etapów: `docs/img/img-lab-postep.png`.

@@ -293,6 +293,58 @@ function attWasm(qkv, B, T, nh, d, sc) {
   return out;
 }
 
+
+// ---------- klocki generatorów obrazów (VAE, GAN, dyfuzja) ----------
+// Sklejenie cech: [n,p] i [n,q] → [n,p+q] (np. rysunek + numer kategorii zapisany jako jedynka na swojej pozycji).
+function concatCols(a, b) {
+  const n = a.s[0], p = a.s[1], q = b.s[1], O = new Float32Array(n * (p + q));
+  for (let i = 0; i < n; i++) { O.set(a.d.subarray(i * p, i * p + p), i * (p + q)); O.set(b.d.subarray(i * q, i * q + q), i * (p + q) + p); }
+  const out = new T(O, [n, p + q], [a, b], () => {
+    for (let i = 0; i < n; i++) { for (let j = 0; j < p; j++) a.g[i * p + j] += out.g[i * (p + q) + j]; for (let j = 0; j < q; j++) b.g[i * q + j] += out.g[i * (p + q) + p + j]; }
+  });
+  return out;
+}
+// exp(k·a), np. odchylenie standardowe z logarytmu wariancji: exp(0,5 · logvar)
+function expScale(a, k) {
+  const O = new Float32Array(a.size); for (let i = 0; i < O.length; i++) O[i] = Math.exp(k * a.d[i]);
+  const out = new T(O, a.s, [a], () => { for (let i = 0; i < O.length; i++) a.g[i] += k * O[i] * out.g[i]; });
+  return out;
+}
+// mnożenie przez stałą (np. waga składnika błędu)
+function scale(a, k) {
+  const O = new Float32Array(a.size); for (let i = 0; i < O.length; i++) O[i] = k * a.d[i];
+  const out = new T(O, a.s, [a], () => { for (let i = 0; i < O.length; i++) a.g[i] += k * out.g[i]; });
+  return out;
+}
+// Binarna entropia krzyżowa z logitów: dla każdego elementu cel t ∈ [0,1], p = sigmoid(logit).
+// Wynik: suma po kolumnach, średnia po wierszach (dla VAE: suma po pikselach rysunku, średnia po porcji).
+function bceLogits(logits, targets) {
+  const [n, m] = logits.s; let loss = 0;
+  for (let i = 0; i < n * m; i++) { const l = logits.d[i]; loss += Math.max(l, 0) - l * targets[i] + Math.log1p(Math.exp(-Math.abs(l))); }
+  const out = new T(new Float32Array([loss / n]), [1], [logits], () => {
+    const g = out.g[0] / n;
+    for (let i = 0; i < n * m; i++) logits.g[i] += g * (1 / (1 + Math.exp(-logits.d[i])) - targets[i]);
+  });
+  return out;
+}
+// Odległość rozkładu N(mu, e^logvar) od N(0, 1) (dywergencja KL), suma po wymiarach, średnia po porcji.
+// Pilnuje, żeby przestrzeń ukryta VAE była „gładka”: bliskie punkty dają podobne rysunki.
+function klNormal(mu, logvar) {
+  const [n, k] = mu.s; let s = 0;
+  for (let i = 0; i < n * k; i++) s += -.5 * (1 + logvar.d[i] - mu.d[i] * mu.d[i] - Math.exp(logvar.d[i]));
+  const out = new T(new Float32Array([s / n]), [1], [mu, logvar], () => {
+    const g = out.g[0] / n;
+    for (let i = 0; i < n * k; i++) { mu.g[i] += g * mu.d[i]; logvar.g[i] += g * -.5 * (1 - Math.exp(logvar.d[i])); }
+  });
+  return out;
+}
+// Błąd średniokwadratowy względem stałego celu (dyfuzja: przewidziany szum kontra prawdziwy).
+function mse(pred, target) {
+  const n = pred.size; let s = 0; for (let i = 0; i < n; i++) { const d = pred.d[i] - target[i]; s += d * d; }
+  const out = new T(new Float32Array([s / n]), [1], [pred], () => { const g = 2 * out.g[0] / n; for (let i = 0; i < n; i++) pred.g[i] += g * (pred.d[i] - target[i]); });
+  return out;
+}
+
 // ---------- komórki sieci rekurencyjnych: jeden krok czytania (jedna litera) ----------
 // xw: wkład bieżącej litery (embedding × W + bias), h: pamięć po poprzedniej literze, U: wagi pamięci.
 
@@ -371,4 +423,4 @@ function pca2(M, rows, cols) {
   return pts;
 }
 
-if (typeof module !== 'undefined') module.exports = { setBackend, T, param, zeros, matmul, addBias, tanh, sigmoid, add, sub, mul, sliceRows, sliceCols, concatRows, rnnCell, gruCell, addPos, layerNorm, gelu, causalAttention, gather, view, crossEntropy, backward, Adam, pca2 };
+if (typeof module !== 'undefined') module.exports = { randn, concatCols, expScale, scale, bceLogits, klNormal, mse, setBackend, T, param, zeros, matmul, addBias, tanh, sigmoid, add, sub, mul, sliceRows, sliceCols, concatRows, rnnCell, gruCell, addPos, layerNorm, gelu, causalAttention, gather, view, crossEntropy, backward, Adam, pca2 };

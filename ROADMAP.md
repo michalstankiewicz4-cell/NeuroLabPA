@@ -13,9 +13,8 @@ Plany z rozmów projektowych, w kolejności, w jakiej najpewniej je zrobimy.
 - Większy model bazowy na GPU (np. 4×64, okno 128, BPE 1024) uczony dłużej na Grabińskim i Wikipedii razem.
 
 ## Laboratorium obrazów
-- **Krok 3: autoenkoder (VAE)**: ściskanie rysunku do kilku liczb i płynne przechodzenie między rysunkami.
-- **Krok 4: GAN**: generator i krytyk.
-- **Krok 5: dyfuzja**: odszumianie krok po kroku, tak jak w dzisiejszych generatorach.
+- Sieci splotowe (U-Net) w VAE, GAN i dyfuzji zamiast warstw gęstych: widzą sąsiedztwo pikseli.
+- Dyfuzja i VAE na karcie graficznej.
 - Kolorowy zbiór (256 kolorów) z zombie z SDF Walkers, ze sterowaniem cechami (np. kolor koszuli).
 - Opis zdaniem zamiast numeru kategorii: koder tekstu z laboratorium języka.
 - Dokańczanie rysunku: zaczynasz kreską, sieć dokańcza resztę.

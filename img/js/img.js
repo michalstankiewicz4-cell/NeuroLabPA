@@ -16,11 +16,43 @@ const STEPS = [
     why: 'Usuwa wadę statystyki: każdy piksel zależy od już narysowanych, więc kreska może się ciągnąć, a oczy pasują do głowy. Tak działał ImageGPT (OpenAI, 2020). Uwaga sama odkrywa dwa wymiary: piksel bezpośrednio nad nim jest 16 pozycji wcześniej, a sieć uczy się tam patrzeć.',
     lim: 'Rysuje po kolei, więc wygenerowanie obrazka to 256 kroków. Przy większych obrazkach to bardzo wolne. Błąd na początku rysunku ciągnie się do końca, bo nie da się wrócić i poprawić. Dlatego dziś do obrazków używa się głównie dyfuzji.',
     more: 'Ile uczyć: po 1000 krokach sieć umie głównie ciągnąć kreskę w poziomie, od ok. 3000 kroków pojawiają się kształty (drzewo, gwiazda), po 5000–6000 rozpoznawalne domy, ryby i księżyce. Na procesorze 3000 kroków to ok. 12–15 minut, na karcie graficznej zwykle kilka razy krócej. Pozycje to 256 wyuczonych wektorów, po jednym na piksel. Sieć nie dostaje podpowiedzi, że obrazek ma 16 kolumn: musi to odkryć sama. Kategoria to po prostu jeszcze jeden „wyraz” w słowniku wejścia (16 odcieni + 12 kategorii).' },
-  { kind: 'vae', name: '3 · Autoenkoder (VAE)', sub: 'wkrótce', ready: false },
-  { kind: 'gan', name: '4 · GAN', sub: 'wkrótce', ready: false },
-  { kind: 'diff', name: '5 · Dyfuzja', sub: 'wkrótce', ready: false },
+  { kind: 'vae', name: '3 · Autoenkoder (VAE)', sub: 'ściśnij i odtwórz, 2013', ready: true,
+    what: 'Koder ściska rysunek (razem z kategorią) do kilku liczb z, czyli punktu w „przestrzeni ukrytej”. Dekoder z samego z i kategorii odtwarza rysunek. Uczymy obu naraz: odtworzenie ma być jak najwierniejsze.',
+    why: 'Nowy pomysł: zamiast rysować piksel po pikselu, sieć uczy się krótkiego opisu rysunku. Błąd ma drugi składnik (dywergencja KL), który zmusza punkty z do układania się jak zwykły rozkład normalny. Dzięki temu można wylosować dowolne z i dostać sensowny rysunek, a bliskie punkty dają podobne rysunki. Wszystkie piksele powstają naraz, w jednym przejściu.',
+    lim: 'Rysunki są rozmyte. Gdy sieć nie wie, czy kreska ma być tu, czy obok, rysuje średnią z obu możliwości, czyli szarą smugę. Kilka liczb z nie mieści wszystkich szczegółów. To główna wada VAE i powód, dla którego powstały GAN-y.',
+    more: 'Koder i dekoder to po jednej warstwie ukrytej (tanh). Sztuczka reparametryzacji: z = mu + rozrzut × losowy szum, dzięki czemu przez losowanie da się liczyć gradient. Przy 2 liczbach z można narysować całą przestrzeń ukrytą jako siatkę: zobacz „Przestrzeń ukryta” niżej.' },
+  { kind: 'gan', name: '4 · GAN', sub: 'generator kontra krytyk, 2014', ready: true,
+    what: 'Dwie sieci grają przeciwko sobie. Generator z losowego szumu (i kategorii) robi rysunek. Krytyk dostaje raz rysunek prawdziwy, raz podróbkę i ocenia, czy jest prawdziwy. Krytyk uczy się odróżniać, generator uczy się oszukiwać krytyka.',
+    why: 'Usuwa rozmycie VAE: generator nie porównuje się piksel po pikselu z oryginałem, tylko musi zrobić coś, czego krytyk nie odróżni od prawdziwych rysunków. Szara smuga od razu zdradza podróbkę, więc generator uczy się ostrych kresek. Nikt nie mówi mu, jak ma wyglądać rysunek.',
+    lim: 'Kapryśna nauka: gdy krytyk za szybko wygrywa, generator nie dostaje użytecznych wskazówek. Generator lubi też rysować w kółko to samo, ignorując kategorię i szum (załamanie trybów). Nie ma prostej miary postępu: błędy obu sieci to wynik gry, nie jakość rysunków. Potrzebuje długiej nauki.',
+    more: 'Sztuczki stabilizujące: szum na wejściu krytyka (malejący w trakcie nauki), etykieta 0,9 zamiast 1 dla prawdziwych rysunków, wolniejszy krytyk, Adam z β1 = 0,5 i dyskryminator projekcyjny (Miyato 2018), w którym kategoria wpływa na ocenę bezpośrednio. Bez nich generator rysował to samo dla każdej kategorii. Szum generatora jest stały przez całą naukę: widać, jak zmienia się ten sam rysunek.' },
+  { kind: 'diff', name: '5 · Dyfuzja', sub: 'z szumu do rysunku, 2020', ready: true,
+    what: 'Nauka: do prawdziwego rysunku dodajemy losową ilość szumu (od odrobiny do samego szumu, w T krokach) i każemy sieci zgadnąć rysunek spod szumu. Rysowanie: zaczynamy od czystego szumu i T razy robimy mały krok w stronę tego, co sieć zgaduje. Z szumu powoli wyłania się rysunek.',
+    why: 'Tak działają dzisiejsze generatory (Stable Diffusion, DALL·E, Midjourney). Łączy zalety poprzedników: uczy się prostym, stabilnym błędem jak VAE, a rysuje ostro, bo rysunek powstaje w wielu krokach i każdy krok poprawia poprzedni. Kategorię czasem (10%) ukrywamy, więc sieć umie też rysować bez podpowiedzi. Przy rysowaniu mieszamy obie odpowiedzi: suwak „siła podpowiedzi” (classifier-free guidance) mocniej ciągnie rysunek w stronę kategorii.',
+    lim: 'Rysowanie jest wolne: T przejść sieci na jeden rysunek (tu 100, w dużych modelach 20–1000). Tutaj sieć jest zwykłą siecią gęstą, a duże modele używają sieci splotowych (U-Net) albo transformerów, które widzą sąsiedztwo pikseli. Opis zdaniem zamiast numeru kategorii wymagałby jeszcze kodera tekstu.',
+    more: 'Harmonogram szumu: kosinusowy (Nichol i Dhariwal 2021). Sieć przewiduje czysty rysunek, a nie sam szum jak w oryginalnym DDPM. To ta sama metoda w innej parametryzacji, łatwiejsza dla małej sieci (z przewidywaniem szumu rysunki zostawały zaszumione). Krok t wchodzi do sieci jako wektor sinusów i kosinusów, kategoria jako wyuczony wektor.' },
 ];
+const CPUDEV = { id: 'device', label: 'Liczy', hint: 'jak liczyć', opts: [['wasm', 'procesor, WASM SIMD'], ['cpu', 'procesor, zwykły JS']], val: 'wasm' };
 const HP = {
+  vae: [
+    { id: 'z', label: 'Przestrzeń ukryta', hint: 'liczb z', opts: [2, 8, 16], val: 8 },
+    { id: 'hidden', label: 'Warstwa ukryta', hint: 'neuronów', opts: [128, 256, 512], val: 256 },
+    { id: 'beta', label: 'Waga KL', hint: 'gładkość przestrzeni', opts: [.5, 1, 2], val: 1 },
+    { id: 'steps', label: 'Kroki nauki', hint: 'po 64 rysunki', opts: [1000, 4000, 10000], val: 4000 },
+    { id: 'lr', label: 'Tempo nauki', hint: 'wielkość kroku', opts: [.0003, .001, .003], val: .001 }, { ...CPUDEV },
+  ],
+  gan: [
+    { id: 'noise', label: 'Szum wejściowy', hint: 'liczb', opts: [8, 16, 32], val: 16 },
+    { id: 'hidden', label: 'Warstwy ukryte', hint: 'neuronów', opts: [128, 256, 512], val: 256 },
+    { id: 'steps', label: 'Kroki gry', hint: 'po 64 rysunki', opts: [2000, 6000, 15000], val: 6000 },
+    { id: 'lr', label: 'Tempo nauki', hint: 'generatora', opts: [.0001, .0002, .0005], val: .0002 }, { ...CPUDEV },
+  ],
+  diff: [
+    { id: 'T', label: 'Kroki szumu', hint: 'T', opts: [50, 100, 200], val: 100 },
+    { id: 'hidden', label: 'Warstwy ukryte', hint: 'neuronów (×3)', opts: [256, 512], val: 512 },
+    { id: 'steps', label: 'Kroki nauki', hint: 'po 64 rysunki', opts: [1000, 4000, 10000], val: 4000 },
+    { id: 'lr', label: 'Tempo nauki', hint: 'wielkość kroku', opts: [.0003, .001, .002], val: .001 }, { ...CPUDEV },
+  ],
   ar: [
     { id: 'layers', label: 'Warstwy', hint: 'bloków uwagi', opts: [1, 2, 3, 4], val: 2 },
     { id: 'dim', label: 'Szerokość', hint: 'liczb na piksel', opts: [32, 48, 64], val: 48 },
@@ -31,7 +63,7 @@ const HP = {
   ],
 };
 let cur = 'stats', man = null, catData = [], ready = false, training = false;
-const hpValues = (kind = cur) => { const o = { batch: 8 }; (HP[kind] || []).forEach(h => o[h.id] = h.val); return o; };
+const hpValues = (kind = cur) => { const o = { batch: kind === 'ar' ? 8 : 64 }; (HP[kind] || []).forEach(h => o[h.id] = h.val); return o; };
 
 // ---------- dane: pliki PNG z img/data, każdy kafelek 16×16 to jeden rysunek ----------
 async function loadData() {
@@ -118,6 +150,33 @@ function graphSpec(kind, hp) {
     { id: 'tab', name: 'Tabela odcieni', out: '256 × 16', w: [['tabela', `${C} × 256 × 16`, C * N * LV]], desc: `Dla każdej z ${C} kategorii i każdego z 256 pikseli 16 prawdopodobieństw odcieni. Policzone wprost z rysunków treningowych, bez uczenia gradientem: to zwykłe zliczanie, jak w bigramie.` },
     { id: 'out', name: 'Losowanie każdego piksela', out: '16 × 16 odcieni', io: true, desc: 'Każdy z 256 pikseli losowany osobno ze swojego rozkładu. Brak zależności między pikselami: dlatego rysunek wychodzi jak szum w kształcie kategorii.' },
   ] };
+  const dl = (id, name, nIn, nOut, out, desc, act) => ({ id, name: name + (act ? ` · ${act}` : ''), out, w: [['W', `${nIn} × ${nOut}`, nIn * nOut], ['bias', `${nOut}`, nOut]], desc });
+  if (kind === 'vae') { const Hh = hp.hidden, Z = hp.z; return { nodes: [
+    { id: 'in', name: 'Wejście: rysunek + kategoria', out: `${N} + ${C} liczb`, io: true, desc: `256 odcieni (0–1) i kategoria jako ${C} liczb, z których jedna to 1 (one-hot).` },
+    dl('e1', 'Koder: warstwa ukryta', N + C, Hh, `${Hh}`, 'Zbiera cechy rysunku.', 'tanh'),
+    { id: 'z', name: `Średnia mu i rozrzut z (2 × ${Z})`, out: `${Z} liczb z`, w: [['W mu', `${Hh} × ${Z}`, Hh * Z], ['bias mu', `${Z}`, Z], ['W log-wariancji', `${Hh} × ${Z}`, Hh * Z], ['bias', `${Z}`, Z]], desc: `Koder nie podaje jednego punktu, tylko rozkład: środek mu i rozrzut. z = mu + rozrzut × losowy szum (reparametryzacja). Te ${Z} liczb to cały „opis” rysunku.` },
+    { id: 'kl', name: 'Błąd KL: z ma być jak N(0, 1)', out: '1 liczba', io: true, desc: 'Kara za to, że rozkład z odbiega od zwykłego rozkładu normalnego. Dzięki niej po nauce można losować z z N(0, 1) i rysować.' },
+    dl('d1', 'Dekoder: z + kategoria → ukryta', Z + C, Hh, `${Hh}`, 'Z kilku liczb i kategorii zaczyna odtwarzać rysunek.', 'tanh'),
+    dl('d2', 'Dekoder: wyjście', Hh, N, `${N}`, 'Dla każdego piksela jedna liczba, po sigmoidzie odcień 0–1. Błąd odtworzenia: binarna entropia krzyżowa z prawdziwym rysunkiem.', 'sigmoid'),
+    { id: 'out', name: 'Rysunek', out: '16 × 16', io: true, desc: 'Wszystkie piksele naraz, w jednym przejściu. Rysując nowe, losujemy z z N(0, 1) i używamy tylko dekodera.' },
+  ] }; }
+  if (kind === 'gan') { const Hh = hp.hidden, Z = hp.noise; return { nodes: [
+    { id: 'in', name: 'Generator: szum + kategoria', out: `${Z} + ${C} liczb`, io: true, desc: `Losowe ${Z} liczb i kategoria. Inny szum = inny rysunek tej samej kategorii.` },
+    dl('g1', 'Generator: warstwa 1', Z + C, Hh, `${Hh}`, 'Rozwija szum w cechy rysunku.', 'GELU'),
+    dl('g2', 'Generator: warstwa 2', Hh, Hh, `${Hh}`, '', 'GELU'),
+    dl('g3', 'Generator: wyjście', Hh, N, `${N}`, 'Odcień każdego piksela (sigmoid). To jest podróbka.', 'sigmoid'),
+    dl('k1', 'Krytyk: rysunek + kategoria', N + C, Hh, `${Hh}`, 'Krytyk dostaje raz prawdziwy rysunek, raz podróbkę generatora.', 'GELU'),
+    dl('k2', 'Krytyk: warstwa 2', Hh, Hh >> 1, `${Hh >> 1}`, '', 'GELU'),
+    { id: 'k3', name: 'Krytyk: ocena (+ projekcja kategorii)', out: '1 liczba', w: [['W', `${Hh >> 1} × 1`, Hh >> 1], ['bias', '1', 1], ['wektory kategorii', `${C} × ${Hh >> 1}`, C * (Hh >> 1)]], desc: 'Jedna liczba: jak bardzo krytyk wierzy, że rysunek jest prawdziwy i pasuje do kategorii. Krytyk chce: prawdziwe → 1, podróbki → 0. Generator chce, żeby jego podróbki dostawały 1.' },
+    { id: 'out', name: 'Gra: krytyk ↔ generator', out: 'dwa błędy', io: true, desc: 'Na zmianę krok krytyka i krok generatora. Błąd generatora liczony jest przez krytyka: gradient płynie przez krytyka do generatora, ale uczy się tylko generator.' },
+  ] }; }
+  if (kind === 'diff') { const Hh = hp.hidden; return { nodes: [
+    { id: 'in', name: 'Wejście: zaszumiony rysunek', out: `${N} liczb`, io: true, desc: `Rysunek z dodanym szumem w kroku t (od 1 do ${hp.T}). Przy t = ${hp.T} to prawie sam szum.` },
+    { id: 'te', name: '+ krok t i kategoria', out: `${N} + 32 + 32`, w: [['wektory kategorii (+ „brak”)', `${C + 1} × 32`, (C + 1) * 32]], desc: 'Krok t jako 32 sinusy i kosinusy (bez wag do nauki), kategoria jako wyuczony wektor 32 liczb. Dodatkowy wektor „brak kategorii” do rysowania bez podpowiedzi.' },
+    dl('l1', 'Warstwa 1', N + 64, Hh, `${Hh}`, '', 'GELU'), dl('l2', 'Warstwa 2', Hh, Hh, `${Hh}`, '', 'GELU'), dl('l3', 'Warstwa 3', Hh, Hh, `${Hh}`, '', 'GELU'),
+    dl('l4', 'Wyjście: zgadnięty rysunek', Hh, N, `${N}`, 'Sieć zgaduje czysty rysunek spod szumu. Błąd: średni kwadrat różnicy z prawdziwym rysunkiem.'),
+    { id: 'out', name: `Rysowanie: ${hp.T} małych kroków`, out: '16 × 16', io: true, desc: `Start z czystego szumu. W każdym z ${hp.T} kroków sieć zgaduje rysunek (dwa razy: z kategorią i bez, mieszane siłą podpowiedzi), a my przesuwamy szum trochę w jego stronę i dodajemy odrobinę nowego szumu.` },
+  ] }; }
   const d = hp.dim, L = hp.layers, nh = hp.heads, Vin = LV + C;
   const blk = [
     { id: 'ln1', name: 'Normalizacja warstwy', out: `256 × ${d}`, w: [['skala g', `${d}`, d], ['przesunięcie b', `${d}`, d]], desc: 'Każdy wektor pozycji sprowadzony do średniej 0 i wariancji 1, potem przeskalowany. Trzyma liczby w rozsądnym zakresie przy wielu warstwach.' },
@@ -180,7 +239,7 @@ function renderGraph() {
     }
   });
   y += 14;
-  svg.setAttribute('viewBox', `0 0 ${W} ${y}`);
+  svg.setAttribute('viewBox', `0 0 ${W} ${y}`); svg.style.maxWidth = svg.style.minWidth = svg.style.margin = '';
   svg.innerHTML = `<defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="#9a9aa6"/></marker>`
     + `<marker id="ar2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="#c9a86a"/></marker></defs>` + h;
   svg.querySelectorAll('.node').forEach(g => {
@@ -227,6 +286,11 @@ function renderNeurons() {
     const cols = [{ n: C, show: Math.min(C, 12), label: 'kategoria', sub: `${C} wejść` }, { n: LV, show: LV, label: 'odcienie piksela', sub: '16 wyjść × 256 pikseli' }];
     return drawNeuronCols(svg, cols, [{ type: 'full', note: 'tabela' }], 'Statystyka nie ma warstw ukrytych: każda kategoria ma po prostu własną tabelę odcieni dla każdego z 256 miejsc. To jedno „połączenie” na parę kategoria → odcień w każdym miejscu.');
   }
+  if (cur !== 'ar') {
+    const wv = wviz && wviz.cols ? wviz : null;
+    if (!wv) { $('graph').innerHTML = ''; const info = $('graphInfo'); info.innerHTML = '<h4>Neurony i połączenia</h4><p>Kliknij „Ucz”: widok pojawi się z pierwszymi wagami sieci.</p>'; return; }
+    return drawNeuronCols(svg, wv.cols.map(c => ({ ...c, sub: String(c.n) })), wv.mats.map(M => ({ type: 'w', M })), 'Wagi z aktualnego stanu sieci (próbka kółek i połączeń). Zielone dodatnie, niebieskie ujemne, grubsze silniejsze.' + (cur === 'gan' ? ' Pokazany jest generator; krytyk ma podobną budowę w odwrotnym kierunku.' : ''));
+  }
   const d = hp.dim, L = hp.layers, cols = [{ n: LV + C, show: 12, label: 'wejście', sub: `1 z ${LV + C}`, labels: wviz && wviz.tok }, { n: d, show: 12, label: 'embedding + pozycja', sub: `${d}` }], links = [{ type: 'w', key: 'emb' }];
   for (let l = 0; l < L; l++) {
     cols.push({ n: d, show: 12, label: `uwaga ${l + 1}`, sub: `${d} · z innych pikseli` }); links.push({ type: 'att' });
@@ -243,7 +307,8 @@ function drawNeuronCols(svg, cols, links, note) {
   links.forEach((lk, li) => {
     const A = pos[li], B = pos[li + 1];
     let M = null;
-    if (lk.type === 'w' && wviz) M = lk.key === 'emb' ? wviz.emb : lk.key === 'wo' ? wviz.wo : wviz.blocks[lk.l] && wviz.blocks[lk.l][lk.key];
+    if (lk.M) M = lk.M;
+    else if (lk.type === 'w' && wviz && wviz.emb) M = lk.key === 'emb' ? wviz.emb : lk.key === 'wo' ? wviz.wo : wviz.blocks[lk.l] && wviz.blocks[lk.l][lk.key];
     const mx = M ? Math.max(1e-9, ...M.flat().map(Math.abs)) : 1;
     A.forEach(([ax, ay], i) => B.forEach(([bx, by], j) => {
       if (lk.type === 'att') { if (i === j || (i + 3) % A.length === j) h += `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="#9a9aa6" stroke-width=".8" stroke-dasharray="3 3" opacity=".55"/>`; return; }
@@ -263,32 +328,39 @@ function drawNeuronCols(svg, cols, links, note) {
     h += `<text class="frametxt" x="${pos[ci][0][0]}" y="${top - up}" text-anchor="middle" font-size="11">${c.label}</text>`;
     h += `<text class="shape" x="${pos[ci][0][0]}" y="${H - (ci % 2 ? 6 : 22)}" text-anchor="middle">${c.sub}</text>`;
   });
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = h;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = h; svg.style.maxWidth = Math.round(W * 1.25) + 'px'; svg.style.minWidth = Math.min(760, Math.round(W * .9)) + 'px'; svg.style.margin = '0 auto';
   const info = $('graphInfo'); info.innerHTML = '<h4>Neurony i połączenia</h4><p></p>'; info.querySelector('p').textContent = note;
 }
 
 // ---------- nauka ----------
 let series = { train: [], val: [] }, live = null, att = null, attSel = { head: 0, pix: 136 };
-const runs = [];
+const runs = [], have = new Set();
+const BITS = k => k === 'stats' || k === 'ar';
+const LABEL = (k, hp) => ({ stats: '1 · Statystyka pikseli', ar: `2 · Piksel po pikselu (${hp.layers}×${hp.dim}, ${hp.heads} gł.)`, vae: `3 · VAE (z = ${hp.z}, ${hp.hidden})`, gan: `4 · GAN (${hp.hidden})`, diff: `5 · Dyfuzja (T = ${hp.T}, ${hp.hidden})` }[k]);
 function resetLearn() {
   series = { train: [], val: [] }; live = null; drawChart(); renderMetrics(null);
   $('samples').innerHTML = ''; $('sampNote').textContent = 'Kliknij „Ucz”.';
   $('gen').disabled = !have.has(cur);
   $('attTitle').hidden = $('attCtl').hidden = cur !== 'ar'; $('att').parentNode.hidden = cur !== 'ar';
+  $('tempBox').hidden = !BITS(cur); $('guideBox').hidden = cur !== 'diff';
+  $('legT').textContent = cur === 'gan' ? 'błąd generatora' : cur === 'vae' ? 'błąd na piksel, rysunki treningowe' : cur === 'diff' ? 'błąd zgadywania rysunku (trening)' : 'błąd na rysunkach treningowych';
+  $('legV').textContent = cur === 'gan' ? 'błąd krytyka' : cur === 'diff' ? 'błąd zgadywania rysunku (sprawdzające)' : cur === 'vae' ? 'błąd na piksel, rysunki sprawdzające' : 'błąd na rysunkach sprawdzających';
+  renderInner();
 }
-const have = new Set();
 $('train').addEventListener('click', () => {
   if (!ready) return;
   series = { train: [], val: [] }; training = true;
-  $('train').disabled = true; $('stop').disabled = cur === 'stats'; $('sampNote').textContent = cur === 'stats' ? 'Liczę…' : 'Sieć zaczyna od losowych wag. Próbki rysunków pojawiają się co ok. 20 s.';
+  $('train').disabled = true; $('stop').disabled = cur === 'stats';
+  $('sampNote').textContent = cur === 'stats' ? 'Liczę…' : `Sieć zaczyna od losowych wag. Próbki rysunków pojawiają się co ${cur === 'ar' ? 'ok. 20' : 'kilka'} s.`;
   worker.postMessage({ cmd: 'train', kind: cur, hp: hpValues() });
 });
 $('stop').addEventListener('click', () => worker.postMessage({ cmd: 'stop' }));
 $('temp').addEventListener('input', () => $('tempOut').textContent = (+$('temp').value).toFixed(1).replace('.', ','));
+$('guide').addEventListener('input', () => $('guideOut').textContent = (+$('guide').value).toFixed(1).replace('.', ','));
 let genId = 0;
 $('gen').addEventListener('click', () => {
   $('gen').disabled = true; const cx = $('draw').getContext('2d'); cx.fillStyle = '#2a2a33'; cx.fillRect(0, 0, 192, 192);
-  worker.postMessage({ cmd: 'generate', kind: cur, classes: [+$('genCat').value], temp: +$('temp').value, id: ++genId });
+  worker.postMessage({ cmd: 'generate', kind: cur, classes: [+$('genCat').value], temp: +$('temp').value, guide: +$('guide').value, id: ++genId });
 });
 function showErr(msg) { $('err').textContent = 'Błąd: ' + msg; $('err').hidden = false; }
 
@@ -305,43 +377,89 @@ worker.onmessage = e => {
     if (m.id !== genId) return;
     const cx = $('draw').getContext('2d'), img = m.imgs[0];
     for (let i = 0; i < m.n; i++) { const g = shade(img[i]); cx.fillStyle = `rgb(${g},${g},${g})`; cx.fillRect((i % S) * 12, Math.floor(i / S) * 12, 12, 12); }
+    $('drawNote').textContent = cur === 'diff' ? (m.done ? 'Gotowe: rysunek wyłonił się z szumu.' : 'Odszumianie: z czystego szumu krok po kroku wyłania się rysunek.') : BITS(cur) ? 'Sieć rysuje piksel po pikselu, wiersz po wierszu od lewego górnego rogu. Na każdym kroku widzi tylko kategorię i to, co już narysowała.' : 'Wszystkie piksele naraz, w jednym przejściu sieci, z nowego losowego szumu. Kliknij jeszcze raz: inny rysunek tej samej kategorii.';
     if (m.done) $('gen').disabled = false;
     return;
   }
+  if (m.type === 'latent') { drawGrid(m.imgs, m.n); return; }
   if (m.type !== 'progress' && m.type !== 'done') return;
   if (m.kind !== cur) return;
   if (m.train != null) series.train.push([m.step, m.train]);
-  if (m.val != null && (!series.val.length || series.val[series.val.length - 1][0] !== m.step)) series.val.push([m.step, m.val]);
+  const v2 = m.kind === 'gan' ? (m.stats && m.stats.d) : m.val;
+  if (v2 != null && (!series.val.length || series.val[series.val.length - 1][0] !== m.step)) series.val.push([m.step, v2]);
   live = m; drawChart(); renderMetrics(m);
   if (m.samples) renderSamples(m);
   if (m.attn) { att = m.attn; drawAtt(); }
+  if (m.frames) { lastFrames = m.frames; renderInner(); }
   if (m.wviz) { wviz = m.wviz; if (graphView === 'neurons') renderGraph(); }
   if (m.type === 'done') {
     training = false; have.add(m.kind); $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = false;
-    const hp = hpValues(m.kind);
-    runs.push({ label: m.kind === 'stats' ? '1 · Statystyka pikseli' : `2 · Piksel po pikselu (${hp.layers}×${hp.dim}, ${hp.heads} gł.)`, params: m.params, val: m.val, ms: m.ms, device: m.device });
-    renderCmp();
+    runs.push({ kind: m.kind, label: LABEL(m.kind, hpValues(m.kind)), params: m.params, val: m.val, stats: m.stats, ms: m.ms, device: m.device });
+    renderCmp(); renderInner();
   }
 };
 function renderMetrics(m) {
-  const v = m ? m.val : null;
-  const rows = [
+  const v = m ? m.val : null, st = (m && m.stats) || {}, k = cur;
+  const krok = ['Krok', m ? m.step.toLocaleString('pl') : '–', m ? `${m.params.toLocaleString('pl')} parametrów` + (m.ms ? ` · ${fmt(m.ms, 0)} ms/krok (${m.device})` : '') + (m.bestStep != null && m.step > 1 ? ` · najlepsza wersja: krok ${m.bestStep.toLocaleString('pl')}` : '') : ''];
+  const rows = BITS(k) ? [
     ['Bity na piksel', fmt(v != null ? v / LN2 : null), m && m.train != null ? `treningowe ${fmt(m.train / LN2)} · bez wiedzy: 4,00` : 'bez wiedzy: 4,00'],
-    ['Waha się między', v != null ? `${fmt(Math.exp(v), 1)} odcieniami` : '–', 'z 16 możliwych'],
-    ['Krok', m ? m.step.toLocaleString('pl') : '–', m ? `${m.params.toLocaleString('pl')} parametrów` + (m.ms ? ` · ${fmt(m.ms, 0)} ms/krok (${m.device})` : '') + (m.bestStep != null && m.step > 1 ? ` · najlepsza wersja: krok ${m.bestStep.toLocaleString('pl')}` : '') : ''],
-  ];
+    ['Waha się między', v != null ? `${fmt(Math.exp(v), 1)} odcieniami` : '–', 'z 16 możliwych'], krok]
+  : k === 'vae' ? [
+    ['Błąd na piksel', fmt(v, 4), 'sprawdzający: odtworzenie + KL, mniej = lepiej'],
+    ['Odtworzenie i KL', st.rec != null ? `${fmt(st.rec, 3)} + ${fmt(st.kl / N, 3)}` : '–', st.kl != null ? `KL całego rysunku: ${fmt(st.kl, 1)} (ile informacji mieści z)` : 'rozmycie kontra gładkość przestrzeni'], krok]
+  : k === 'gan' ? [
+    ['Krytyk ocenia', st.pr != null ? `${Math.round(st.pr * 100)}% / ${Math.round(st.pf * 100)}%` : '–', 'prawdziwe / podróbki: ile „prawdziwości” daje krytyk. Równowaga to oba blisko 50%'],
+    ['Błędy w grze', st.main != null ? `G ${fmt(st.main, 2)} · K ${fmt(st.d, 2)}` : '–', 'generator i krytyk; to wynik gry, nie jakość rysunków'], krok]
+  : [
+    ['Błąd zgadywania', fmt(v, 4), 'średni kwadrat różnicy zgadniętego i prawdziwego rysunku (skala −1…1)'],
+    ['Na treningu', fmt(m && m.train, 4), 'po losowych krokach szumu t'], krok];
   $('metrics').innerHTML = rows.map(() => '<div><dt></dt><dd></dd></div>').join('');
   [...$('metrics').children].forEach((d, i) => { d.querySelector('dt').textContent = rows[i][0]; const dd = d.querySelector('dd'); dd.textContent = rows[i][1]; const s = document.createElement('small'); s.textContent = rows[i][2]; dd.appendChild(s); });
 }
 function renderSamples(m) {
   const box = $('samples'); box.innerHTML = '';
   const add = (pix, label) => { const d = document.createElement('div'), cv = document.createElement('canvas'), sp = document.createElement('span'); d.className = 'samp'; cv.width = cv.height = S; drawImg(cv.getContext('2d'), pix, 0, 0, 1); sp.textContent = label; d.append(cv, sp); box.appendChild(d); };
+  const head = t => { const h = document.createElement('h4'); h.textContent = t; box.appendChild(h); };
   if (m.mean) m.mean.forEach((pix, c) => add(pix.map(v => Math.round(v)), `${catData[c].name}: średni`));
   const cls = m.sampleClasses || m.samples.map((_, i) => i);
+  if (m.recon) head('Nowe rysunki (losowe z)');
   m.samples.forEach((pix, i) => add(pix, catData[cls[i]].name));
-  $('sampNote').textContent = m.kind === 'stats'
-    ? 'Najpierw średni obrazek każdej kategorii (oczekiwany odcień w każdym miejscu), potem po jednym losowym rysunku. Średnie przypominają kategorie, ale losowe rysunki to szum: piksele nie wiedzą o sobie nawzajem.'
-    : `Po jednym rysunku z każdej kategorii z ostatniego sprawdzenia, temperatura 0,8${m.genMs ? ` (rysowanie wszystkich: ${fmt(m.genMs / 1000, 1)} s)` : ''}. Pierwsze kształty pojawiają się zwykle po ok. 3000 krokach.`;
+  if (m.recon) { head('Odtwarzanie: oryginał → po ściśnięciu do z i odtworzeniu'); m.recon.real.forEach((p, i) => { add(p, 'oryginał'); add(m.recon.rec[i], 'odtworzony'); }); }
+  $('sampNote').textContent = {
+    stats: 'Najpierw średni obrazek każdej kategorii (oczekiwany odcień w każdym miejscu), potem po jednym losowym rysunku. Średnie przypominają kategorie, ale losowe rysunki to szum: piksele nie wiedzą o sobie nawzajem.',
+    ar: `Po jednym rysunku z każdej kategorii z ostatniego sprawdzenia, temperatura 0,8${m.genMs ? ` (rysowanie wszystkich: ${fmt(m.genMs / 1000, 1)} s)` : ''}. Pierwsze kształty pojawiają się zwykle po ok. 3000 krokach.`,
+    vae: 'Po jednym rysunku z każdej kategorii z losowego z, a niżej odtworzenia rysunków sprawdzających. Rozmycie to znak rozpoznawczy VAE: gdy sieć nie jest pewna, gdzie kreska, rysuje średnią.',
+    gan: 'Ten sam szum przez całą naukę, po jednym na kategorię: widać, jak zmienia się ten sam rysunek. Na początku szum, potem plamy, z czasem kształty. Gdy wszystkie kategorie wyglądają tak samo, to załamanie trybów.',
+    diff: 'Po jednym rysunku z każdej kategorii, siła podpowiedzi 2. Każdy powstał z czystego szumu w ' + hpValues('diff').T + ' krokach odszumiania: zobacz „Odszumianie krok po kroku” niżej.',
+  }[m.kind];
+}
+// Podgląd wnętrza: mapa przestrzeni ukrytej (VAE) albo odszumianie krok po kroku (dyfuzja).
+let lastFrames = null;
+function renderInner() {
+  const show = cur === 'vae' || cur === 'diff';
+  ['innerTitle', 'innerCtl', 'innerRow'].forEach(id => $(id).hidden = !show);
+  if (!show) return;
+  const ctl = $('innerCtl'); ctl.innerHTML = '';
+  if (cur === 'vae') {
+    $('innerTitle').textContent = 'Przestrzeń ukryta';
+    const sel = document.createElement('select'); sel.id = 'latCat'; catData.forEach((c, i) => sel.add(new Option(c.name, i)));
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'ghost nav'; b.textContent = 'Narysuj mapę'; b.disabled = !have.has('vae');
+    b.addEventListener('click', () => worker.postMessage({ cmd: 'latent', c: +sel.value }));
+    ctl.append(sel, b);
+    $('innerNote').textContent = 'Siatka 8 × 8: każdy rysunek to dekoder dla innego punktu z. W poziomie zmienia się pierwsza liczba z (od −2,5 do 2,5), w pionie druga, pozostałe są 0. Rysunki przechodzą płynnie jeden w drugi: sieć sama ułożyła w tych liczbach cechy rysunku, np. obrót albo grubość. Najlepiej widać to przy 2 liczbach z.';
+    if (!have.has('vae')) clearInner('Najpierw naucz VAE.');
+  } else {
+    $('innerTitle').textContent = 'Odszumianie krok po kroku';
+    $('innerNote').textContent = 'Cztery rysunki (kot, dom, drzewo, ryba), od lewej co ok. ' + Math.round(hpValues('diff').T / 10) + ' kroków odszumiania: od czystego szumu do gotowego rysunku. Na początku sieć ustala ogólny kształt, na końcu szczegóły.';
+    if (lastFrames) drawFrames(lastFrames); else clearInner('Pojawi się w trakcie nauki.');
+  }
+}
+function clearInner(t) { const cv = $('inner'); cv.width = 288; cv.height = 60; const cx = cv.getContext('2d'); cx.fillStyle = '#1b1b22'; cx.fillRect(0, 0, 288, 60); cx.fillStyle = '#9a9aa6'; cx.font = '13px system-ui'; cx.fillText(t, 12, 34); }
+function drawGrid(imgs, n) { const cv = $('inner'), sc = 2, cell = S * sc + 2; cv.width = cv.height = n * cell; const cx = cv.getContext('2d'); cx.fillStyle = '#1b1b22'; cx.fillRect(0, 0, cv.width, cv.height); imgs.forEach((p, k) => drawImg(cx, p, (k % n) * cell + 1, Math.floor(k / n) * cell + 1, sc)); cv.style.width = Math.min(n * cell * 2, 576) + 'px'; }
+function drawFrames(fr) {
+  const cv = $('inner'), sc = 2, cell = S * sc + 2, nf = fr.length, rows = fr[0].length; cv.width = nf * cell; cv.height = rows * cell;
+  const cx = cv.getContext('2d'); cx.fillStyle = '#1b1b22'; cx.fillRect(0, 0, cv.width, cv.height);
+  fr.forEach((imgs, f) => imgs.forEach((p, r) => drawImg(cx, p, f * cell + 1, r * cell + 1, sc))); cv.style.width = Math.min(nf * cell * 2, 900) + 'px';
 }
 
 // ---------- wykres ----------
@@ -349,14 +467,13 @@ const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).
 function drawChart() {
   const W = 640, H = 260, cv = $('chart'), dpr = window.devicePixelRatio || 1; cv.width = W * dpr; cv.height = H * dpr;
   const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const L = 46, R = 12, T = 14, B = 30, k = 1 / LN2, sT = series.train.map(([a, b]) => [a, b * k]), sV = series.val.map(([a, b]) => [a, b * k]), pts = [...sT, ...sV];
-  const top = Math.max(4.2, ...pts.map(p => p[1])), lo = Math.max(0, Math.min(1.5, ...pts.map(p => p[1])) - .2), maxX = Math.max(1, ...pts.map(p => p[0]));
-  const x = s => L + s / maxX * (W - L - R), y = v => T + (1 - (v - lo) / (top - lo)) * (H - T - B);
+  const bits = BITS(cur), L = 46, R = 12, T = 14, B = 30, k = bits ? 1 / LN2 : 1, sT = series.train.map(([a, b]) => [a, b * k]), sV = series.val.map(([a, b]) => [a, b * k]), pts = [...sT, ...sV];
+  const top = bits ? Math.max(4.2, ...pts.map(p => p[1])) : Math.max(1e-6, ...pts.map(p => p[1])) * 1.08, lo = bits ? Math.max(0, Math.min(1.5, ...pts.map(p => p[1])) - .2) : Math.max(0, Math.min(...pts.map(p => p[1]), top) * .9), maxX = Math.max(1, ...pts.map(p => p[0]));
+  const x = s => L + s / maxX * (W - L - R), y = v => T + (1 - (v - lo) / ((top - lo) || 1)) * (H - T - B);
   c.font = '11px "Atkinson Hyperlegible",system-ui,sans-serif'; c.fillStyle = css('--muted'); c.strokeStyle = css('--line'); c.lineWidth = 1;
-  for (let i = 0; i <= 4; i++) { const v = lo + (top - lo) * i / 4, yy = y(v); c.beginPath(); c.moveTo(L, yy); c.lineTo(W - R, yy); c.stroke(); c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(fmt(v, 1), L - 6, yy); }
+  for (let i = 0; i <= 4; i++) { const v = lo + (top - lo) * i / 4, yy = y(v); c.beginPath(); c.moveTo(L, yy); c.lineTo(W - R, yy); c.stroke(); c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(fmt(v, bits ? 1 : 2), L - 6, yy); }
   c.textAlign = 'center'; c.textBaseline = 'top'; [0, .5, 1].forEach(f => c.fillText(Math.round(maxX * f).toLocaleString('pl'), x(maxX * f), H - B + 8));
-  const yb = y(4); c.setLineDash([4, 4]); c.strokeStyle = css('--muted'); c.beginPath(); c.moveTo(L, yb); c.lineTo(W - R, yb); c.stroke(); c.setLineDash([]);
-  c.textAlign = 'left'; c.textBaseline = 'bottom'; c.fillText('bez wiedzy (4 bity na piksel)', L + 6, yb - 3);
+  if (bits) { const yb = y(4); c.setLineDash([4, 4]); c.strokeStyle = css('--muted'); c.beginPath(); c.moveTo(L, yb); c.lineTo(W - R, yb); c.stroke(); c.setLineDash([]); c.textAlign = 'left'; c.textBaseline = 'bottom'; c.fillText('bez wiedzy (4 bity na piksel)', L + 6, yb - 3); }
   const line = (arr, col, w) => { if (!arr.length) return; if (arr.length === 1) { c.fillStyle = col; c.beginPath(); c.arc(x(arr[0][0]), y(arr[0][1]), 3, 0, 7); c.fill(); return; } c.strokeStyle = col; c.lineWidth = w; c.beginPath(); arr.forEach((p, i) => i ? c.lineTo(x(p[0]), y(p[1])) : c.moveTo(x(p[0]), y(p[1]))); c.stroke(); };
   line(sT, css('--muted'), 1.4); line(sV, css('--rot'), 2.2);
   if (!pts.length) { c.fillStyle = css('--muted'); c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = '13px "Atkinson Hyperlegible",system-ui,sans-serif'; c.fillText('Tu pojawi się krzywa błędu.', W / 2, H / 2); }
@@ -389,13 +506,16 @@ $('att').addEventListener('click', e => {
 });
 
 // ---------- porównanie ----------
+// Bity na piksel mają sens tylko dla modeli, które podają prawdopodobieństwo każdego odcienia (kroki 1–2).
+// VAE, GAN i dyfuzja mierzą co innego, więc mają własną miarę; porównuje się je patrząc na rysunki.
 function renderCmp() {
   const tb = $('cmp').querySelector('tbody'); tb.innerHTML = '';
   if (!runs.length) { tb.innerHTML = '<tr><td colspan="5" class="note">Tu trafi każda zakończona nauka.</td></tr>'; return; }
-  const best = Math.min(...runs.map(r => r.val));
+  const bitRuns = runs.filter(r => BITS(r.kind)), best = bitRuns.length ? Math.min(...bitRuns.map(r => r.val)) : null;
   runs.forEach(r => {
-    const tr = document.createElement('tr'); if (r.val === best) tr.className = 'best';
-    [r.label, r.params.toLocaleString('pl'), r.ms ? `${fmt(r.ms, 0)} ms · ${r.device.split(' · ')[0]}` : '–', fmt(r.val / LN2), `${fmt(Math.exp(r.val), 1)} odcieniami`].forEach(v => { const td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
+    const tr = document.createElement('tr'); if (BITS(r.kind) && r.val === best) tr.className = 'best';
+    const other = BITS(r.kind) ? `waha się między ${fmt(Math.exp(r.val), 1)} odcieniami` : r.kind === 'vae' ? `błąd na piksel ${fmt(r.val, 4)}` : r.kind === 'diff' ? `błąd zgadywania ${fmt(r.val, 4)}` : r.stats ? `krytyk: ${Math.round(r.stats.pr * 100)}% / ${Math.round(r.stats.pf * 100)}%` : '–';
+    [r.label, r.params.toLocaleString('pl'), r.ms ? `${fmt(r.ms, 0)} ms · ${r.device.split(' · ')[0]}` : '–', BITS(r.kind) ? fmt(r.val / LN2) : '–', other].forEach(v => { const td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
     tb.appendChild(tr);
   });
 }

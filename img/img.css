@@ -44,4 +44,7 @@
 .graphrow.wide{grid-template-columns:1fr}
 .graphrow.wide .graphside{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 @media (max-width:900px){.graphrow.wide .graphside{grid-template-columns:1fr}}
-.graphrow.wide svg{min-width:760px}
+.innerrow{display:flex;flex-wrap:wrap;gap:16px;align-items:start}
+.innerrow canvas{image-rendering:pixelated;border:1px solid var(--line);background:var(--panel);max-width:100%}
+.innerrow .note{max-width:52ch;margin:0}
+.samples h4{flex-basis:100%;margin:6px 0 0;font-family:var(--display);font-weight:500;color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
