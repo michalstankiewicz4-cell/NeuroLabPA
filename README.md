@@ -103,9 +103,9 @@ Skrypty są zwykłymi `<script>` (bez modułów ES) i dzielą zmienne globalne, 
 - Ocena Good uczy wszystkie części „OK”. Bad z tagami uczy wskazane części. Bad bez tagów uczy tylko `good`; wyjścia części są wtedy maskowane.
 - Jakość mierzy 5-krotna walidacja krzyżowa: jak często sieć zgadza się z ocenami, których nie widziała.
 
-## Plany
+## Plany i notatki
 
-Zobacz `ROADMAP.md`.
+Plan: `ROADMAP.md`. Historia zmian: `CHANGELOG.md`. Konwencje pracy, zmierzone wyniki, decyzje i sprawy otwarte: folder `notatki/`.
 
 ## Wersjonowanie
 
