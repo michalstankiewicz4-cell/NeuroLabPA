@@ -366,7 +366,7 @@ function showErr(msg) { $('err').textContent = 'Błąd: ' + msg; $('err').hidden
 
 worker.onmessage = e => {
   const m = e.data;
-  if (m.type === 'ready') { ready = true; $('train').disabled = false; return; }
+  if (m.type === 'ready') { ready = true; $('train').disabled = false; renderAnswers(); return; }
   if (m.type === 'gputest') {
     gpuState = m; $('train').disabled = training || !ready; renderGraph();
     if (!m.ok) { const h = HP.ar.find(x => x.id === 'device'); h.val = 'wasm'; if ($('hp-device')) $('hp-device').value = 'wasm'; }
@@ -382,6 +382,10 @@ worker.onmessage = e => {
     return;
   }
   if (m.type === 'latent') { drawGrid(m.imgs, m.n); return; }
+  if (m.type === 'guess') { if (m.id === guessId) { guessRes = { stats: m.stats, ar: m.ar }; renderAnswers(); } return; }
+  if (m.type === 'valImage') { strokes.length = 0; padDraw(); const cx = $('pad').getContext('2d'); drawImg(cx, m.pix, 0, 0, 16); seenPix = m.pix; padTruth = m.c; showSeen(seenPix); askGuess(); return; }
+  if (m.type === 'accProgress') { const b = [...$('answers').querySelectorAll('button')].find(x => x.textContent.startsWith('Liczę')); if (b) b.textContent = `Liczę… ${m.done}/${m.n}`; return; }
+  if (m.type === 'accuracy') { accRes[m.kind] = { text: `Trafność: ${Math.round(m.acc * 100)}% na ${m.n} rysunkach sprawdzających (zgadując na ślepo: 8%).`, conf: m.conf }; renderAnswers(); return; }
   if (m.type === 'imgFrame') { if (m.id === imId) drawBig(m.img); return; }
   if (m.type === 'imagined') { if (m.id === imId) showImagined(m); return; }
   if (m.type !== 'progress' && m.type !== 'done') return;
@@ -395,9 +399,9 @@ worker.onmessage = e => {
   if (m.frames) { lastFrames = m.frames; renderInner(); }
   if (m.wviz) { wviz = m.wviz; if (graphView === 'neurons') renderGraph(); }
   if (m.type === 'done') {
-    training = false; have.add(m.kind); $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = false;
+    training = false; have.add(m.kind); delete accRes[m.kind]; $('train').disabled = false; $('stop').disabled = true; $('gen').disabled = false;
     runs.push({ kind: m.kind, label: LABEL(m.kind, hpValues(m.kind)), params: m.params, val: m.val, stats: m.stats, ms: m.ms, device: m.device });
-    renderCmp(); renderInner(); renderImagine();
+    renderCmp(); renderInner(); renderImagine(); renderAnswers(); askGuess();
   }
 };
 function renderMetrics(m) {
@@ -515,6 +519,72 @@ $('mask').addEventListener('pointermove', e => { if (painting == null) return; c
   $('maskPresets').appendChild(b);
 });
 
+// ---------- zgadnij, co narysowałem ----------
+// Kreski zapisujemy jako listy punktów. Przed zgadywaniem rysujemy je od nowa, wykadrowane i przeskalowane
+// jak w Quick, Draw! (dłuższy bok wypełnia ok. 15/16 pola, rysunek na środku), kreską o stałej grubości,
+// potem uśredniamy do 16×16 i sprowadzamy do 16 odcieni tak jak przy przygotowaniu danych.
+const strokes = []; let curStroke = null, guessId = 0, guessTimer = null, seenPix = null, guessRes = {}, accRes = {}, padTruth = null;
+const METHODS = [
+  { key: 'stats', name: 'Statystyka pikseli (krok 1)', sub: 'naiwny Bayes: każdy piksel osobno', need: 'Naucz krok 1 (1 s).', per: 200 },
+  { key: 'ar', name: 'Piksel po pikselu (krok 2)', sub: 'transformer: jak bardzo rysunek go zaskakuje', need: 'Naucz krok 2 (najlepiej 3000+ kroków).', per: 10 },
+];
+function padDraw() {
+  const cx = $('pad').getContext('2d'); cx.fillStyle = '#f2f2f2'; cx.fillRect(0, 0, 256, 256);
+  cx.strokeStyle = '#18181c'; cx.lineWidth = 6; cx.lineCap = cx.lineJoin = 'round';
+  [...strokes, curStroke].filter(Boolean).forEach(st => { cx.beginPath(); st.forEach(([x, y], i) => i ? cx.lineTo(x, y) : cx.moveTo(x, y)); if (st.length === 1) cx.lineTo(st[0][0] + .1, st[0][1]); cx.stroke(); });
+}
+function padTo16() {
+  const pts = strokes.flat(); if (!pts.length) return null;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; pts.forEach(([x, y]) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); });
+  const R = 256, side = Math.max(x1 - x0, y1 - y0, 1), k = R * (15 / 16) / side, ox = (R - (x1 - x0) * k) / 2, oy = (R - (y1 - y0) * k) / 2;
+  const cv = document.createElement('canvas'); cv.width = cv.height = R; const cx = cv.getContext('2d');
+  cx.fillStyle = '#fff'; cx.fillRect(0, 0, R, R); cx.strokeStyle = '#000'; cx.lineWidth = R * .07; cx.lineCap = cx.lineJoin = 'round';
+  strokes.forEach(st => { cx.beginPath(); st.forEach(([x, y], i) => { const X = ox + (x - x0) * k, Y = oy + (y - y0) * k; i ? cx.lineTo(X, Y) : cx.moveTo(X, Y); }); if (st.length === 1) cx.lineTo(ox + (st[0][0] - x0) * k + .1, oy + (st[0][1] - y0) * k); cx.stroke(); });
+  const d = cx.getImageData(0, 0, R, R).data, out = new Array(N), c = R / S;
+  for (let gy = 0; gy < S; gy++) for (let gx = 0; gx < S; gx++) {
+    let s = 0; for (let y = gy * c; y < (gy + 1) * c; y++) for (let x = gx * c; x < (gx + 1) * c; x++) s += 1 - d[(y * R + x) * 4] / 255;
+    out[gy * S + gx] = Math.max(0, Math.min(LV - 1, Math.round(Math.min(1, s / (c * c) * 1.6) * (LV - 1))));
+  }
+  return out;
+}
+function showSeen(pix) { const cx = $('seen').getContext('2d'); if (!pix) { cx.fillStyle = '#f2f2f2'; cx.fillRect(0, 0, 16, 16); return; } drawImg(cx, pix, 0, 0, 1); }
+function askGuess() { if (!seenPix) { guessRes = {}; renderAnswers(); return; } worker.postMessage({ cmd: 'guess', pix: seenPix, id: ++guessId }); }
+function afterDraw() { seenPix = padTo16(); padTruth = null; showSeen(seenPix); clearTimeout(guessTimer); guessTimer = setTimeout(askGuess, 120); }
+const padXY = e => { const r = $('pad').getBoundingClientRect(); return [(e.clientX - r.left) * 256 / r.width, (e.clientY - r.top) * 256 / r.height]; };
+$('pad').addEventListener('pointerdown', e => { curStroke = [padXY(e)]; $('pad').setPointerCapture(e.pointerId); padDraw(); });
+$('pad').addEventListener('pointermove', e => { if (!curStroke) return; const p = padXY(e), q = curStroke[curStroke.length - 1]; if (Math.hypot(p[0] - q[0], p[1] - q[1]) > 2) { curStroke.push(p); padDraw(); } });
+['pointerup', 'pointercancel'].forEach(ev => $('pad').addEventListener(ev, () => { if (!curStroke) return; strokes.push(curStroke); curStroke = null; padDraw(); afterDraw(); }));
+$('padClear').addEventListener('click', () => { strokes.length = 0; padTruth = null; padDraw(); seenPix = null; showSeen(null); guessRes = {}; renderAnswers(); });
+$('padSample').addEventListener('click', () => worker.postMessage({ cmd: 'valImage' }));
+function renderAnswers() {
+  const box = $('answers'); box.innerHTML = '';
+  METHODS.forEach(M => {
+    const d = document.createElement('div'), h = document.createElement('h4'), sub = document.createElement('p'); d.className = 'ans';
+    h.textContent = M.name; sub.className = 'sub'; sub.textContent = M.sub; d.append(h, sub);
+    const r = guessRes[M.key];
+    if (!have.has(M.key)) { const p = document.createElement('p'); p.className = 'sub'; p.textContent = M.need; d.appendChild(p); }
+    else if (!seenPix) { const p = document.createElement('p'); p.className = 'sub'; p.textContent = 'Narysuj coś po lewej.'; d.appendChild(p); }
+    else if (r) {
+      const order = r.probs.map((p, c) => [p, c]).sort((a, b) => b[0] - a[0]);
+      const big = document.createElement('p'); big.className = 'big'; big.textContent = `To ${catData[order[0][1]].name}?` + (padTruth != null ? (order[0][1] === padTruth ? ' ✓' : ` ✗ (to ${catData[padTruth].name})`) : ''); d.appendChild(big);
+      order.slice(0, 5).forEach(([p, c]) => {
+        const row = document.createElement('div'), nm = document.createElement('span'), bw = document.createElement('span'), i = document.createElement('i'), pc = document.createElement('span');
+        row.className = 'bar'; nm.textContent = catData[c].name; i.style.width = Math.max(1, p * 100) + '%'; bw.appendChild(i); pc.className = 'p'; pc.textContent = p >= .995 ? '>99%' : p < .005 ? '<1%' : Math.round(p * 100) + '%';
+        nm.title = `${fmt(r.bits[c], 2)} bita na piksel przy tej kategorii`; row.append(nm, bw, pc); d.appendChild(row);
+      });
+      const bb = document.createElement('p'); bb.className = 'sub'; bb.textContent = `Bity na piksel: ${order.slice(0, 3).map(([, c]) => `${catData[c].name} ${fmt(r.bits[c], 2)}`).join(', ')}. Różnica nawet ułamka bita na piksel to setki razy większe prawdopodobieństwo całego rysunku, dlatego procenty bywają skrajne.`; d.appendChild(bb);
+    }
+    if (have.has(M.key)) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'ghost'; b.textContent = 'Sprawdź trafność';
+      b.addEventListener('click', () => { b.disabled = true; b.textContent = 'Liczę…'; worker.postMessage({ cmd: 'accuracy', kind: M.key, per: M.per, id: M.key }); });
+      d.appendChild(b);
+      if (accRes[M.key]) { const a = document.createElement('p'); a.className = 'acc'; a.textContent = accRes[M.key].text; d.appendChild(a); }
+    }
+    box.appendChild(d);
+  });
+  $('padSample').disabled = !ready;
+}
+
 // ---------- wykres ----------
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function drawChart() {
@@ -574,5 +644,5 @@ function renderCmp() {
 }
 
 // ---------- start ----------
-renderAll(); resetLearn(); renderCmp();
+renderAll(); resetLearn(); renderCmp(); padDraw(); showSeen(null); renderAnswers();
 loadData().then(renderGraph);

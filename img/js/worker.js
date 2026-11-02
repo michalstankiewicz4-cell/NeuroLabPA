@@ -436,6 +436,42 @@ function vizMLP(cols, Ws) {
   return { cols: cols.map(([label, n], i) => ({ label, n, show: idx[i].length })), mats: Ws.map((W, i) => wsub(W.d, cols[i + 1][1], idx[i], idx[i + 1])) };
 }
 
+
+// ======================================================================================
+// Zgadywanie, co jest na rysunku. Metoda 1: sieć, która umie rysować, jako „zgadywacz” (klasyfikator generatywny).
+// Dla każdej kategorii liczymy, jak bardzo rysunek zaskakuje model (bity na piksel przy tej kategorii).
+// Wzór Bayesa przy równych szansach kategorii: P(kategoria | rysunek) ∝ P(rysunek | kategoria).
+// Model nigdy nie uczył się rozpoznawać: umie to, bo nauczył się, jak wyglądają rysunki każdej kategorii.
+// ======================================================================================
+function genScores(kind, pixList) {
+  const C = cats.length, md = models[kind];
+  if (!md) return null;
+  return pixList.map(pix => {
+    const lp = new Float64Array(C);
+    if (kind === 'stats') { for (let c = 0; c < C; c++) { let s = 0; for (let i = 0; i < S2; i++) s += Math.log(md.P[(c * S2 + i) * LV + pix[i]]); lp[c] = s; } }
+    else {
+      const X = new Int32Array(C * S2);
+      for (let c = 0; c < C; c++) { X[c * S2] = LV + c; for (let t = 1; t < S2; t++) X[c * S2 + t] = pix[t - 1]; }
+      const lg = md.forward(X, C, S2).logits.d;
+      for (let c = 0; c < C; c++) { let s = 0; for (let t = 0; t < S2; t++) { const o = (c * S2 + t) * LV; let mx = -Infinity; for (let j = 0; j < LV; j++) mx = Math.max(mx, lg[o + j]); let z = 0; for (let j = 0; j < LV; j++) z += Math.exp(lg[o + j] - mx); s += lg[o + pix[t]] - mx - Math.log(z); } lp[c] = s; }
+    }
+    let mx = -Infinity; for (const v of lp) mx = Math.max(mx, v);
+    const e = Array.from(lp, v => Math.exp(v - mx)), z = e.reduce((a, b) => a + b, 0);
+    return { probs: e.map(v => v / z), bits: Array.from(lp, v => -v / S2 / Math.LN2) };
+  });
+}
+// Trafność na rysunkach sprawdzających: po `per` z każdej kategorii (dla kroku 2 mniej, bo to 12 przejść sieci na rysunek).
+function genAccuracy(kind, per, id) {
+  const set = []; cats.forEach((_, c) => set.push(...val.filter(v => v.c === c).slice(0, per)));
+  let ok = 0, done = 0; const conf = cats.map(() => new Array(cats.length).fill(0)), t0 = now();
+  for (const v of set) {
+    const r = genScores(kind, [v.p])[0], g = r.probs.indexOf(Math.max(...r.probs));
+    conf[v.c][g]++; if (g === v.c) ok++; done++;
+    if (now() - t0 > 400 && done % 12 === 0) post({ type: 'accProgress', id, kind, done, n: set.length });
+  }
+  return { kind, acc: ok / set.length, n: set.length, conf };
+}
+
 // ---------- krok 2 na karcie graficznej ----------
 let gpuEng = null;
 // Zgodność: ten sam start i te same rysunki, jeden krok nauki na CPU i na GPU.
@@ -497,6 +533,9 @@ self.onmessage = e => {
       else trainAR(m.hp);
     }
     else if (m.cmd === 'stop') { if (running) running.stop = true; }
+    else if (m.cmd === 'guess') post({ type: 'guess', id: m.id, stats: (genScores('stats', [m.pix]) || [null])[0], ar: (genScores('ar', [m.pix]) || [null])[0] });
+    else if (m.cmd === 'accuracy') post({ type: 'accuracy', id: m.id, ...genAccuracy(m.kind, m.per, m.id) });
+    else if (m.cmd === 'valImage') { const v = val[randInt(val.length)]; post({ type: 'valImage', pix: Array.from(v.p), c: v.c }); }
     else if (m.cmd === 'imagine') { const r = imagine(m, (k, x) => post({ type: 'imgFrame', id: m.id, img: toPix(x, -1, 1)[0] })); post({ type: 'imagined', id: m.id, ...r }); }
     else if (m.cmd === 'latent') { const md = models.vae; if (!md) throw new Error('Najpierw naucz VAE.'); post({ type: 'latent', c: m.c, n: 8, imgs: latentMap(md, m.c) }); }
     else if (m.cmd === 'gputest') gpuSelfTest().then(r => post({ type: 'gputest', ok: true, ...r }), err => post({ type: 'gputest', ok: false, msg: String(err.message || err) }));

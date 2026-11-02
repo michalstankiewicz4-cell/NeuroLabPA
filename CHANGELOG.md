@@ -3,6 +3,14 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.27.0
+- Laboratorium obrazów: nowa sekcja **„Zgadnij, co narysowałem”**, część 1: zgadują sieci, które umieją rysować (klasyfikator generatywny).
+  - Rysowanie myszką. Kreski są kadrowane, skalowane i rysowane od nowa kreską stałej grubości, potem pomniejszane do 16×16 i 16 odcieni tak jak dane do nauki. Obok podgląd „tak to widzi sieć”.
+  - **Statystyka pikseli (krok 1)** jako naiwny klasyfikator Bayesa i **piksel po pikselu (krok 2)**: dla każdej kategorii liczba bitów na piksel, czyli jak bardzo rysunek zaskakuje model. Wynik w procentach ze wzoru Bayesa, 5 najlepszych typów, bity przy każdej kategorii.
+  - Przycisk „Losowy rysunek sprawdzający” z oznaczeniem, czy sieć trafiła.
+  - „Sprawdź trafność” na rysunkach sprawdzających: statystyka 71% (2400 rysunków), piksel po pikselu po 1000 krokach 68% (120 rysunków). Zgadując na ślepo: 8%.
+- Porównanie to teraz sekcja 5.
+
 ## 0.26.0
 - Laboratorium obrazów: sekcja **„Wyobraźnia”**, czyli rzeczy, których nie było w danych.
   - **Mieszanie dwóch kategorii** (VAE, GAN, dyfuzja): suwak A ↔ B i pasek 7 rysunków od 100% A do 100% B przy tym samym szumie. W VAE i GAN-ie mieszana jest kategoria na wejściu sieci, w dyfuzji odpowiedzi sieci w każdym kroku odszumiania (composable diffusion, Liu i in. 2022).

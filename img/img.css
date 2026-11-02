@@ -57,3 +57,22 @@
 .region h4{margin:4px 0 8px;font-family:var(--display);font-weight:500;color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 .regctl{display:grid;gap:10px;max-width:52ch}
 .regctl .note{margin:0}
+.guessintro{max-width:90ch;margin:0}
+.guessrow{display:flex;flex-wrap:wrap;gap:20px;align-items:start}
+.pad{display:grid;gap:8px}
+#pad{width:256px;height:256px;background:#f2f2f2;border:1px solid var(--line);cursor:crosshair;touch-action:none}
+.padctl{display:flex;flex-wrap:wrap;gap:8px}
+.padctl button{font-size:14px;padding:6px 10px}
+.seen{display:grid;gap:6px;justify-items:center;color:var(--muted);font-size:12px}
+.seen canvas{width:128px;height:128px;image-rendering:pixelated;border:1px solid var(--line)}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;flex:1;min-width:260px}
+.ans{background:var(--panel);border:1px solid var(--line);padding:12px 14px;display:grid;gap:8px;align-content:start}
+.ans h4{margin:0;font-family:var(--display);font-weight:500;color:var(--rot);letter-spacing:.04em;font-size:14px}
+.ans .sub{margin:0;color:var(--muted);font-size:12px}
+.ans .big{font-family:var(--display);font-size:22px;margin:0}
+.bar{display:grid;grid-template-columns:7.5em 1fr 3.6em;gap:8px;align-items:center;font-size:13px}
+.bar i{display:block;height:8px;background:var(--rot);opacity:.85}
+.bar .p{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.bar small{color:var(--muted)}
+.ans button{justify-self:start;font-size:13px;padding:5px 10px}
+.acc{font-size:13px;color:var(--fg)}
