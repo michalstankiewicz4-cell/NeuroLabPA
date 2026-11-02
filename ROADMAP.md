@@ -18,7 +18,7 @@ Plany z rozmów projektowych, w kolejności, w jakiej najpewniej je zrobimy.
 - Kolorowy zbiór (256 kolorów) z zombie z SDF Walkers, ze sterowaniem cechami (np. kolor koszuli).
 - Opis zdaniem zamiast numeru kategorii: koder tekstu z laboratorium języka.
 - Dokańczanie rysunku (inpainting): zaczynasz kreską albo zaznaczasz miejsce, sieć dokańcza resztę.
-- „Zgadnij, co narysowałem”: rozpoznawanie rysunku. Sieć generatywna jako klasyfikator (który kategorii najbardziej pasuje rysunek) i osobny mały klasyfikator do porównania.
+- „Zgadnij, co narysowałem”: rozpoznawanie rysunku. Rysujesz myszką, sieć podaje typy z procentami („kot 64%, czaszka 20%…”). Dwie metody obok siebie: sieć z kroku 2 jako klasyfikator generatywny (przy której kategorii rysunek jest najmniej zaskakujący; sieć nigdy nie uczyła się rozpoznawać) i osobny mały klasyfikator uczony wprost na pytanie „co to jest?”.
 
 ## Laboratorium języka: następne
 - **Własne rozmowy w kroku 5:** wgranie pliku albo dopisanie przykładów w polu tekstowym (np. imię i charakter sieci).
