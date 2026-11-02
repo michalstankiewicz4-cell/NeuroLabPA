@@ -472,6 +472,37 @@ function genAccuracy(kind, per, id) {
   return { kind, acc: ok / set.length, n: set.length, conf };
 }
 
+
+// Metoda 2: zwykły klasyfikator (dyskryminacyjny). Sieć gęsta 256 → 256 → 128 → 12 uczona wprost na pytanie
+// „która kategoria?”. Rysować nie umie: wie tylko, po czym odróżnić kategorie od siebie.
+function buildClf(hp) {
+  const C = cats.length, l1 = dense(S2, hp.hidden), l2 = dense(hp.hidden, hp.hidden >> 1), l3 = dense(hp.hidden >> 1, C, .01);
+  const m = { kind: 'clf', hp, params: lparams([l1, l2, l3]), L: { l1, l2, l3 } };
+  m.count = m.params.reduce((a, p) => a + p.size, 0);
+  m.logits = x => lin(gelu(lin(gelu(lin(x, l1)), l2)), l3);
+  m.probs = pixList => { const B = pixList.length, x = new Float32Array(B * S2); pixList.forEach((p, b) => { for (let i = 0; i < S2; i++) x[b * S2 + i] = p[i] / (LV - 1); }); const lg = m.logits(new T(x, [B, S2])).d; return pixList.map((_, b) => softmax(lg.subarray(b * C, (b + 1) * C))); };
+  return m;
+}
+function clfAccuracy(m, set) { let ok = 0; for (let i = 0; i < set.length; i += 200) { const part = set.slice(i, i + 200), pr = m.probs(part.map(v => v.p)); pr.forEach((p, k) => { if (p.indexOf(Math.max(...p)) === part[k].c) ok++; }); } return ok / set.length; }
+function trainClf(hp) {
+  try { setBackend('wasm'); } catch (e) { setBackend('js'); }
+  const m = buildClf(hp), opt = new Adam(m.params, hp.lr), job = { stop: false }; let step = 0, ema = null, tR = 0;
+  models.clf = m; running = job;
+  const tick = () => {
+    const t0 = now();
+    while (now() - t0 < 80 && step < hp.steps && !job.stop) {
+      const idx = rnd(hp.batch), { x, cl } = realBatch(train, idx), l = crossEntropy(m.logits(new T(x, [hp.batch, S2])), Int32Array.from(cl));
+      opt.zeroGrad(); backward(l); opt.lr = hp.lr * (step > hp.steps * .7 ? .2 : 1); opt.step(); step++;
+      ema = ema == null ? l.d[0] : ema * .97 + l.d[0] * .03;
+    }
+    const doneNow = step >= hp.steps || job.stop;
+    if (doneNow || now() - tR > 700) { tR = now(); post({ type: 'clfProgress', step, steps: hp.steps, loss: ema, acc: doneNow ? clfAccuracy(m, val) : null, params: m.count, done: doneNow }); }
+    if (doneNow) { running = null; return; }
+    setTimeout(tick, 0);
+  };
+  setTimeout(tick, 0);
+}
+
 // ---------- krok 2 na karcie graficznej ----------
 let gpuEng = null;
 // Zgodność: ten sam start i te same rysunki, jeden krok nauki na CPU i na GPU.
@@ -533,8 +564,9 @@ self.onmessage = e => {
       else trainAR(m.hp);
     }
     else if (m.cmd === 'stop') { if (running) running.stop = true; }
-    else if (m.cmd === 'guess') post({ type: 'guess', id: m.id, stats: (genScores('stats', [m.pix]) || [null])[0], ar: (genScores('ar', [m.pix]) || [null])[0] });
-    else if (m.cmd === 'accuracy') post({ type: 'accuracy', id: m.id, ...genAccuracy(m.kind, m.per, m.id) });
+    else if (m.cmd === 'trainClf') { if (running) running.stop = true; trainClf(m.hp); }
+    else if (m.cmd === 'guess') post({ type: 'guess', id: m.id, clf: models.clf ? { probs: models.clf.probs([m.pix])[0] } : null, stats: (genScores('stats', [m.pix]) || [null])[0], ar: (genScores('ar', [m.pix]) || [null])[0] });
+    else if (m.cmd === 'accuracy') post({ type: 'accuracy', id: m.id, ...(m.kind === 'clf' ? { kind: 'clf', acc: clfAccuracy(models.clf, val), n: val.length } : genAccuracy(m.kind, m.per, m.id)) });
     else if (m.cmd === 'valImage') { const v = val[randInt(val.length)]; post({ type: 'valImage', pix: Array.from(v.p), c: v.c }); }
     else if (m.cmd === 'imagine') { const r = imagine(m, (k, x) => post({ type: 'imgFrame', id: m.id, img: toPix(x, -1, 1)[0] })); post({ type: 'imagined', id: m.id, ...r }); }
     else if (m.cmd === 'latent') { const md = models.vae; if (!md) throw new Error('Najpierw naucz VAE.'); post({ type: 'latent', c: m.c, n: 8, imgs: latentMap(md, m.c) }); }

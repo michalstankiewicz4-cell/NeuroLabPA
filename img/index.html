@@ -111,7 +111,7 @@
 
   <section class="panel" aria-labelledby="h-guess">
     <h2 id="h-guess"><span class="num">4</span> Zgadnij, co narysowałem</h2>
-    <p class="note guessintro">Narysuj coś myszką (kot, dom, drzewo, ryba, samochód, słońce, kwiat, rower, jabłko, gwiazda, czaszka albo księżyc). Rysunek jest kadrowany, skalowany i pomniejszany do 16×16 tak samo jak dane do nauki. Zgadują sieci, które umieją <b>rysować</b>: dla każdej kategorii liczą, jak bardzo Twój rysunek je zaskakuje, i wybierają najmniej zaskakującą. Nigdy nie uczyły się rozpoznawać.</p>
+    <p class="note guessintro">Narysuj coś myszką (kot, dom, drzewo, ryba, samochód, słońce, kwiat, rower, jabłko, gwiazda, czaszka albo księżyc). Rysunek jest kadrowany, skalowany i pomniejszany do 16×16 tak samo jak dane do nauki. Zgadują dwa rodzaje sieci. <b>Klasyfikator</b> uczył się tylko odpowiadać „co to jest?”: zna różnice między kategoriami, ale rysować nie umie. Sieci z kroków 1 i 2 umieją <b>rysować</b>, a nigdy nie uczyły się rozpoznawać. Zgadują, licząc dla każdej kategorii, jak bardzo Twój rysunek je zaskakuje, i wybierając najmniej zaskakującą.</p>
     <div class="guessrow">
       <div class="pad">
         <canvas id="pad" width="256" height="256" aria-label="Płótno do rysowania myszką"></canvas>

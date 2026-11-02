@@ -30,6 +30,7 @@ Błąd sprawdzający na literę (mniej = lepiej). Przy tokenach błąd na token 
 | GAN | 256 neuronów, 6000 kroków | krytyk 63% / 26%; ziarniste, kategorie się różnią | ok. 3 min |
 | Dyfuzja | T = 100, 3×512, 4000 kroków | błąd zgadywania 0,21; **najlepsze rysunki** | ok. 4 min |
 
+- Zgadywanie, co jest na rysunku (trafność na rysunkach sprawdzających, na ślepo 8%): klasyfikator 256 → 256 → 128 → 12 **86%** (30 s nauki), statystyka pikseli jako naiwny Bayes 71%, piksel po pikselu po 1000 krokach 68% (na 120 rysunkach).
 - Piksel po pikselu, co rysuje: po 1000 krokach kreski w poziomie, po 3000 pierwsze kształty (drzewo, gwiazda), po 6000 dom, ryba, księżyc. Zob. `docs/img/img-lab-postep.png`.
 - Porównanie VAE / GAN / dyfuzji: `docs/img/img-lab-vae-gan-dyfuzja.png`. Wyobraźnia (drzewo z głową kota): `docs/img/img-lab-wyobraznia.png`.
 

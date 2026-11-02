@@ -3,6 +3,11 @@
 Wszystkie wersje powstały 28 października 2026, w jednej sesji pracy.
 Wersje oznaczone ⚠ zmieniają listę wejść sieci, więc modele wyeksportowane wcześniej do nich nie pasują (oceny dalej działają).
 
+## 0.28.0
+- „Zgadnij, co narysowałem”, część 2: **klasyfikator**. Sieć gęsta 256 → 256 → 128 → 12 (100 tys. parametrów) uczona tylko na pytanie „która kategoria?”, 3000 kroków w ok. 30 s, uruchamiana przyciskiem w tej sekcji.
+  - Trafność na wszystkich 2400 rysunkach sprawdzających: **86%**, wobec 71% statystyki pikseli i 68% piksel po pikselu (po 1000 krokach).
+  - Trzy odpowiedzi obok siebie: widać, czym różni się sieć, która umie tylko rozpoznawać, od sieci, które umieją rysować.
+
 ## 0.27.0
 - Laboratorium obrazów: nowa sekcja **„Zgadnij, co narysowałem”**, część 1: zgadują sieci, które umieją rysować (klasyfikator generatywny).
   - Rysowanie myszką. Kreski są kadrowane, skalowane i rysowane od nowa kreską stałej grubości, potem pomniejszane do 16×16 i 16 odcieni tak jak dane do nauki. Obok podgląd „tak to widzi sieć”.
